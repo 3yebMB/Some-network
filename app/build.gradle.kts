@@ -22,12 +22,13 @@ android {
             useSupportLibrary = true
         }
 
-        val properties = Properties().apply {
-            load(project.rootProject.file("local.properties").inputStream())
+        if (project.hasProperty("propertyfile") && project.hasProperty("key.store")) {
+            val properties = Properties().apply {
+                load(project.rootProject.file("local.properties").inputStream())
+            }
+            buildConfigField("String", "API_KEY", "\"${properties.getProperty("API_KEY")}\"")
+            buildConfigField("String", "BASE_URL", "\"https://opendata.mkrf.ru/v2/\"")
         }
-
-        buildConfigField("String", "API_KEY", "\"${properties.getProperty("API_KEY")}\"")
-        buildConfigField("String", "BASE_URL", "\"https://opendata.mkrf.ru/v2/\"")
 
         resourceConfigurations += setOf("ru", "en")
 

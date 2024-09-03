@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -10,8 +12,8 @@ android {
 
     defaultConfig {
         applicationId = "dev.m13d.somenet"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = libs.versions.androidSdk.min.get().toInt()
+        targetSdk = libs.versions.androidSdk.target.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
@@ -19,15 +21,32 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-    }
 
+        val properties = Properties().apply {
+            load(project.rootProject.file("local.properties").inputStream())
+        }
+
+        buildConfigField("String", "API_KEY", "\"${properties.getProperty("API_KEY")}\"")
+        buildConfigField("String", "BASE_URL", "\"https://opendata.mkrf.ru/v2/\"")
+
+        resourceConfigurations += setOf("ru", "en")
+
+        ndk {
+            //noinspection ChromeOsAbiSupport
+            abiFilters += setOf("armeabi-v7a", "arm64-v8a")
+        }
+    }
+    // Signing configuration doesn't need anymore because it'll be sign on GitHub.
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            isMinifyEnabled = false
         }
     }
     compileOptions {
@@ -43,6 +62,14 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/okhttp3/internal/publicsuffix/NOTICE"
+            excludes += "/kotlin/**"
+            excludes += "META-INF/androidx.*.version"
+            excludes += "META-INF/com.google.*.version"
+            excludes += "META-INF/kotlinx.*.version"
+            excludes += "kotlin-tooling-metadata.json"
+            excludes += "DebugProbesKt.bin"
+            excludes += "META-INF/com/android/build/gradle/*"
         }
     }
 }

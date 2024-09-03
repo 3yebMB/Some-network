@@ -1,4 +1,7 @@
 [versions]
+androidSdk-compile = "34"
+androidSdk-target = "34"
+androidSdk-min = "24"
 agp = "8.6.0"
 kotlin = "2.0.20"
 coreKtx = "1.13.1"

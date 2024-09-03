@@ -74,7 +74,7 @@ jobs:
       - name: Download app test APK
         uses: actions/download-artifact@v1
         with:
-          name: app-debug-androidTest.apk
+          name: app-debug-androidTest
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v0
@@ -106,18 +106,6 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
-      - name: Grant execute permission for ls
-        run: chmod +x ls
-
-      - name: Log files
-        run: |
-          ls -al ./
-          ls -al ../
-#          ls -al app/build/outputs/apk/release
-#          ls -al app/build/outputs/release
-#          ls -al app/release
-#          ls -al app/build/outputs/bundle/release
 
       - name: Assemble Release Bundle
         run: ./gradlew bundleRelease

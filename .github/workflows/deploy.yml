@@ -17,7 +17,7 @@ jobs:
         run: |
           ./gradlew bundleRelease
       - name: Sign Release
-        uses: r0adkll/sign-android-release@v1
+        uses: r0adkll/sign-android-release@v1.0.4
         with:
           releaseDirectory: app/build/outputs/release
           signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE }}

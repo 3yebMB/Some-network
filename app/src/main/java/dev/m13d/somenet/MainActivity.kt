@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import dev.m13d.somenet.screens.signup.SignUpScreen
+import dev.m13d.somenet.signup.SignUpScreen
 import dev.m13d.somenet.ui.theme.SoMeNetTheme
 
 class MainActivity : ComponentActivity() {

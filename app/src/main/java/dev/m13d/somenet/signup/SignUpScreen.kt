@@ -1,7 +1,6 @@
-package dev.m13d.somenet.screens.signup
+package dev.m13d.somenet.signup
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

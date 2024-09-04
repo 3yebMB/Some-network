@@ -25,4 +25,11 @@ class CredentialsValidationTest {
         viewModel.createAccount("email", ":password:", "about")
         assertEquals(SignUpState.BadEmail, viewModel.signUpState.value)
     }
+
+    @Test
+    fun invalidPassword() {
+        val viewModel = SignUpViewModel()
+        viewModel.createAccount("michael@somenet.dev", "", ":about:")
+        assertEquals(SignUpState.BadPassword, viewModel.signUpState.value)
+    }
 }

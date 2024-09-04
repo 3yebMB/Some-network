@@ -1,5 +1,7 @@
 package dev.m13d.somenet.screens.signup
 
+import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,12 +11,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
@@ -23,29 +34,21 @@ import dev.m13d.somenet.R
 @Preview(device = "id:pixel_8", showBackground = true)
 fun SignUpScreen() {
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-        ) {
-            Text(
-                text = stringResource(R.string.createAnAccount),
-                style = typography.headlineMedium
-            )
-        }
+        ScreenTitle(R.string.createAnAccount)
         Spacer(Modifier.height(8.dp))
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = "",
-            label = { Text(text = stringResource(R.string.email)) },
-            onValueChange = { },
+        var email by remember { mutableStateOf("") }
+        LoginField(
+            value = email,
+            onValueChange = { email = it }
         )
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = "",
-            label = { Text(text = stringResource(R.string.password)) },
-            onValueChange = { },
+        var pass by remember { mutableStateOf("") }
+        PasswordField(
+            value = pass,
+            onValueChange = { pass = it }
         )
         Spacer(Modifier.height(8.dp))
         Button(
@@ -54,5 +57,60 @@ fun SignUpScreen() {
         ) {
             Text(text = stringResource(id = R.string.signUp))
         }
+    }
+}
+
+@Composable
+private fun PasswordField(
+    value: String,
+    onValueChange: (String) -> Unit,
+) {
+    var isPassVisible by remember { mutableStateOf(false) }
+    OutlinedTextField(
+        modifier = Modifier.fillMaxWidth(),
+        value = value,
+        trailingIcon = {
+            IconButton(onClick = {
+                isPassVisible = !isPassVisible
+            }) {
+                Icon(
+                    painter = painterResource(id = if (isPassVisible) R.drawable.pass_visible else R.drawable.pass_invisible),
+                    contentDescription = stringResource(id = R.string.passwordToggleVisiblity)
+                )
+            }
+        },
+        visualTransformation = if (isPassVisible) {
+            VisualTransformation.None
+        } else {
+            PasswordVisualTransformation()
+        },
+        label = { Text(text = stringResource(id = R.string.password)) },
+        onValueChange = onValueChange,
+    )
+}
+
+@Composable
+private fun LoginField(
+    value: String,
+    onValueChange: (String) -> Unit,
+) {
+    OutlinedTextField(
+        modifier = Modifier.fillMaxWidth(),
+        value = value,
+        label = { Text(text = stringResource(id = R.string.email)) },
+        onValueChange = onValueChange,
+    )
+}
+
+@Composable
+private fun ScreenTitle(@StringRes titleResource: Int) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = stringResource(id = titleResource),
+            style = typography.headlineMedium
+        )
     }
 }

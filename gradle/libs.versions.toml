@@ -3,11 +3,13 @@ androidSdk-compile = "34"
 androidSdk-target = "34"
 androidSdk-min = "24"
 agp = "8.6.0"
+archCoreTesting = "2.2.0"
 kotlin = "2.0.20"
 coreKtx = "1.13.1"
 junit = "5.11.0"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+kotlinxCoroutinesTest = "1.6.1"
 lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
 composeBom = "2024.08.00"
@@ -29,6 +31,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
+androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "archCoreTesting" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

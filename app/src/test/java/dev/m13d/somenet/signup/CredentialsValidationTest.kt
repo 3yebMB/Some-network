@@ -20,16 +20,27 @@ class CredentialsValidationTest {
         "'ab@bc.c'",
         "'email'",
     )
-    fun invalidEmail() {
+    fun invalidEmail(email: String) {
         val viewModel = SignUpViewModel()
-        viewModel.createAccount("email", ":password:", "about")
+        viewModel.createAccount(email, ":password:", "about")
         assertEquals(SignUpState.BadEmail, viewModel.signUpState.value)
     }
 
-    @Test
-    fun invalidPassword() {
+    @ParameterizedTest
+    @CsvSource(
+        "''",
+        "' '",
+        "'  '",
+        "'12345678'",
+        "'abcd5678'",
+        "'qwertY'",
+        "'123Qwe'",
+        "'qwe123#$'",
+        "QWERTY123%&",
+    )
+    fun invalidPassword(password: String) {
         val viewModel = SignUpViewModel()
-        viewModel.createAccount("michael@somenet.dev", "", ":about:")
+        viewModel.createAccount("michael@somenet.dev", password, ":about:")
         assertEquals(SignUpState.BadPassword, viewModel.signUpState.value)
     }
 }

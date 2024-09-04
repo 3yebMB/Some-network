@@ -2,6 +2,7 @@ package dev.m13d.somenet.signup
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -29,7 +30,7 @@ class SignUpRobot (
 
     fun typePassword(password: String) {
         val passwordHint = rule.activity.getString(R.string.password)
-        rule.onNodeWithText(passwordHint).performTextInput(password)
+        rule.onNodeWithTag(passwordHint).performTextInput(password)
     }
 
     fun submit() {

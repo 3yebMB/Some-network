@@ -22,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -66,27 +67,39 @@ private fun PasswordField(
     onValueChange: (String) -> Unit,
 ) {
     var isPassVisible by remember { mutableStateOf(false) }
+    val visualTransformation = if (isPassVisible) {
+        VisualTransformation.None
+    } else {
+        PasswordVisualTransformation()
+    }
     OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .testTag(stringResource(id = R.string.password))
+            .fillMaxWidth(),
         value = value,
         trailingIcon = {
-            IconButton(onClick = {
+            VisibilityToggle(isPassVisible) {
                 isPassVisible = !isPassVisible
-            }) {
-                Icon(
-                    painter = painterResource(id = if (isPassVisible) R.drawable.pass_visible else R.drawable.pass_invisible),
-                    contentDescription = stringResource(id = R.string.passwordToggleVisiblity)
-                )
             }
         },
-        visualTransformation = if (isPassVisible) {
-            VisualTransformation.None
-        } else {
-            PasswordVisualTransformation()
-        },
+        visualTransformation = visualTransformation,
         label = { Text(text = stringResource(id = R.string.password)) },
         onValueChange = onValueChange,
     )
+}
+
+@Composable
+private fun VisibilityToggle(
+    isPassVisible: Boolean,
+    onToggle: () -> Unit,
+) {
+    IconButton(onClick = { onToggle() }) {
+        val resource = if (isPassVisible) R.drawable.pass_visible else R.drawable.pass_invisible
+        Icon(
+            painter = painterResource(id = resource),
+            contentDescription = stringResource(id = R.string.passwordToggleVisiblity)
+        )
+    }
 }
 
 @Composable

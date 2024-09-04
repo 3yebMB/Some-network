@@ -23,6 +23,8 @@ class SignUpViewModel(
 
             CredentialsValidationResult.InvalidPassword ->
                 _signUpState.value = SignUpState.BadPassword
+
+            CredentialsValidationResult.Valid -> {}
         }
     }
 }

@@ -45,6 +45,7 @@ fun SignUpScreen(
 
     var email by remember { mutableStateOf("") }
     var pass by remember { mutableStateOf("") }
+    var about by remember { mutableStateOf("") }
 
     val signUpState by signUpViewModel.signUpState.observeAsState()
 
@@ -61,22 +62,53 @@ fun SignUpScreen(
         Spacer(Modifier.height(8.dp))
         LoginField(
             value = email,
-            onValueChange = { email = it }
+            onValueChange = { email = it },
         )
         PasswordField(
             value = pass,
-            onValueChange = { pass = it }
+            onValueChange = { pass = it },
+        )
+        Spacer(Modifier.height(8.dp))
+        AboutField(
+            value = about,
+            onValueChange = { about = it },
         )
         Spacer(Modifier.height(8.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                signUpViewModel.createAccount(email, pass, "")
+                signUpViewModel.createAccount(email, pass, about)
             }
         ) {
             Text(text = stringResource(id = R.string.signUp))
         }
     }
+}
+
+@Composable
+private fun ScreenTitle(@StringRes titleResource: Int) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = stringResource(id = titleResource),
+            style = typography.headlineMedium
+        )
+    }
+}
+
+@Composable
+private fun LoginField(
+    value: String,
+    onValueChange: (String) -> Unit,
+) {
+    OutlinedTextField(
+        modifier = Modifier.fillMaxWidth(),
+        value = value,
+        label = { Text(text = stringResource(id = R.string.email)) },
+        onValueChange = onValueChange,
+    )
 }
 
 @Composable
@@ -106,6 +138,20 @@ private fun PasswordField(
     )
 }
 
+
+@Composable
+private fun AboutField(
+    value: String,
+    onValueChange: (String) -> Unit,
+) {
+    OutlinedTextField(
+        modifier = Modifier.fillMaxWidth(),
+        value = value,
+        label = { Text(text = stringResource(id = R.string.email)) },
+        onValueChange = onValueChange,
+    )
+}
+
 @Composable
 private fun VisibilityToggle(
     isPassVisible: Boolean,
@@ -121,34 +167,7 @@ private fun VisibilityToggle(
 }
 
 @Composable
-private fun LoginField(
-    value: String,
-    onValueChange: (String) -> Unit,
-) {
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = value,
-        label = { Text(text = stringResource(id = R.string.email)) },
-        onValueChange = onValueChange,
-    )
-}
-
-@Composable
-private fun ScreenTitle(@StringRes titleResource: Int) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
-    ) {
-        Text(
-            text = stringResource(id = titleResource),
-            style = typography.headlineMedium
-        )
-    }
-}
-
-@Composable
 @Preview(device = "id:pixel_8", showBackground = true)
 fun SignUpScreen() {
-    val onSignedUp: () -> Unit
     SignUpScreen {}
 }

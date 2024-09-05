@@ -19,7 +19,7 @@ fun launchSignUpScreen(
     return SignUpRobot(rule).apply(block)
 }
 
-class SignUpRobot (
+class SignUpRobot(
     private val rule: SignUpTestRule,
 ) {
 
@@ -48,7 +48,7 @@ class SignUpRobot (
 class SignUpVerification(
     private val rule: SignUpTestRule
 ) {
-    val timeline = rule.activity.getString(R.string.timeline)
+    private val timeline = rule.activity.getString(R.string.timeline)
     fun timelineScreenIsPresent() {
         rule.onNodeWithText(timeline).assertIsDisplayed()
     }

@@ -6,4 +6,5 @@
     <string name="timeline">Timeline</string>
     <string name="createAnAccount">Create an account</string>
     <string name="passwordToggleVisiblity">The toggle of the password visibility</string>
+    <string name="about">About</string>
 </resources>

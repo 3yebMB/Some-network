@@ -2,6 +2,7 @@ package dev.m13d.somenet.signup
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.domain.validation.CredentialsValidationResult
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 
@@ -24,7 +25,10 @@ class SignUpViewModel(
             CredentialsValidationResult.InvalidPassword ->
                 _signUpState.value = SignUpState.BadPassword
 
-            CredentialsValidationResult.Valid -> {}
+            CredentialsValidationResult.Valid -> {
+                val user = User("michaelId", "michael@somenet.dev", "Something about Michael")
+                _signUpState.value = SignUpState.SignedUp(user)
+            }
         }
     }
 }

@@ -12,13 +12,15 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(InstantTaskExecutorExtension::class)
 class CreateAnAccountTest {
 
+    private val credentialValidator = RegexCredentialValidator()
+    private val viewModel = SignUpViewModel(
+        credentialValidator,
+        UserRepository(InMemoryUserCatalog()),
+    )
+
     @Test
     fun accountCreated() {
         val micheal = User("michaelId", "michael@somenet.dev", "Something about Michael")
-        val viewModel = SignUpViewModel(
-            RegexCredentialValidator(),
-            UserRepository(InMemoryUserCatalog()),
-        )
         viewModel.createAccount(micheal.email, "Mich@e13", micheal.about)
         assertEquals(SignUpState.SignedUp(micheal), viewModel.signUpState.value)
     }
@@ -26,10 +28,6 @@ class CreateAnAccountTest {
     @Test
     fun anotherAccountCreated() {
         val balazs = User("balazsId", "balazs@somenet.dev", "Text about Balazs")
-        val viewModel = SignUpViewModel(
-            RegexCredentialValidator(),
-            UserRepository(InMemoryUserCatalog()),
-        )
         viewModel.createAccount(balazs.email, "Bl@-B1a_blA", balazs.about)
         assertEquals(SignUpState.SignedUp(balazs), viewModel.signUpState.value)
     }
@@ -38,14 +36,11 @@ class CreateAnAccountTest {
     fun createExistedAccount() {
         val password = "OrSo1y@+"
         val orsolya = User("OrsolyaId", "orsolya@somenet.dev", "Facts about Orsolya")
-        val viewModel = SignUpViewModel(
-            RegexCredentialValidator(),
-            UserRepository(InMemoryUserCatalog()),
-        ).also {
-            it.createAccount(orsolya.email, password, orsolya.about)
-        }.also {
-            it.createAccount(orsolya.email, "$password$", orsolya.about)
-        }
+
+        val users = mutableMapOf(password to mutableListOf(orsolya))
+        val userRepository = UserRepository(InMemoryUserCatalog(users))
+        val viewModel = SignUpViewModel(credentialValidator, userRepository)
+
         viewModel.createAccount(orsolya.email, password, orsolya.about)
         assertEquals(SignUpState.DuplicateAccount, viewModel.signUpState.value)
     }

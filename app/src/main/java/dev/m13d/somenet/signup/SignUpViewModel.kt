@@ -26,7 +26,10 @@ class SignUpViewModel(
                 _signUpState.value = SignUpState.BadPassword
 
             CredentialsValidationResult.Valid -> {
-                val user = User("michaelId", "michael@somenet.dev", "Something about Michael")
+                val user = if (email.contains("balazs"))
+                    User("balazsId", "balazs@somenet.dev", "Text about Balazs")
+                else
+                    User("michaelId", "michael@somenet.dev", "Something about Michael")
                 _signUpState.value = SignUpState.SignedUp(user)
             }
         }

@@ -26,14 +26,17 @@ class SignUpViewModel(
                 _signUpState.value = SignUpState.BadPassword
 
             CredentialsValidationResult.Valid -> {
-                if (email.contains("orsolya")) {
+                if (users.contains(email)) {
                     _signUpState.value = SignUpState.DuplicateAccount
                 } else {
                     val userId = email.takeWhile { it != '@' } + "Id"
                     val user = User(userId = userId, email = email, about = about)
+                    users[email] = user
                     _signUpState.value = SignUpState.SignedUp(user)
                 }
             }
         }
     }
+
+    private val users = mutableMapOf<String, User>()
 }

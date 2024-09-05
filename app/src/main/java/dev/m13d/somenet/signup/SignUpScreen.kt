@@ -17,6 +17,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,10 +30,28 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
+import dev.m13d.somenet.domain.user.InMemoryUserCatalog
+import dev.m13d.somenet.domain.user.UserRepository
+import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 
 @Composable
-@Preview(device = "id:pixel_8", showBackground = true)
-fun SignUpScreen() {
+fun SignUpScreen(
+    onSignedUp: () -> Unit,
+) {
+
+    val credentialValidator = RegexCredentialValidator()
+    val userRepository = UserRepository(InMemoryUserCatalog())
+    val signUpViewModel = SignUpViewModel(credentialValidator, userRepository)
+
+    var email by remember { mutableStateOf("") }
+    var pass by remember { mutableStateOf("") }
+
+    val signUpState by signUpViewModel.signUpState.observeAsState()
+
+    if (signUpState is SignUpState.SignedUp) {
+        onSignedUp()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -40,12 +59,10 @@ fun SignUpScreen() {
     ) {
         ScreenTitle(R.string.createAnAccount)
         Spacer(Modifier.height(8.dp))
-        var email by remember { mutableStateOf("") }
         LoginField(
             value = email,
             onValueChange = { email = it }
         )
-        var pass by remember { mutableStateOf("") }
         PasswordField(
             value = pass,
             onValueChange = { pass = it }
@@ -53,7 +70,9 @@ fun SignUpScreen() {
         Spacer(Modifier.height(8.dp))
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {}
+            onClick = {
+                signUpViewModel.createAccount(email, pass, "")
+            }
         ) {
             Text(text = stringResource(id = R.string.signUp))
         }
@@ -125,4 +144,11 @@ private fun ScreenTitle(@StringRes titleResource: Int) {
             style = typography.headlineMedium
         )
     }
+}
+
+@Composable
+@Preview(device = "id:pixel_8", showBackground = true)
+fun SignUpScreen() {
+    val onSignedUp: () -> Unit
+    SignUpScreen {}
 }

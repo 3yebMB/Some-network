@@ -9,11 +9,10 @@ import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 
 class SignUpViewModel(
     private val credentialValidator: RegexCredentialValidator,
+    private val userRepository: UserRepository,
 ) {
     private val _signUpState = MutableLiveData<SignUpState>()
     val signUpState: LiveData<SignUpState> = _signUpState
-
-    private val userRepository = UserRepository(InMemoryUserCatalog())
 
     fun createAccount(
         email: String,

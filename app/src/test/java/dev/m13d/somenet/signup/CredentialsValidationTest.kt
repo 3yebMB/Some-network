@@ -1,6 +1,8 @@
 package dev.m13d.somenet.signup
 
 import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.domain.user.InMemoryUserCatalog
+import dev.m13d.somenet.domain.user.UserRepository
 import dev.m13d.somenet.domain.validation.CredentialsValidationResult
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -23,7 +25,10 @@ class CredentialsValidationTest {
         "'email'",
     )
     fun invalidEmail(email: String) {
-        val viewModel = SignUpViewModel(RegexCredentialValidator())
+        val viewModel = SignUpViewModel(
+            RegexCredentialValidator(),
+            UserRepository(InMemoryUserCatalog()),
+        )
         viewModel.createAccount(email, ":password:", "about")
         assertEquals(SignUpState.BadEmail, viewModel.signUpState.value)
     }
@@ -41,7 +46,10 @@ class CredentialsValidationTest {
         "QWERTY123%&",
     )
     fun invalidPassword(password: String) {
-        val viewModel = SignUpViewModel(RegexCredentialValidator())
+        val viewModel = SignUpViewModel(
+            RegexCredentialValidator(),
+            UserRepository(InMemoryUserCatalog()),
+        )
         viewModel.createAccount("michael@somenet.dev", password, ":about:")
         assertEquals(SignUpState.BadPassword, viewModel.signUpState.value)
     }

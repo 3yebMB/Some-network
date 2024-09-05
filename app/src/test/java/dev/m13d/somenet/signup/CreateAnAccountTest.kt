@@ -1,7 +1,9 @@
 package dev.m13d.somenet.signup
 
 import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.User
+import dev.m13d.somenet.domain.user.UserRepository
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -13,7 +15,10 @@ class CreateAnAccountTest {
     @Test
     fun accountCreated() {
         val micheal = User("michaelId", "michael@somenet.dev", "Something about Michael")
-        val viewModel = SignUpViewModel(RegexCredentialValidator())
+        val viewModel = SignUpViewModel(
+            RegexCredentialValidator(),
+            UserRepository(InMemoryUserCatalog()),
+        )
         viewModel.createAccount(micheal.email, "Mich@e13", micheal.about)
         assertEquals(SignUpState.SignedUp(micheal), viewModel.signUpState.value)
     }
@@ -21,7 +26,10 @@ class CreateAnAccountTest {
     @Test
     fun anotherAccountCreated() {
         val balazs = User("balazsId", "balazs@somenet.dev", "Text about Balazs")
-        val viewModel = SignUpViewModel(RegexCredentialValidator())
+        val viewModel = SignUpViewModel(
+            RegexCredentialValidator(),
+            UserRepository(InMemoryUserCatalog()),
+        )
         viewModel.createAccount(balazs.email, "Bl@-B1a_blA", balazs.about)
         assertEquals(SignUpState.SignedUp(balazs), viewModel.signUpState.value)
     }
@@ -30,7 +38,10 @@ class CreateAnAccountTest {
     fun createExistedAccount() {
         val password = "OrSo1y@+"
         val orsolya = User("OrsolyaId", "orsolya@somenet.dev", "Facts about Orsolya")
-        val viewModel = SignUpViewModel(RegexCredentialValidator()).also {
+        val viewModel = SignUpViewModel(
+            RegexCredentialValidator(),
+            UserRepository(InMemoryUserCatalog()),
+        ).also {
             it.createAccount(orsolya.email, password, orsolya.about)
         }.also {
             it.createAccount(orsolya.email, "$password$", orsolya.about)

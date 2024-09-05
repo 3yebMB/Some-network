@@ -140,19 +140,6 @@ private fun PasswordField(
 
 
 @Composable
-private fun AboutField(
-    value: String,
-    onValueChange: (String) -> Unit,
-) {
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = value,
-        label = { Text(text = stringResource(id = R.string.email)) },
-        onValueChange = onValueChange,
-    )
-}
-
-@Composable
 private fun VisibilityToggle(
     isPassVisible: Boolean,
     onToggle: () -> Unit,
@@ -164,6 +151,19 @@ private fun VisibilityToggle(
             contentDescription = stringResource(id = R.string.passwordToggleVisiblity)
         )
     }
+}
+
+@Composable
+private fun AboutField(
+    value: String,
+    onValueChange: (String) -> Unit,
+) {
+    OutlinedTextField(
+        modifier = Modifier.fillMaxWidth(),
+        value = value,
+        label = { Text(text = stringResource(id = R.string.about)) },
+        onValueChange = onValueChange,
+    )
 }
 
 @Composable

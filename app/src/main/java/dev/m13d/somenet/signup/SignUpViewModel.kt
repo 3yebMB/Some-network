@@ -26,22 +26,31 @@ class SignUpViewModel(
                 _signUpState.value = SignUpState.BadPassword
 
             CredentialsValidationResult.Valid -> {
-                val isKnown = users.values.flatten().any { it.email == email }
-                if (isKnown) {
-                    _signUpState.value = SignUpState.DuplicateAccount
-                } else {
+                try {
                     val user = createUser(email, password, about)
                     _signUpState.value = SignUpState.SignedUp(user)
+                } catch (duplicateAccount: DuplicateAccountException) {
+                    _signUpState.value = SignUpState.DuplicateAccount
                 }
             }
         }
     }
 
-    private fun createUser(email: String, password: String, about: String): User {
+    private fun createUser(
+        email: String,
+        password: String,
+        about: String
+    ): User {
+        if (users.values.flatten().any { it.email == email })
+            throw DuplicateAccountException()
         val userId = email.takeWhile { it != '@' } + "Id"
         val user = User(userId = userId, email = email, about = about)
         users.getOrPut(password, ::mutableListOf).add(user)
         return user
+    }
+
+    class DuplicateAccountException : Throwable() {
+
     }
 
     private val users = mutableMapOf<String, MutableList<User>>()

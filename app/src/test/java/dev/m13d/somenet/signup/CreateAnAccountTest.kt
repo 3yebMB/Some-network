@@ -14,7 +14,7 @@ class CreateAnAccountTest {
     fun accountCreated() {
         val micheal = User("michaelId", "michael@somenet.dev", "Something about Michael")
         val viewModel = SignUpViewModel(RegexCredentialValidator())
-        viewModel.createAccount("michael@somenet.dev", "Mich@e13", "Something about Michael")
+        viewModel.createAccount(micheal.email, "Mich@e13", micheal.about)
         assertEquals(SignUpState.SignedUp(micheal), viewModel.signUpState.value)
     }
 }

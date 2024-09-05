@@ -10,4 +10,6 @@ sealed class SignUpState {
 
     object BadPassword : SignUpState()
 
+    object DuplicateAccount : SignUpState()
+
 }

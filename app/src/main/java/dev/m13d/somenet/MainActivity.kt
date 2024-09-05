@@ -5,8 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import dev.m13d.somenet.signup.SignUpScreen
 import dev.m13d.somenet.ui.theme.SoMeNetTheme
 
@@ -15,11 +21,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
             SoMeNetTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    SignUpScreen()
+                    NavHost(navController = navController, startDestination = "SignUpScreen") {
+                        composable("SignUpScreen") {
+                            SignUpScreen(onSignedUp = { navController.navigate("Timeline") })
+                        }
+                        composable("Timeline") {
+                            Text(text = stringResource(id = R.string.timeline))
+                        }
+                    }
 //                        modifier = Modifier.padding(innerPadding)
-//                    )
                 }
             }
         }

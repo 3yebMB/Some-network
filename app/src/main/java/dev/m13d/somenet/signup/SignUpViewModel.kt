@@ -26,7 +26,8 @@ class SignUpViewModel(
                 _signUpState.value = SignUpState.BadPassword
 
             CredentialsValidationResult.Valid -> {
-                if (users.contains(email)) {
+                val isKnown = users.values.flatten().any { it.email == email }
+                if (isKnown) {
                     _signUpState.value = SignUpState.DuplicateAccount
                 } else {
                     val user = createUser(email, password, about)
@@ -39,9 +40,9 @@ class SignUpViewModel(
     private fun createUser(email: String, password: String, about: String): User {
         val userId = email.takeWhile { it != '@' } + "Id"
         val user = User(userId = userId, email = email, about = about)
-        users.getOrPut(email, ::mutableMapOf)[password] = user
+        users.getOrPut(password, ::mutableListOf).add(user)
         return user
     }
 
-    private val users = mutableMapOf<String, MutableMap<String, User>>()
+    private val users = mutableMapOf<String, MutableList<User>>()
 }

@@ -8,15 +8,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dev.m13d.somenet.signup.SignUpScreen
+import dev.m13d.somenet.timeline.TimelineScreen
 import dev.m13d.somenet.ui.theme.SoMeNetTheme
 
 class MainActivity : ComponentActivity() {
+
+    private companion object {
+        private const val SIGNUP = "SignUpScreen"
+        private const val TIMELINE = "Timeline"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -24,12 +32,12 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             SoMeNetTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NavHost(navController = navController, startDestination = "SignUpScreen") {
+                    NavHost(navController = navController, startDestination = SIGNUP) {
                         composable("SignUpScreen") {
                             SignUpScreen(onSignedUp = { navController.navigate("Timeline") })
                         }
-                        composable("Timeline") {
-                            Text(text = stringResource(id = R.string.timeline))
+                        composable(TIMELINE) {
+                            TimelineScreen()
                         }
                     }
 //                        modifier = Modifier.padding(innerPadding)

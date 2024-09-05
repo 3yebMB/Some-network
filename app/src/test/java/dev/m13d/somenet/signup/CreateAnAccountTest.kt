@@ -32,6 +32,8 @@ class CreateAnAccountTest {
         val orsolya = User("OrsolyaId", "orsolya@somenet.dev", "Facts about Orsolya")
         val viewModel = SignUpViewModel(RegexCredentialValidator()).also {
             it.createAccount(orsolya.email, password, orsolya.about)
+        }.also {
+            it.createAccount(orsolya.email, "$password$", orsolya.about)
         }
         viewModel.createAccount(orsolya.email, password, orsolya.about)
         assertEquals(SignUpState.DuplicateAccount, viewModel.signUpState.value)

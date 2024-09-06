@@ -4,15 +4,16 @@ androidSdk-target = "34"
 androidSdk-min = "24"
 agp = "8.6.0"
 archCoreTesting = "2.2.0"
+koinBom = "3.5.6"
 kotlin = "2.0.20"
 coreKtx = "1.13.1"
 junit = "5.11.0"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 kotlinxCoroutinesTest = "1.6.1"
-lifecycleRuntimeKtx = "2.8.4"
-activityCompose = "1.9.1"
-composeBom = "2024.08.00"
+lifecycleRuntimeKtx = "2.8.5"
+activityCompose = "1.9.2"
+composeBom = "2024.09.00"
 navigationCompose = "2.8.0"
 runtimeLivedata = "1.7.0"
 
@@ -32,6 +33,12 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBom" }
+koin-android = { group = "io.insert-koin", name = "koin-android" }
+koin-coroutines = { group = "io.insert-koin", name = "koin-core-coroutines" }
+koin-workmanager = { group = "io.insert-koin", name = "koin-androidx-workmanager" }
+koin-junit = { group = "io.insert-koin", name = "koin-test-junit4" }
+koin-android-test = { group = "io.insert-koin", name = "koin-android-test" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
@@ -41,3 +48,17 @@ androidx-core-testing = { module = "androidx.arch.core:core-testing", version.re
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+[bundles]
+compose-ui = [
+    "androidx-ui",
+    "androidx-ui-graphics",
+    "androidx-ui-tooling-preview",
+    "androidx-material3",
+]
+
+koin = [
+    "koin-android",
+    "koin-coroutines",
+    "koin-workmanager",
+]

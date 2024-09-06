@@ -2,6 +2,7 @@ package dev.m13d.somenet.signup
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import dev.m13d.somenet.domain.user.UserRepository
 import dev.m13d.somenet.domain.validation.CredentialsValidationResult
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
@@ -9,7 +10,7 @@ import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 class SignUpViewModel(
     private val credentialValidator: RegexCredentialValidator,
     private val userRepository: UserRepository,
-) {
+): ViewModel() {
     private val _signUpState = MutableLiveData<SignUpState>()
     val signUpState: LiveData<SignUpState> = _signUpState
 

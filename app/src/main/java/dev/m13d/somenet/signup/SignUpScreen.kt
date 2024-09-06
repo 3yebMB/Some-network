@@ -36,13 +36,9 @@ import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 
 @Composable
 fun SignUpScreen(
+    signUpViewModel : SignUpViewModel,
     onSignedUp: () -> Unit,
 ) {
-
-    val credentialValidator = RegexCredentialValidator()
-    val userRepository = UserRepository(InMemoryUserCatalog())
-    val signUpViewModel = SignUpViewModel(credentialValidator, userRepository)
-
     var email by remember { mutableStateOf("") }
     var pass by remember { mutableStateOf("") }
     var about by remember { mutableStateOf("") }
@@ -164,10 +160,4 @@ private fun AboutField(
         label = { Text(text = stringResource(id = R.string.about)) },
         onValueChange = onValueChange,
     )
-}
-
-@Composable
-@Preview(device = "id:pixel_8", showBackground = true)
-fun SignUpScreen() {
-    SignUpScreen {}
 }

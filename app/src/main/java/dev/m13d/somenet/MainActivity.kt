@@ -11,8 +11,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dev.m13d.somenet.signup.SignUpScreen
+import dev.m13d.somenet.signup.SignUpViewModel
 import dev.m13d.somenet.timeline.TimelineScreen
 import dev.m13d.somenet.ui.theme.SoMeNetTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -20,6 +22,8 @@ class MainActivity : ComponentActivity() {
         private const val SIGNUP = "SignUpScreen"
         private const val TIMELINE = "Timeline"
     }
+
+    private val signUpViewModel: SignUpViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +34,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     NavHost(navController = navController, startDestination = SIGNUP) {
                         composable("SignUpScreen") {
-                            SignUpScreen(onSignedUp = { navController.navigate("Timeline") })
+                            SignUpScreen(signUpViewModel) { navController.navigate(TIMELINE) }
                         }
                         composable(TIMELINE) {
                             TimelineScreen()

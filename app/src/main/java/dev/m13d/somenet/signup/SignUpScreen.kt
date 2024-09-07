@@ -1,7 +1,9 @@
 package dev.m13d.somenet.signup
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,8 +14,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,12 +31,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
-import dev.m13d.somenet.domain.user.InMemoryUserCatalog
-import dev.m13d.somenet.domain.user.UserRepository
-import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 
 @Composable
 fun SignUpScreen(
@@ -49,35 +49,51 @@ fun SignUpScreen(
         onSignedUp()
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        ScreenTitle(R.string.createAnAccount)
-        Spacer(Modifier.height(8.dp))
-        LoginField(
-            value = email,
-            onValueChange = { email = it },
-        )
-        PasswordField(
-            value = pass,
-            onValueChange = { pass = it },
-        )
-        Spacer(Modifier.height(8.dp))
-        AboutField(
-            value = about,
-            onValueChange = { about = it },
-        )
-        Spacer(Modifier.height(8.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                signUpViewModel.createAccount(email, pass, about)
-            }
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
-            Text(text = stringResource(id = R.string.signUp))
+            ScreenTitle(R.string.createAnAccount)
+            Spacer(Modifier.height(8.dp))
+            LoginField(
+                value = email,
+                onValueChange = { email = it },
+            )
+            PasswordField(
+                value = pass,
+                onValueChange = { pass = it },
+            )
+            Spacer(Modifier.height(8.dp))
+            AboutField(
+                value = about,
+                onValueChange = { about = it },
+            )
+            Spacer(Modifier.height(8.dp))
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    signUpViewModel.createAccount(email, pass, about)
+                }
+            ) {
+                Text(text = stringResource(id = R.string.signUp))
+            }
         }
+        if (signUpState is SignUpState.DuplicateAccount) {
+            InfoMessage(R.string.duplicateAccountException)
+        }
+    }
+}
+
+@Composable
+fun InfoMessage(@StringRes stringResource: Int) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.secondaryContainer),
+    ) {
+        Text(text = stringResource(id = stringResource))
     }
 }
 
@@ -144,7 +160,7 @@ private fun VisibilityToggle(
         val resource = if (isPassVisible) R.drawable.pass_visible else R.drawable.pass_invisible
         Icon(
             painter = painterResource(id = resource),
-            contentDescription = stringResource(id = R.string.passwordToggleVisiblity)
+            contentDescription = stringResource(id = R.string.passwordVisibilityToggle)
         )
     }
 }

@@ -39,17 +39,25 @@ class SignUpRobot(
     }
 
     infix fun verify(
-        block: SignUpVerification.() -> Unit
+        block: SignUpVerification.() -> Unit,
     ): SignUpVerification {
         return SignUpVerification(rule).apply(block)
     }
 }
 
 class SignUpVerification(
-    private val rule: SignUpTestRule
+    private val rule: SignUpTestRule,
 ) {
-    private val timeline = rule.activity.getString(R.string.timeline)
+
     fun timelineScreenIsPresent() {
-        rule.onNodeWithText(timeline).assertIsDisplayed()
+        val timeline = rule.activity.getString(R.string.timeline)
+        rule.onNodeWithText(timeline)
+            .assertIsDisplayed()
+    }
+
+    fun duplicateAccountErrorIsShown() {
+        val duplicateAccountError = rule.activity.getString(R.string.duplicateAccountException)
+        rule.onNodeWithText(duplicateAccountError)
+            .assertIsDisplayed()
     }
 }

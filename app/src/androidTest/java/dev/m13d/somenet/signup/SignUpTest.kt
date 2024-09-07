@@ -3,6 +3,7 @@ package dev.m13d.somenet.signup
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dev.m13d.somenet.MainActivity
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
+import dev.m13d.somenet.domain.user.UserCatalog
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -17,7 +18,7 @@ class SignUpTest {
 
     private val userCatalog = InMemoryUserCatalog()
     private val signUpModule = module {
-        factory { userCatalog }
+        factory<UserCatalog> { userCatalog }
     }
 
     @Before

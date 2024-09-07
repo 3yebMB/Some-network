@@ -7,5 +7,7 @@
     <string name="createAnAccount">Create an account</string>
     <string name="passwordVisibilityToggle">The toggle of the password visibility</string>
     <string name="about">About</string>
-    <string name="duplicateAccountException">An account with this email already exists</string>
+    <string name="duplicateAccountError">An account with this email already exists</string>
+    <string name="createAccountError">Could not create an account</string>
+    <string name="offlineError">It seems you\'re offline</string>
 </resources>

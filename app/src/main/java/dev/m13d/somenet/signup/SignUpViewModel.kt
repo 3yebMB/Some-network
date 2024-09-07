@@ -27,7 +27,7 @@ class SignUpViewModel(
                 _signUpState.value = SignUpState.BadPassword
 
             CredentialsValidationResult.Valid ->
-                _signUpState.value = userRepository.signUpState(email, password, about)
+                _signUpState.value = userRepository.signUp(email, password, about)
         }
     }
 }

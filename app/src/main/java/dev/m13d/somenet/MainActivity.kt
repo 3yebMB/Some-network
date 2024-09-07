@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
             SoMeNetTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     NavHost(navController = navController, startDestination = SIGNUP) {
-                        composable("SignUpScreen") {
+                        composable(SIGNUP) {
                             SignUpScreen(signUpViewModel) { navController.navigate(TIMELINE) }
                         }
                         composable(TIMELINE) {

@@ -6,7 +6,7 @@ import dev.m13d.somenet.signup.SignUpState
 class UserRepository(
     private val userCatalog: InMemoryUserCatalog,
 ) {
-    fun signUpState(
+    fun signUp(
         email: String,
         password: String,
         about: String

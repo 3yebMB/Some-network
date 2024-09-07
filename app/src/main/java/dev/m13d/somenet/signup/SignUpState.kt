@@ -12,4 +12,6 @@ sealed class SignUpState {
 
     object DuplicateAccount : SignUpState()
 
+    object BackendError : SignUpState()
+
 }

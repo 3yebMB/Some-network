@@ -6,8 +6,9 @@ typealias PasswordUserType = MutableMap<String, MutableList<User>>
 
 class InMemoryUserCatalog(
     private val users: PasswordUserType = mutableMapOf()
-) {
-    fun createUser(
+): UserCatalog {
+
+    override fun createUser(
         email: String,
         password: String,
         about: String

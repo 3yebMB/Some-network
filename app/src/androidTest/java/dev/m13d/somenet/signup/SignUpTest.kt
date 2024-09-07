@@ -2,7 +2,9 @@ package dev.m13d.somenet.signup
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dev.m13d.somenet.MainActivity
+import dev.m13d.somenet.domain.exceptions.BackendException
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
+import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.domain.user.UserCatalog
 import org.junit.After
 import org.junit.Before
@@ -53,11 +55,35 @@ class SignUpTest {
         }
     }
 
+    @Test
+    fun displayBackendError() {
+        val replaceModule = module {
+            factory<UserCatalog> { UnavailableUserCatalog() }
+        }
+        loadKoinModules(replaceModule)
+
+        launchSignUpScreen(signUpTestRule) {
+            typeEmail("robert@somenet.dev")
+            typePassword("J0hn#333")
+            submit()
+        } verify {
+            backendErrorIsShown()
+        }
+    }
+
     @After
     fun tearDown() {
         val resetModule = module {
             single { InMemoryUserCatalog() }
+            single<UserCatalog> { InMemoryUserCatalog() }
         }
         loadKoinModules(resetModule)
+    }
+}
+
+
+class UnavailableUserCatalog : UserCatalog {
+    override fun createUser(email: String, password: String, about: String): User {
+        throw BackendException()
     }
 }

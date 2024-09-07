@@ -36,7 +36,7 @@ import dev.m13d.somenet.R
 
 @Composable
 fun SignUpScreen(
-    signUpViewModel : SignUpViewModel,
+    signUpViewModel: SignUpViewModel,
     onSignedUp: () -> Unit,
 ) {
     var email by remember { mutableStateOf("") }
@@ -81,7 +81,9 @@ fun SignUpScreen(
             }
         }
         if (signUpState is SignUpState.DuplicateAccount) {
-            InfoMessage(R.string.duplicateAccountException)
+            InfoMessage(R.string.duplicateAccountError)
+        } else if (signUpState is SignUpState.BackendError) {
+            InfoMessage(R.string.createAccountError)
         }
     }
 }

@@ -3,6 +3,7 @@ package dev.m13d.somenet.signup
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dev.m13d.somenet.MainActivity
 import dev.m13d.somenet.domain.exceptions.BackendException
+import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.domain.user.UserCatalog
@@ -71,16 +72,36 @@ class SignUpTest {
         }
     }
 
+    @Test
+    fun displayOfflineError() {
+        val replaceModule = module {
+            factory<UserCatalog> { OfflineUserCatalog() }
+        }
+        loadKoinModules(replaceModule)
+
+        launchSignUpScreen(signUpTestRule) {
+            typeEmail("philip@somenet.dev")
+            typePassword("J0hn#333")
+            submit()
+        } verify {
+            offlineErrorIsShown()
+        }
+    }
+
     @After
     fun tearDown() {
         val resetModule = module {
-            single { InMemoryUserCatalog() }
             single<UserCatalog> { InMemoryUserCatalog() }
         }
         loadKoinModules(resetModule)
     }
 }
 
+class OfflineUserCatalog : UserCatalog {
+    override fun createUser(email: String, password: String, about: String): User {
+        throw ConnectionUnavailableException()
+    }
+}
 
 class UnavailableUserCatalog : UserCatalog {
     override fun createUser(email: String, password: String, about: String): User {

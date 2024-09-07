@@ -11,4 +11,5 @@
     <string name="createAccountError">Could not create an account</string>
     <string name="offlineError">It seems you\'re offline</string>
     <string name="badEmail">Invalid email format</string>
+    <string name="badPassword">Invalid password format</string>
 </resources>

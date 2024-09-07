@@ -14,4 +14,6 @@ sealed class SignUpState {
 
     object BackendError : SignUpState()
 
+    object Offline : SignUpState()
+
 }

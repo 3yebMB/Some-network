@@ -25,7 +25,7 @@ class SignUpScreenState(
 
     private var lastSubmittedPassword by mutableStateOf("")
     val showBadPassword: Boolean
-        get() = isBadPassword && lastSubmittedPassword == email
+        get() = isBadPassword && lastSubmittedPassword == password
 
     fun toggleInfoMessage(@StringRes message: Int) = coroutineScope.launch {
         if (infoMessage != message) {

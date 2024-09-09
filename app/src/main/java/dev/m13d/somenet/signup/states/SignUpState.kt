@@ -1,4 +1,4 @@
-package dev.m13d.somenet.signup
+package dev.m13d.somenet.signup.states
 
 import dev.m13d.somenet.domain.user.User
 

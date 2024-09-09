@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import dev.m13d.somenet.signup.states.SignUpState
 
 @Composable
 fun SignUpScreen(

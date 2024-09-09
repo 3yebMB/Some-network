@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import dev.m13d.somenet.domain.user.UserRepository
 import dev.m13d.somenet.domain.validation.CredentialsValidationResult
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
+import dev.m13d.somenet.signup.states.SignUpState
 
 class SignUpViewModel(
     private val credentialValidator: RegexCredentialValidator,

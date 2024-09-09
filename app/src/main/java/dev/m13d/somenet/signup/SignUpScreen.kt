@@ -43,6 +43,7 @@ fun SignUpScreen(
     var pass by remember { mutableStateOf("") }
     var isBadPassword by remember { mutableStateOf(false) }
     var about by remember { mutableStateOf("") }
+    var infoMessage: Int? by remember { mutableStateOf(null) }
 
     val signUpState by signUpViewModel.signUpState.observeAsState()
 
@@ -50,9 +51,9 @@ fun SignUpScreen(
         is SignUpState.SignedUp -> onSignedUp()
         is SignUpState.BadEmail -> isBadEmail = true
         is SignUpState.BadPassword -> isBadPassword = true
-        is SignUpState.DuplicateAccount -> InfoMessage(R.string.duplicateAccountError)
-        is SignUpState.BackendError -> InfoMessage(R.string.createAccountError)
-        is SignUpState.Offline -> InfoMessage(R.string.offlineError)
+        is SignUpState.DuplicateAccount -> infoMessage = R.string.duplicateAccountError
+        is SignUpState.BackendError -> infoMessage = R.string.createAccountError
+        is SignUpState.Offline -> infoMessage = R.string.offlineError
         else -> {}
     }
 
@@ -89,13 +90,14 @@ fun SignUpScreen(
                 Text(text = stringResource(id = R.string.signUp))
             }
         }
+        infoMessage?.let { InfoMessage(it) }
     }
 }
 
 @Composable
 fun InfoMessage(@StringRes stringResource: Int) {
     Surface(
-        color = MaterialTheme.colorScheme.secondaryContainer,
+        color = MaterialTheme.colorScheme.error,
         shadowElevation = 4.dp,
         modifier = Modifier.fillMaxWidth(),
     ) {

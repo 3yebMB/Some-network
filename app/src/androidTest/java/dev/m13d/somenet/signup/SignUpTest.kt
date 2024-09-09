@@ -7,6 +7,7 @@ import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.domain.user.UserCatalog
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -84,7 +85,7 @@ class SignUpTest {
     }
 
     @Test
-    fun displayDuplicateAccountError() {
+    fun displayDuplicateAccountError() = runBlocking<Unit> {
         val signedUpUserEmail = "alice@somenet.dev"
         val signedUpUserPassword = "@l1cePass"
 
@@ -141,13 +142,13 @@ class SignUpTest {
 }
 
 class OfflineUserCatalog : UserCatalog {
-    override fun createUser(email: String, password: String, about: String): User {
+    override suspend fun createUser(email: String, password: String, about: String): User {
         throw ConnectionUnavailableException()
     }
 }
 
 class UnavailableUserCatalog : UserCatalog {
-    override fun createUser(email: String, password: String, about: String): User {
+    override suspend fun createUser(email: String, password: String, about: String): User {
         throw BackendException()
     }
 }

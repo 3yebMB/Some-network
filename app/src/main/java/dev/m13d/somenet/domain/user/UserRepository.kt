@@ -8,7 +8,7 @@ import dev.m13d.somenet.signup.states.SignUpState
 class UserRepository(
     private val userCatalog: UserCatalog,
 ) {
-    fun signUp(
+    suspend fun signUp(
         email: String,
         password: String,
         about: String

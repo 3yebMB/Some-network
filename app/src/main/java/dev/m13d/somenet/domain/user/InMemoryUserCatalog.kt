@@ -8,7 +8,7 @@ class InMemoryUserCatalog(
     private val users: PasswordUserType = mutableMapOf()
 ): UserCatalog {
 
-    override fun createUser(
+    override suspend fun createUser(
         email: String,
         password: String,
         about: String

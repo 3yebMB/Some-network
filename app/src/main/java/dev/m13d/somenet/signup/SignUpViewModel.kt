@@ -38,11 +38,17 @@ class SignUpViewModel(
         }
     }
 
+    class TestDispatchers {
+        val background = Dispatchers.Unconfined
+    }
+
+    private val dispatchers = TestDispatchers()
+
     @SuppressLint("NullSafeMutableLiveData")
     private fun proceedWithSignUp(email: String, password: String, about: String) {
         viewModelScope.launch {
             _signUpState.value = SignUpState.Loading
-            _signUpState.value = withContext(Dispatchers.Unconfined) {
+            _signUpState.value = withContext(dispatchers.background) {
                 userRepository.signUp(email, password, about)
             }
         }

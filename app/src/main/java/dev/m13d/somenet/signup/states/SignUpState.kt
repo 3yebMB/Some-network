@@ -16,4 +16,6 @@ sealed class SignUpState {
 
     object Offline : SignUpState()
 
+    object Loading : SignUpState()
+
 }

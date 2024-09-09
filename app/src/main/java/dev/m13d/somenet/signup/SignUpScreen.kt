@@ -47,8 +47,14 @@ fun SignUpScreen(
 
     val signUpState by signUpViewModel.signUpState.observeAsState()
 
-    if (signUpState is SignUpState.SignedUp) {
-        onSignedUp()
+    when (signUpState) {
+        is SignUpState.SignedUp -> onSignedUp()
+        is SignUpState.BadEmail -> isBadEmail = true
+        is SignUpState.BadPassword -> isBadPassword = true
+        is SignUpState.DuplicateAccount -> InfoMessage(R.string.duplicateAccountError)
+        is SignUpState.BackendError -> InfoMessage(R.string.createAccountError)
+        is SignUpState.Offline -> InfoMessage(R.string.offlineError)
+        else -> {}
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -83,17 +89,6 @@ fun SignUpScreen(
             ) {
                 Text(text = stringResource(id = R.string.signUp))
             }
-        }
-        if (signUpState is SignUpState.BadEmail) {
-            isBadEmail = true
-        } else if (signUpState is SignUpState.BadPassword) {
-            isBadPassword = true
-        } else if (signUpState is SignUpState.DuplicateAccount) {
-            InfoMessage(R.string.duplicateAccountError)
-        } else if (signUpState is SignUpState.BackendError) {
-            InfoMessage(R.string.createAccountError)
-        } else if (signUpState is SignUpState.Offline) {
-            InfoMessage(R.string.offlineError)
         }
     }
 }

@@ -13,12 +13,13 @@ val applicationModule = module {
     single<UserCatalog> { InMemoryUserCatalog() }
     factory { RegexCredentialValidator() }
     factory { UserRepository(userCatalog = get()) }
+    single<CoroutineDispatchers> { DefaultDispatchers() }
 
     viewModel {
         SignUpViewModel(
             credentialValidator = get(),
             userRepository = get(),
-            dispatchers = TestDispatchers(),
+            dispatchers = get(),
         )
     }
 }

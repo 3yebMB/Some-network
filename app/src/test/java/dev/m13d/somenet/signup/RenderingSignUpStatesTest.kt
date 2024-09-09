@@ -13,12 +13,12 @@ import kotlin.test.assertEquals
 @ExtendWith(InstantTaskExecutorExtension::class)
 class RenderingSignUpStatesTest {
 
+    private val userRepository = UserRepository(InMemoryUserCatalog())
+    private val viewModel = SignUpViewModel(RegexCredentialValidator(), userRepository)
+    private val tom = User("tomId", "tom@somenet.dev", "about Tom")
+
     @Test
     fun uiStatesAreDeliveredInParticularOrder() {
-
-        val userRepository = UserRepository(InMemoryUserCatalog())
-        val viewModel = SignUpViewModel(RegexCredentialValidator(), userRepository)
-        val tom = User("tomId", "tom@somenet.dev", "about Tom")
         val deliveredStates = mutableListOf<SignUpState>()
         viewModel.signUpState.observeForever { deliveredStates.add(it) }
         viewModel.createAccount(tom.email, "p@S\$w0rd", tom.about)

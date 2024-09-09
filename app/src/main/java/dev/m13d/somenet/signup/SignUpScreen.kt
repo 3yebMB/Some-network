@@ -38,8 +38,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import dev.m13d.somenet.signup.states.SignUpScreenState
 import dev.m13d.somenet.signup.states.SignUpState
 
 @Composable
@@ -47,40 +46,19 @@ fun SignUpScreen(
     signUpViewModel: SignUpViewModel,
     onSignedUp: () -> Unit,
 ) {
-    var email by remember { mutableStateOf("") }
-    var isBadEmail by remember { mutableStateOf(false) }
-    var pass by remember { mutableStateOf("") }
-    var isBadPassword by remember { mutableStateOf(false) }
-    var about by remember { mutableStateOf("") }
-    var infoMessage: Int? by remember { mutableStateOf(null) }
-    var isInfoMessageShowing by remember { mutableStateOf(false) }
-
     val coroutineScope = rememberCoroutineScope()
+    val screenState by remember { mutableStateOf(
+        SignUpScreenState(coroutineScope)
+    ) }
     val signUpState by signUpViewModel.signUpState.observeAsState()
-
-    fun toggleInfoMessage(@StringRes message: Int) = coroutineScope.launch {
-        if (infoMessage != message) {
-            infoMessage = message
-            if (!isInfoMessageShowing) {
-                isInfoMessageShowing = true
-                delay(1500L)
-                isInfoMessageShowing = false
-            }
-        }
-    }
-
-    fun resetUiState() {
-        infoMessage = null
-        isInfoMessageShowing = false
-    }
 
     when (signUpState) {
         is SignUpState.SignedUp -> onSignedUp()
-        is SignUpState.BadEmail -> isBadEmail = true
-        is SignUpState.BadPassword -> isBadPassword = true
-        is SignUpState.DuplicateAccount -> toggleInfoMessage(R.string.duplicateAccountError)
-        is SignUpState.BackendError -> toggleInfoMessage(R.string.createAccountError)
-        is SignUpState.Offline -> toggleInfoMessage(R.string.offlineError)
+        is SignUpState.BadEmail -> screenState.isBadEmail = true
+        is SignUpState.BadPassword -> screenState.isBadPassword = true
+        is SignUpState.DuplicateAccount -> screenState.toggleInfoMessage(R.string.duplicateAccountError)
+        is SignUpState.BackendError -> screenState.toggleInfoMessage(R.string.createAccountError)
+        is SignUpState.Offline -> screenState.toggleInfoMessage(R.string.offlineError)
         else -> {}
     }
 
@@ -93,32 +71,36 @@ fun SignUpScreen(
             ScreenTitle(R.string.createAnAccount)
             Spacer(Modifier.height(8.dp))
             LoginField(
-                value = email,
-                isError = isBadEmail,
-                onValueChange = { email = it },
+                value = screenState.email,
+                isError = screenState.isBadEmail,
+                onValueChange = { screenState.email = it },
             )
             PasswordField(
-                value = pass,
-                isError = isBadPassword,
-                onValueChange = { pass = it },
+                value = screenState.pass,
+                isError = screenState.isBadPassword,
+                onValueChange = { screenState.pass = it },
             )
             Spacer(Modifier.height(8.dp))
             AboutField(
-                value = about,
-                onValueChange = { about = it },
+                value = screenState.about,
+                onValueChange = { screenState.about = it },
             )
             Spacer(Modifier.height(8.dp))
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    resetUiState()
-                    signUpViewModel.createAccount(email, pass, about)
+                    screenState.resetUiState()
+                    with(screenState) {
+                        signUpViewModel.createAccount(email, pass, about)
+                    }
                 }
             ) {
                 Text(text = stringResource(id = R.string.signUp))
             }
         }
-        infoMessage?.let { InfoMessage(isVisible = isInfoMessageShowing, stringResource = it) }
+        screenState.infoMessage?.let {
+            InfoMessage(isVisible = screenState.isInfoMessageShowing, stringResource = it)
+        }
     }
 }
 

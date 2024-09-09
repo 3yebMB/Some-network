@@ -6,10 +6,12 @@ import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.domain.user.UserRepository
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 import dev.m13d.somenet.signup.states.SignUpState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.assertEquals
 
+@ExperimentalCoroutinesApi
 @ExtendWith(InstantTaskExecutorExtension::class)
 class RenderingSignUpStatesTest {
 
@@ -22,6 +24,9 @@ class RenderingSignUpStatesTest {
         val deliveredStates = mutableListOf<SignUpState>()
         viewModel.signUpState.observeForever { deliveredStates.add(it) }
         viewModel.createAccount(tom.email, "p@S\$w0rd", tom.about)
-        assertEquals(listOf(SignUpState.Loading, SignUpState.SignedUp(tom)), deliveredStates)
+        assertEquals(
+            listOf(SignUpState.Loading, SignUpState.SignedUp(tom)),
+            deliveredStates
+        )
     }
 }

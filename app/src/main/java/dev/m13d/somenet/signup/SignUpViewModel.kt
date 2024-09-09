@@ -1,12 +1,17 @@
 package dev.m13d.somenet.signup
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dev.m13d.somenet.domain.user.UserRepository
 import dev.m13d.somenet.domain.validation.CredentialsValidationResult
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 import dev.m13d.somenet.signup.states.SignUpState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SignUpViewModel(
     private val credentialValidator: RegexCredentialValidator,
@@ -15,6 +20,7 @@ class SignUpViewModel(
     private val _signUpState = MutableLiveData<SignUpState>()
     val signUpState: LiveData<SignUpState> = _signUpState
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun createAccount(
         email: String,
         password: String,
@@ -27,9 +33,17 @@ class SignUpViewModel(
             CredentialsValidationResult.InvalidPassword ->
                 _signUpState.value = SignUpState.BadPassword
 
-            CredentialsValidationResult.Valid -> {
-                _signUpState.value = SignUpState.Loading
-                _signUpState.value = userRepository.signUp(email, password, about)
+            CredentialsValidationResult.Valid ->
+                proceedWithSignUp(email, password, about)
+        }
+    }
+
+    @SuppressLint("NullSafeMutableLiveData")
+    private fun proceedWithSignUp(email: String, password: String, about: String) {
+        viewModelScope.launch {
+            _signUpState.value = SignUpState.Loading
+            _signUpState.value = withContext(Dispatchers.Unconfined) {
+                userRepository.signUp(email, password, about)
             }
         }
     }

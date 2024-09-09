@@ -76,9 +76,9 @@ fun SignUpScreen(
                 onValueChange = { screenState.email = it },
             )
             PasswordField(
-                value = screenState.pass,
-                isError = screenState.isBadPassword,
-                onValueChange = { screenState.pass = it },
+                value = screenState.password,
+                isError = screenState.showBadPassword,
+                onValueChange = { screenState.password = it },
             )
             Spacer(Modifier.height(8.dp))
             AboutField(
@@ -91,7 +91,7 @@ fun SignUpScreen(
                 onClick = {
                     screenState.resetUiState()
                     with(screenState) {
-                        signUpViewModel.createAccount(email, pass, about)
+                        signUpViewModel.createAccount(email, password, about)
                     }
                 }
             ) {
@@ -189,7 +189,7 @@ private fun PasswordField(
             .testTag(stringResource(id = R.string.password))
             .fillMaxWidth(),
         value = value,
-        isError = isPassVisible,
+        isError = isError,
         trailingIcon = {
             VisibilityToggle(isPassVisible) {
                 isPassVisible = !isPassVisible

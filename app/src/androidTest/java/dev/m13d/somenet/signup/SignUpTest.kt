@@ -19,9 +19,8 @@ class SignUpTest {
     @get:Rule
     val signUpTestRule = createAndroidComposeRule<MainActivity>()
 
-    private val userCatalog = InMemoryUserCatalog()
     private val signUpModule = module {
-        factory<UserCatalog> { userCatalog }
+        factory<UserCatalog> { InMemoryUserCatalog() }
     }
 
     @Before
@@ -66,7 +65,9 @@ class SignUpTest {
         val signedUpUserEmail = "alice@somenet.dev"
         val signedUpUserPassword = "@l1cePass"
 
-        userCatalog.createUser(signedUpUserEmail, signedUpUserPassword, "")
+        replaceUserCatalogWith(InMemoryUserCatalog().apply {
+            createUser(signedUpUserEmail, signedUpUserPassword, "")
+        })
 
         launchSignUpScreen(signUpTestRule) {
             typeEmail(signedUpUserEmail)
@@ -105,10 +106,7 @@ class SignUpTest {
 
     @After
     fun tearDown() {
-        val resetModule = module {
-            single<UserCatalog> { InMemoryUserCatalog() }
-        }
-        loadKoinModules(resetModule)
+        replaceUserCatalogWith(InMemoryUserCatalog())
     }
 
     private fun replaceUserCatalogWith(userCatalog: UserCatalog) {
@@ -130,3 +128,4 @@ class UnavailableUserCatalog : UserCatalog {
         throw BackendException()
     }
 }
+

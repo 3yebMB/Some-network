@@ -72,7 +72,7 @@ fun SignUpScreen(
             Spacer(Modifier.height(8.dp))
             LoginField(
                 value = screenState.email,
-                isError = screenState.isBadEmail,
+                isError = screenState.showBadEmail,
                 onValueChange = { screenState.email = it },
             )
             PasswordField(
@@ -159,7 +159,9 @@ private fun LoginField(
     onValueChange: (String) -> Unit,
 ) {
     OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .testTag(stringResource(R.string.email))
+            .fillMaxWidth(),
         value = value,
         isError = isError,
         label = {

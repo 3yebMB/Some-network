@@ -25,7 +25,7 @@ class SignUpRobot(
 
     fun typeEmail(email: String) {
         val emailHint = rule.activity.getString(R.string.email)
-        rule.onNodeWithText(emailHint).performTextInput(email)
+        rule.onNodeWithTag(emailHint).performTextInput(email)
     }
 
     fun typePassword(password: String) {
@@ -83,5 +83,11 @@ class SignUpVerification(
         val badPassword = rule.activity.getString(R.string.badPassword)
         rule.onNodeWithText(badPassword)
             .assertIsDisplayed()
+    }
+
+    fun badEmailErrorIsNotShown() {
+        val badEmail = rule.activity.getString(R.string.badEmail)
+        rule.onNodeWithText(badEmail)
+            .assertDoesNotExist()
     }
 }

@@ -1,7 +1,6 @@
 package dev.m13d.somenet.signup
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -96,11 +95,20 @@ fun SignUpScreen(
 @Composable
 fun InfoMessage(@StringRes stringResource: Int) {
     Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.secondaryContainer),
+        color = MaterialTheme.colorScheme.secondaryContainer,
+        shadowElevation = 4.dp,
+        modifier = Modifier.fillMaxWidth(),
     ) {
-        Text(text = stringResource(id = stringResource))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                text = stringResource(id = stringResource),
+                color = MaterialTheme.colorScheme.onError,
+                modifier = Modifier.padding(16.dp),
+            )
+        }
     }
 }
 

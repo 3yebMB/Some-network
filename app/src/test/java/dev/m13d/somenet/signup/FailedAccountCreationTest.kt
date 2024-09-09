@@ -5,6 +5,7 @@ import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.domain.user.UserCatalog
 import dev.m13d.somenet.domain.user.UserRepository
+import dev.m13d.somenet.signup.states.SignUpState
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

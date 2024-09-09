@@ -5,17 +5,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.user.UserRepository
 import dev.m13d.somenet.domain.validation.CredentialsValidationResult
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 import dev.m13d.somenet.signup.states.SignUpState
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SignUpViewModel(
     private val credentialValidator: RegexCredentialValidator,
     private val userRepository: UserRepository,
+    private val dispatchers: TestDispatchers,
 ): ViewModel() {
     private val _signUpState = MutableLiveData<SignUpState>()
     val signUpState: LiveData<SignUpState> = _signUpState
@@ -37,12 +38,6 @@ class SignUpViewModel(
                 proceedWithSignUp(email, password, about)
         }
     }
-
-    class TestDispatchers {
-        val background = Dispatchers.Unconfined
-    }
-
-    private val dispatchers = TestDispatchers()
 
     @SuppressLint("NullSafeMutableLiveData")
     private fun proceedWithSignUp(email: String, password: String, about: String) {

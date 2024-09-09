@@ -1,4 +1,4 @@
-package dev.m13d.somenet.di
+package dev.m13d.somenet.app
 
 import android.app.Application
 import org.koin.core.context.startKoin

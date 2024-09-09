@@ -1,6 +1,7 @@
 package dev.m13d.somenet.signup
 
 import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.domain.user.UserRepository
@@ -16,7 +17,11 @@ import org.junit.jupiter.api.extension.ExtendWith
 class RenderingSignUpStatesTest {
 
     private val userRepository = UserRepository(InMemoryUserCatalog())
-    private val viewModel = SignUpViewModel(RegexCredentialValidator(), userRepository)
+    private val viewModel = SignUpViewModel(
+        RegexCredentialValidator(),
+        userRepository,
+        TestDispatchers(),
+    )
     private val tom = User("tomId", "tom@somenet.dev", "about Tom")
 
     @Test

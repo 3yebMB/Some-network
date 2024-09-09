@@ -1,17 +1,20 @@
 package dev.m13d.somenet.signup
 
 import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.UserRepository
 import dev.m13d.somenet.domain.validation.CredentialsValidationResult
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 import dev.m13d.somenet.signup.states.SignUpState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
+@ExperimentalCoroutinesApi
 @ExtendWith(InstantTaskExecutorExtension::class)
 class CredentialsValidationTest {
 
@@ -29,6 +32,7 @@ class CredentialsValidationTest {
         val viewModel = SignUpViewModel(
             RegexCredentialValidator(),
             UserRepository(InMemoryUserCatalog()),
+            TestDispatchers(),
         )
         viewModel.createAccount(email, ":password:", "about")
         assertEquals(SignUpState.BadEmail, viewModel.signUpState.value)
@@ -50,6 +54,7 @@ class CredentialsValidationTest {
         val viewModel = SignUpViewModel(
             RegexCredentialValidator(),
             UserRepository(InMemoryUserCatalog()),
+            TestDispatchers(),
         )
         viewModel.createAccount("michael@somenet.dev", password, ":about:")
         assertEquals(SignUpState.BadPassword, viewModel.signUpState.value)

@@ -1,15 +1,18 @@
 package dev.m13d.somenet.signup
 
 import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.domain.user.UserRepository
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 import dev.m13d.somenet.signup.states.SignUpState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
+@ExperimentalCoroutinesApi
 @ExtendWith(InstantTaskExecutorExtension::class)
 class CreateAnAccountTest {
 
@@ -17,6 +20,7 @@ class CreateAnAccountTest {
     private val viewModel = SignUpViewModel(
         credentialValidator,
         UserRepository(InMemoryUserCatalog()),
+        TestDispatchers(),
     )
 
     @Test
@@ -40,7 +44,7 @@ class CreateAnAccountTest {
 
         val users = mutableMapOf(password to mutableListOf(orsolya))
         val userRepository = UserRepository(InMemoryUserCatalog(users))
-        val viewModel = SignUpViewModel(credentialValidator, userRepository)
+        val viewModel = SignUpViewModel(credentialValidator, userRepository, TestDispatchers())
 
         viewModel.createAccount(orsolya.email, password, orsolya.about)
         assertEquals(SignUpState.DuplicateAccount, viewModel.signUpState.value)

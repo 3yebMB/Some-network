@@ -1,4 +1,4 @@
-package dev.m13d.somenet.di
+package dev.m13d.somenet.app
 
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.UserCatalog
@@ -18,6 +18,7 @@ val applicationModule = module {
         SignUpViewModel(
             credentialValidator = get(),
             userRepository = get(),
+            dispatchers = TestDispatchers(),
         )
     }
 }

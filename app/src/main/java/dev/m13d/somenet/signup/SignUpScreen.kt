@@ -3,7 +3,9 @@ package dev.m13d.somenet.signup
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
@@ -105,20 +107,32 @@ fun SignUpScreen(
         screenState.infoMessage?.let {
             InfoMessage(isVisible = screenState.isInfoMessageShowing, stringResource = it)
         }
-        if (screenState.isLoading) LoadingBlock()
+        LoadingBlock(screenState.isLoading)
     }
 }
 
 @Composable
-fun LoadingBlock() {
-    Box(
-        modifier = Modifier
-            .testTag(stringResource(id = R.string.loading))
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.7f))
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center,
+fun LoadingBlock(isShowing: Boolean) {
+    AnimatedVisibility(
+        visible = isShowing,
+        enter = fadeIn(
+            initialAlpha = 0f,
+            animationSpec = tween(durationMillis = 150, easing = FastOutLinearInEasing),
+        ),
+        exit = fadeOut(
+            targetAlpha = 0f,
+            animationSpec = tween(durationMillis = 250, easing = LinearOutSlowInEasing),
+        ),
     ) {
-        CircularProgressIndicator()
+        Box(
+            modifier = Modifier
+                .testTag(stringResource(id = R.string.loading))
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.7f))
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator()
+        }
     }
 }
 

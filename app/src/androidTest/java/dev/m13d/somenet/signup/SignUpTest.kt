@@ -7,6 +7,7 @@ import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.domain.user.UserCatalog
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -128,6 +129,18 @@ class SignUpTest {
         }
     }
 
+    @Test
+    fun displayLoadingBlock() {
+        replaceUserCatalogWith(DelayingUserCatalog())
+        launchSignUpScreen(signUpTestRule) {
+            typeEmail("alex@somenet.dev")
+            typePassword("@1eX1092")
+            submit()
+        } verify {
+            loadingBlockIsShown()
+        }
+    }
+
     @After
     fun tearDown() {
         replaceUserCatalogWith(InMemoryUserCatalog())
@@ -138,6 +151,14 @@ class SignUpTest {
             factory<UserCatalog> { userCatalog }
         }
         loadKoinModules(replaceModule)
+    }
+}
+
+class DelayingUserCatalog : UserCatalog {
+
+    override suspend fun createUser(email: String, password: String, about: String): User {
+        delay(1000L)
+        return User("someId", email, about)
     }
 }
 

@@ -7,13 +7,17 @@ import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.timeline.states.TimelineState
 
-class TimelineViewModel : ViewModel() {
+class TimelineViewModel(
+    private val userCatalog: InMemoryUserCatalog,
+    private val postCatalog: InMemoryPostsCatalog,
+) : ViewModel() {
+    
     private var _timelineState = MutableLiveData<TimelineState>()
     val timelineState: LiveData<TimelineState> = _timelineState
 
     fun timelineFor(userId: String) {
-        val userIds = listOf(userId) + InMemoryUserCatalog().followedBy(userId)
-        val postsForUser = InMemoryPostsCatalog().postsFor(userIds)
+        val userIds = listOf(userId) + userCatalog.followedBy(userId)
+        val postsForUser = postCatalog.postsFor(userIds)
         _timelineState.value = TimelineState.Posts(postsForUser)
     }
 }

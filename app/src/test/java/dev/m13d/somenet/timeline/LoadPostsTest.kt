@@ -43,4 +43,22 @@ class LoadPostsTest {
         viewModel.timelineFor(anabel.id)
         assertEquals(TimelineState.Posts(lucyPosts), viewModel.timelineState.value)
     }
+
+    @Test
+    fun allPostsAvailable() {
+        val lucy = aUser().withId("lucyId").build()
+        val lucyPosts = listOf(
+            Post("post2", lucy.id, "post 2", 2L),
+            Post("post1", lucy.id, "post 1", 1L),
+        )
+        val sarah = aUser().withId("sarahId").build()
+        val sarahPosts = listOf(
+            Post("post4", sarah.id, "post 4", 4L),
+            Post("post3", sarah.id, "post 3", 3L),
+        )
+
+        val viewModel = TimelineViewModel()
+        viewModel.timelineFor(sarah.id)
+        assertEquals(TimelineState.Posts(lucyPosts + sarahPosts), viewModel.timelineState.value)
+    }
 }

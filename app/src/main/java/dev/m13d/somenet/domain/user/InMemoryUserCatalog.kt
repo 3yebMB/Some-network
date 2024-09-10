@@ -15,7 +15,7 @@ class InMemoryUserCatalog(
     ): User {
         checkAccountExists(email)
         val userId = createUserId(email)
-        val user = User(userId = userId, email = email, about = about)
+        val user = User(id = userId, email = email, about = about)
         saveUser(password, user)
         return user
     }

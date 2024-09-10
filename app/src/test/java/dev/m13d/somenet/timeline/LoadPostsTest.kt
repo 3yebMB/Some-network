@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.assertEquals
 import kotlin.uuid.ExperimentalUuidApi
 
+@ExperimentalUuidApi
 @ExperimentalCoroutinesApi
 @ExtendWith(InstantTaskExecutorExtension::class)
 class LoadPostsTest {
@@ -21,13 +22,25 @@ class LoadPostsTest {
         assertEquals(TimelineState.Posts(emptyList()), viewModel.timelineState.value)
     }
 
-    @OptIn(ExperimentalUuidApi::class)
     @Test
     fun postsAvailable() {
         val tim = aUser().withId("timId").build()
-        val timPosts = listOf(Post("postId", tim.userId, "post text", 1L))
+        val timPosts = listOf(Post("postId", tim.id, "post text", 1L))
         val viewModel = TimelineViewModel()
-        viewModel.timelineFor(tim.userId)
+        viewModel.timelineFor(tim.id)
         assertEquals(TimelineState.Posts(timPosts), viewModel.timelineState.value)
+    }
+
+    @Test
+    fun postsFromFriends() {
+        val anabel = aUser().withId("anabelId").build()
+        val lucy = aUser().withId("lucyId").build()
+        val lucyPosts = listOf(
+            Post("post2", lucy.id, "post 2", 2L),
+            Post("post1", lucy.id, "post 1", 1L)
+        )
+        val viewModel = TimelineViewModel()
+        viewModel.timelineFor(anabel.id)
+        assertEquals(TimelineState.Posts(lucyPosts), viewModel.timelineState.value)
     }
 }

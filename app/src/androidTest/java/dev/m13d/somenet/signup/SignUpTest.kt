@@ -160,17 +160,29 @@ class DelayingUserCatalog : UserCatalog {
         delay(1000L)
         return User("someId", email, about)
     }
+
+    override fun followedBy(userId: String): List<String> {
+        TODO("Not yet implemented")
+    }
 }
 
 class OfflineUserCatalog : UserCatalog {
     override suspend fun createUser(email: String, password: String, about: String): User {
         throw ConnectionUnavailableException()
     }
+
+    override fun followedBy(userId: String): List<String> {
+        TODO("Not yet implemented")
+    }
 }
 
 class UnavailableUserCatalog : UserCatalog {
     override suspend fun createUser(email: String, password: String, about: String): User {
         throw BackendException()
+    }
+
+    override fun followedBy(userId: String): List<String> {
+        TODO("Not yet implemented")
     }
 }
 

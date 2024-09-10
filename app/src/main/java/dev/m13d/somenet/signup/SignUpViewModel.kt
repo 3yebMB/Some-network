@@ -18,23 +18,23 @@ class SignUpViewModel(
     private val userRepository: UserRepository,
     private val dispatchers: CoroutineDispatchers,
 ): ViewModel() {
+
     private val _signUpState = MutableLiveData<SignUpState>()
     val signUpState: LiveData<SignUpState> = _signUpState
 
-    @SuppressLint("NullSafeMutableLiveData")
     fun createAccount(
         email: String,
         password: String,
         about: String
     ) {
         when (credentialValidator.validate(email, password)) {
-            CredentialsValidationResult.InvalidEmail ->
+            is CredentialsValidationResult.InvalidEmail ->
                 _signUpState.value = SignUpState.BadEmail
 
-            CredentialsValidationResult.InvalidPassword ->
+            is CredentialsValidationResult.InvalidPassword ->
                 _signUpState.value = SignUpState.BadPassword
 
-            CredentialsValidationResult.Valid ->
+            is CredentialsValidationResult.Valid ->
                 proceedWithSignUp(email, password, about)
         }
     }

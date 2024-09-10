@@ -12,15 +12,18 @@ class TimelineViewModel : ViewModel() {
     val timelineState: LiveData<TimelineState> = _timelineState
 
     fun timelineFor(userId: String) {
+        val userIds = listOf(userId) + followedBy(userId)
+        val postsForUser = InMemoryPostsCatalog().postsFor(userIds)
+        _timelineState.value = TimelineState.Posts(postsForUser)
+    }
+
+    private fun followedBy(userId: String): List<String> {
         val followings = listOf(
             Following("sarahId", "lucyId"),
             Following("anabelId", "lucyId"),
         )
-        val userIds = listOf(userId) + followings
+        return followings
             .filter { it.userId == userId }
             .map { it.followedId }
-        val postsForUser = InMemoryPostsCatalog().postsFor(userIds)
-        _timelineState.value = TimelineState.Posts(postsForUser)
-    }
     }
 }

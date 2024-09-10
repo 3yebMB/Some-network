@@ -20,6 +20,16 @@ class InMemoryUserCatalog(
         return user
     }
 
+    fun followedBy(userId: String): List<String> {
+        val followings = listOf(
+            Following("sarahId", "lucyId"),
+            Following("anabelId", "lucyId"),
+        )
+        return followings
+            .filter { it.userId == userId }
+            .map { it.followedId }
+    }
+
     private fun checkAccountExists(email: String) {
         if (users.values.flatten().any { it.email == email })
             throw DuplicateAccountException()

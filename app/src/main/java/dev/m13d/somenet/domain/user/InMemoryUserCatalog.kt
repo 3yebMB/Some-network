@@ -5,7 +5,8 @@ import dev.m13d.somenet.domain.exceptions.DuplicateAccountException
 typealias PasswordUserType = MutableMap<String, MutableList<User>>
 
 class InMemoryUserCatalog(
-    private val users: PasswordUserType = mutableMapOf()
+    private val users: PasswordUserType = mutableMapOf(),
+    private val followings: List<Following> = mutableListOf(),
 ): UserCatalog {
 
     override suspend fun createUser(
@@ -21,10 +22,6 @@ class InMemoryUserCatalog(
     }
 
     fun followedBy(userId: String): List<String> {
-        val followings = listOf(
-            Following("sarahId", "lucyId"),
-            Following("anabelId", "lucyId"),
-        )
         return followings
             .filter { it.userId == userId }
             .map { it.followedId }

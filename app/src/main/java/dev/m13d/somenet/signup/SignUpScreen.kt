@@ -56,10 +56,10 @@ fun SignUpScreen(
     val signUpState by signUpViewModel.signUpState.observeAsState()
 
     when (signUpState) {
-        is SignUpState.Loading -> LoadingBlock()
+        is SignUpState.Loading -> screenState.toggleLoading()
         is SignUpState.SignedUp -> onSignedUp()
-        is SignUpState.BadEmail -> screenState.isBadEmail = true
-        is SignUpState.BadPassword -> screenState.isBadPassword = true
+        is SignUpState.BadEmail -> screenState.showBadEmail()
+        is SignUpState.BadPassword -> screenState.showBadPassword()
         is SignUpState.DuplicateAccount -> screenState.toggleInfoMessage(R.string.duplicateAccountError)
         is SignUpState.BackendError -> screenState.toggleInfoMessage(R.string.createAccountError)
         is SignUpState.Offline -> screenState.toggleInfoMessage(R.string.offlineError)
@@ -105,6 +105,7 @@ fun SignUpScreen(
         screenState.infoMessage?.let {
             InfoMessage(isVisible = screenState.isInfoMessageShowing, stringResource = it)
         }
+        if (screenState.isLoading) LoadingBlock()
     }
 }
 

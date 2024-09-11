@@ -5,6 +5,7 @@ import dev.m13d.somenet.domain.exceptions.BackendException
 import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.post.PostsCatalog
+import dev.m13d.somenet.domain.timeline.TimelineRepository
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.timeline.states.TimelineState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,7 +21,9 @@ class FailTimelineLoadingTest {
     fun backendError() {
         val userCatalog = InMemoryUserCatalog()
         val postCatalog = UnavailablePostCatalog()
-        val viewModel = TimelineViewModel(userCatalog, postCatalog)
+        val viewModel = TimelineViewModel(
+            TimelineRepository(userCatalog, postCatalog)
+        )
         viewModel.timelineFor(":irrelevant:")
         assertEquals(TimelineState.BackendError, viewModel.timelineState.value)
     }
@@ -29,7 +32,9 @@ class FailTimelineLoadingTest {
     fun offlineError() {
         val userCatalog = InMemoryUserCatalog()
         val postCatalog = OfflinePostCatalog()
-        val viewModel = TimelineViewModel(userCatalog, postCatalog)
+        val viewModel = TimelineViewModel(
+            TimelineRepository(userCatalog, postCatalog)
+        )
         viewModel.timelineFor(":irrelevant:")
         assertEquals(TimelineState.OfflineError, viewModel.timelineState.value)
     }

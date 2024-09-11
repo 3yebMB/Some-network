@@ -3,6 +3,7 @@ package dev.m13d.somenet.timeline
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.post.Post
+import dev.m13d.somenet.domain.timeline.TimelineRepository
 import dev.m13d.somenet.domain.user.Following
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.infrastructure.builder.UserBuilder.Companion.aUser
@@ -39,18 +40,21 @@ class LoadTimelineTest {
 
     @Test
     fun noPostsAvailable() {
+        val userCatalog = InMemoryUserCatalog()
+        val postCatalog = InMemoryPostsCatalog(availablePosts)
         val viewModel = TimelineViewModel(
-            InMemoryUserCatalog(),
-            InMemoryPostsCatalog(availablePosts)
+            TimelineRepository(userCatalog, postCatalog)
         )
         viewModel.timelineFor("annaId")
         assertEquals(TimelineState.Posts(emptyList()), viewModel.timelineState.value)
     }
+
     @Test
     fun postsAvailable() {
+        val userCatalog = InMemoryUserCatalog()
+        val postCatalog = InMemoryPostsCatalog(availablePosts)
         val viewModel = TimelineViewModel(
-            InMemoryUserCatalog(),
-            InMemoryPostsCatalog(availablePosts)
+            TimelineRepository(userCatalog, postCatalog)
         )
         viewModel.timelineFor(tim.id)
         assertEquals(TimelineState.Posts(timPosts), viewModel.timelineState.value)
@@ -58,11 +62,12 @@ class LoadTimelineTest {
 
     @Test
     fun postsFromFriends() {
+        val userCatalog = InMemoryUserCatalog(
+            followings = listOf(Following(anabel.id, lucy.id))
+        )
+        val postCatalog = InMemoryPostsCatalog(availablePosts)
         val viewModel = TimelineViewModel(
-            InMemoryUserCatalog(
-                followings = listOf(Following(anabel.id, lucy.id))
-            ),
-            InMemoryPostsCatalog(availablePosts)
+            TimelineRepository(userCatalog, postCatalog)
         )
         viewModel.timelineFor(anabel.id)
         assertEquals(TimelineState.Posts(lucyPosts), viewModel.timelineState.value)
@@ -70,11 +75,12 @@ class LoadTimelineTest {
 
     @Test
     fun allPostsAvailable() {
+        val userCatalog = InMemoryUserCatalog(
+            followings = listOf(Following(sarah.id, lucy.id))
+        )
+        val postCatalog = InMemoryPostsCatalog(availablePosts)
         val viewModel = TimelineViewModel(
-            InMemoryUserCatalog(
-                followings = listOf(Following(sarah.id, lucy.id))
-            ),
-            InMemoryPostsCatalog(availablePosts)
+            TimelineRepository(userCatalog, postCatalog)
         )
         viewModel.timelineFor(sarah.id)
         assertEquals(TimelineState.Posts(lucyPosts + sarahPosts), viewModel.timelineState.value)

@@ -16,7 +16,7 @@ import kotlin.uuid.ExperimentalUuidApi
 @ExperimentalUuidApi
 @ExperimentalCoroutinesApi
 @ExtendWith(InstantTaskExecutorExtension::class)
-class LoadPostsTest {
+class LoadTimelineTest {
 
     private val lucy = aUser().withId("lucyId").build()
     private val sarah = aUser().withId("sarahId").build()

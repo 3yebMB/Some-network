@@ -1,0 +1,32 @@
+package dev.m13d.somenet.timeline
+
+import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.domain.exceptions.BackendException
+import dev.m13d.somenet.domain.post.Post
+import dev.m13d.somenet.domain.post.PostsCatalog
+import dev.m13d.somenet.domain.user.InMemoryUserCatalog
+import dev.m13d.somenet.timeline.states.TimelineState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import kotlin.test.assertEquals
+
+@ExperimentalCoroutinesApi
+@ExtendWith(InstantTaskExecutorExtension::class)
+class FailTimelineLoadingTest {
+
+    @Test
+    fun backendError() {
+        val userCatalog = InMemoryUserCatalog()
+        val postCatalog = UnavailablePostCatalog()
+        val viewModel = TimelineViewModel(userCatalog, postCatalog)
+        viewModel.timelineFor(":irrelevant:")
+        assertEquals(TimelineState.BackendError, viewModel.timelineState.value)
+    }
+
+    private class UnavailablePostCatalog : PostsCatalog {
+        override fun postsFor(userIds: List<String>): List<Post> {
+            throw BackendException()
+        }
+    }
+}

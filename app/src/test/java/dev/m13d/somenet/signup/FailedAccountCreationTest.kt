@@ -25,27 +25,27 @@ class FailedAccountCreationTest {
         val result = userRepository.signUp("email", "password", "about")
         assertEquals(SignUpState.Offline, result)
     }
-}
 
-class OfflineUserCatalog : UserCatalog {
+    private class OfflineUserCatalog : UserCatalog {
 
-    override suspend fun createUser(email: String, password: String, about: String): User {
-        throw ConnectionUnavailableException()
+        override suspend fun createUser(email: String, password: String, about: String): User {
+            throw ConnectionUnavailableException()
+        }
+
+        override fun followedBy(userId: String): List<String> {
+            TODO("Not yet implemented")
+        }
+
     }
 
-    override fun followedBy(userId: String): List<String> {
-        TODO("Not yet implemented")
-    }
+    private class UnavailableUserCatalog : UserCatalog {
 
-}
+        override suspend fun createUser(email: String, password: String, about: String): User {
+            throw BackendException()
+        }
 
-class UnavailableUserCatalog : UserCatalog {
-
-    override suspend fun createUser(email: String, password: String, about: String): User {
-        throw BackendException()
-    }
-
-    override fun followedBy(userId: String): List<String> {
-        TODO("Not yet implemented")
+        override fun followedBy(userId: String): List<String> {
+            TODO("Not yet implemented")
+        }
     }
 }

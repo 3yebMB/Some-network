@@ -23,7 +23,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -45,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
 import dev.m13d.somenet.signup.states.SignUpScreenState
 import dev.m13d.somenet.signup.states.SignUpState
+import dev.m13d.somenet.ui.component.ScreenTitle
 
 @Composable
 fun SignUpScreen(
@@ -170,19 +170,6 @@ fun InfoMessage(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun ScreenTitle(@StringRes titleResource: Int) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
-    ) {
-        Text(
-            text = stringResource(id = titleResource),
-            style = typography.headlineMedium
-        )
     }
 }
 

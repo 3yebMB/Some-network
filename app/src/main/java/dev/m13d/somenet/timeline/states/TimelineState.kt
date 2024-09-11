@@ -6,6 +6,8 @@ sealed class TimelineState {
 
     object BackendError : TimelineState()
 
+    object OfflineError : TimelineState()
+
     data class Posts(val posts: List<Post>) : TimelineState()
 
 }

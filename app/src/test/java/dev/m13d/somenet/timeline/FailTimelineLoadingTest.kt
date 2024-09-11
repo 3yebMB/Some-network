@@ -2,6 +2,7 @@ package dev.m13d.somenet.timeline
 
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.domain.exceptions.BackendException
+import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.post.PostsCatalog
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
@@ -24,9 +25,24 @@ class FailTimelineLoadingTest {
         assertEquals(TimelineState.BackendError, viewModel.timelineState.value)
     }
 
+    @Test
+    fun offlineError() {
+        val userCatalog = InMemoryUserCatalog()
+        val postCatalog = OfflinePostCatalog()
+        val viewModel = TimelineViewModel(userCatalog, postCatalog)
+        viewModel.timelineFor(":irrelevant:")
+        assertEquals(TimelineState.OfflineError, viewModel.timelineState.value)
+    }
+
     private class UnavailablePostCatalog : PostsCatalog {
         override fun postsFor(userIds: List<String>): List<Post> {
             throw BackendException()
+        }
+    }
+
+    private class OfflinePostCatalog : PostsCatalog {
+        override fun postsFor(userIds: List<String>): List<Post> {
+            throw ConnectionUnavailableException()
         }
     }
 }

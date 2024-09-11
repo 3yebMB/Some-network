@@ -38,7 +38,9 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = SIGNUP) {
                         composable(SIGNUP) {
                             SignUpScreen(signUpViewModel) { signedUpUserId ->
-                                navController.navigate("$TIMELINE/$signedUpUserId")
+                                navController.navigate("$TIMELINE/$signedUpUserId") {
+                                    popUpTo(SIGNUP) { inclusive = true }
+                                }
                             }
                         }
                         composable(

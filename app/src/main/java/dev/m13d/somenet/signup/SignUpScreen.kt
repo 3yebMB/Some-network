@@ -49,7 +49,7 @@ import dev.m13d.somenet.signup.states.SignUpState
 @Composable
 fun SignUpScreen(
     signUpViewModel: SignUpViewModel,
-    onSignedUp: () -> Unit,
+    onSignedUp: (String) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val screenState by remember {
@@ -61,7 +61,7 @@ fun SignUpScreen(
 
     when (signUpState) {
         is SignUpState.Loading -> screenState.toggleLoading()
-        is SignUpState.SignedUp -> onSignedUp()
+        is SignUpState.SignedUp -> onSignedUp((signUpState as SignUpState.SignedUp).user.id)
         is SignUpState.BadEmail -> screenState.showBadEmail()
         is SignUpState.BadPassword -> screenState.showBadPassword()
         is SignUpState.DuplicateAccount -> screenState.toggleInfoMessage(R.string.duplicateAccountError)

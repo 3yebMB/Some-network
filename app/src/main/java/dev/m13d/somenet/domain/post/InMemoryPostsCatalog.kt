@@ -1,7 +1,7 @@
 package dev.m13d.somenet.domain.post
 
 class InMemoryPostsCatalog(
-    private val availablePosts: List<Post>,
+    private val availablePosts: List<Post> = emptyList(),
 ) : PostsCatalog {
 
     override fun postsFor(userIds: List<String>): List<Post> {

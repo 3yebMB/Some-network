@@ -12,7 +12,7 @@ class TimelineScreenTest {
 
     @Test
     fun showEmptyTimelineMessage() {
-        val email = "elizabeth"
+        val email = "elizabeth@somenet.dev"
         val password = "p@S\$w0rd="
         launchTimelineFor(email, password, timelineTestRule) {
             // No operations

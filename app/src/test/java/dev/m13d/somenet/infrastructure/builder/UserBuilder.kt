@@ -10,6 +10,7 @@ class UserBuilder {
 
     private var userEmail = "user@somenet.dev"
     private var aboutUser = "About User ($userId)"
+
     companion object {
         fun aUser(): UserBuilder {
             return UserBuilder()

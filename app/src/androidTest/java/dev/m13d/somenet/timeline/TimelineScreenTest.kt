@@ -5,6 +5,7 @@ import dev.m13d.somenet.MainActivity
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.post.PostsCatalog
+import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.context.loadKoinModules
@@ -32,17 +33,24 @@ class TimelineScreenTest {
         val password = "B@rb24A89"
         val post1 = Post("post1", "samanthaId", "This is Samantha's first post", 1L)
         val post2 = Post("post2", "samanthaId", "This is Samantha's second post", 2L)
+        replacePostCatalogWith(InMemoryPostsCatalog(listOf(post1, post2)))
 
-        val postsCatalog = InMemoryPostsCatalog(listOf(post1, post2))
+        launchTimelineFor(email, password, timelineTestRule) {
+            
+        } verify {
+            postsAreDisplayed(post1, post2)
+        }
+    }
+
+    @After
+    fun tearDown() {
+        replacePostCatalogWith(InMemoryPostsCatalog())
+    }
+
+    private fun replacePostCatalogWith(postsCatalog: PostsCatalog) {
         val replaceModule = module {
             factory<PostsCatalog> { postsCatalog }
         }
         loadKoinModules(replaceModule)
-
-        launchTimelineFor(email, password, timelineTestRule) {
-
-        } verify {
-            postsAreDisplayed(post1, post2)
-        }
     }
 }

@@ -36,7 +36,7 @@ class TimelineScreenTest {
         replacePostCatalogWith(InMemoryPostsCatalog(listOf(post1, post2)))
 
         launchTimelineFor(email, password, timelineTestRule) {
-            
+
         } verify {
             postsAreDisplayed(post1, post2)
         }

@@ -1,26 +1,22 @@
 package dev.m13d.somenet.signup
 
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import androidx.test.ext.junit.rules.ActivityScenarioRule
-import dev.m13d.somenet.MainActivity
 import dev.m13d.somenet.R
-
-typealias SignUpTestRule = AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>
+import dev.m13d.somenet.utils.ComposeTestRule
 
 fun launchSignUpScreen(
-    rule: SignUpTestRule,
+    rule: ComposeTestRule,
     block: SignUpRobot.() -> Unit,
 ): SignUpRobot {
     return SignUpRobot(rule).apply(block)
 }
 
 class SignUpRobot(
-    private val rule: SignUpTestRule,
+    private val rule: ComposeTestRule,
 ) {
 
     fun typeEmail(email: String) {
@@ -46,7 +42,7 @@ class SignUpRobot(
 }
 
 class SignUpVerification(
-    private val rule: SignUpTestRule,
+    private val rule: ComposeTestRule,
 ) {
 
     fun timelineScreenIsPresent() {

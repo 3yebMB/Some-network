@@ -1,8 +1,8 @@
 package dev.m13d.somenet.domain.post
 
 data class Post(
-    val postId: String,
+    val id: String,
     val userId: String,
-    val postText: String,
+    val text: String,
     val timestamp: Long,
 )

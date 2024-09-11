@@ -3,6 +3,8 @@ package dev.m13d.somenet.timeline
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -53,5 +55,18 @@ fun TimelineScreen(
 
 @Composable
 private fun PostsList(posts: List<Post>) {
-    Text(text = stringResource(id = R.string.emptyTimelineMessage))
+    if (posts.isEmpty()) {
+        Text(text = stringResource(id = R.string.emptyTimelineMessage))
+    } else {
+        LazyColumn {
+            items(posts) { post ->
+                PostItem(post)
+            }
+        }
+    }
+}
+
+@Composable
+private fun PostItem(post: Post) {
+    Text(text = post.text)
 }

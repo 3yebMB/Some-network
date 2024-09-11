@@ -14,7 +14,7 @@ class RegexCredentialValidator {
 
     fun validate(
         email: String,
-        password: String
+        password: String,
     ): CredentialsValidationResult {
         return if (!emailPattern.matcher(email).matches()) {
             CredentialsValidationResult.InvalidEmail

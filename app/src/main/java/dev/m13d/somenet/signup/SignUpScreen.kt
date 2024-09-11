@@ -52,9 +52,11 @@ fun SignUpScreen(
     onSignedUp: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val screenState by remember { mutableStateOf(
-        SignUpScreenState(coroutineScope)
-    ) }
+    val screenState by remember {
+        mutableStateOf(
+            SignUpScreenState(coroutineScope)
+        )
+    }
     val signUpState by signUpViewModel.signUpState.observeAsState()
 
     when (signUpState) {
@@ -65,7 +67,7 @@ fun SignUpScreen(
         is SignUpState.DuplicateAccount -> screenState.toggleInfoMessage(R.string.duplicateAccountError)
         is SignUpState.BackendError -> screenState.toggleInfoMessage(R.string.createAccountError)
         is SignUpState.Offline -> screenState.toggleInfoMessage(R.string.offlineError)
-        else -> { }
+        else -> {}
     }
 
     Box(modifier = Modifier.fillMaxSize()) {

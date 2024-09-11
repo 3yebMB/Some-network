@@ -11,7 +11,7 @@ class UserRepository(
     suspend fun signUp(
         email: String,
         password: String,
-        about: String
+        about: String,
     ): SignUpState {
         return try {
             val user = userCatalog.createUser(email, password, about)

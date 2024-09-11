@@ -17,7 +17,7 @@ class SignUpViewModel(
     private val credentialValidator: RegexCredentialValidator,
     private val userRepository: UserRepository,
     private val dispatchers: CoroutineDispatchers,
-): ViewModel() {
+) : ViewModel() {
 
     private val _signUpState = MutableLiveData<SignUpState>()
     val signUpState: LiveData<SignUpState> = _signUpState
@@ -25,7 +25,7 @@ class SignUpViewModel(
     fun createAccount(
         email: String,
         password: String,
-        about: String
+        about: String,
     ) {
         when (credentialValidator.validate(email, password)) {
             is CredentialsValidationResult.InvalidEmail ->

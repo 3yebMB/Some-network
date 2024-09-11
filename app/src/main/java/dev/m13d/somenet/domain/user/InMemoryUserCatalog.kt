@@ -7,12 +7,12 @@ typealias PasswordUserType = MutableMap<String, MutableList<User>>
 class InMemoryUserCatalog(
     private val users: PasswordUserType = mutableMapOf(),
     private val followings: List<Following> = mutableListOf(),
-): UserCatalog {
+) : UserCatalog {
 
     override suspend fun createUser(
         email: String,
         password: String,
-        about: String
+        about: String,
     ): User {
         checkAccountExists(email)
         val userId = createUserId(email)

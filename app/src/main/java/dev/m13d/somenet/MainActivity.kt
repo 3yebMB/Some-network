@@ -1,6 +1,7 @@
 package dev.m13d.somenet
 
 import android.os.Bundle
+import android.os.Parcelable.Creator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import dev.m13d.somenet.postcomposer.CreateNewPostScreen
 import dev.m13d.somenet.signup.SignUpScreen
 import dev.m13d.somenet.signup.SignUpViewModel
 import dev.m13d.somenet.timeline.TimelineScreen
@@ -23,6 +25,7 @@ class MainActivity : ComponentActivity() {
     private companion object {
         private const val SIGNUP = "SignUpScreen"
         private const val TIMELINE = "Timeline"
+        private const val CREATE_NEW_POST = "CreateNewPost"
     }
 
     private val signUpViewModel: SignUpViewModel by viewModel()
@@ -48,9 +51,13 @@ class MainActivity : ComponentActivity() {
                             arguments = listOf(navArgument("userId") { })
                         ) { backStackEntry ->
                             TimelineScreen(
-                                backStackEntry.arguments?.getString("userId") ?: "",
-                                timelineViewModel,
+                                userId = backStackEntry.arguments?.getString("userId") ?: "",
+                                timelineViewModel = timelineViewModel,
+                                onCreateNewPost = { navController.navigate(CREATE_NEW_POST) }
                             )
+                        }
+                        composable(CREATE_NEW_POST) {
+                            CreateNewPostScreen()
                         }
                     }
 //                        modifier = Modifier.padding(innerPadding)

@@ -42,6 +42,15 @@ class TimelineScreenTest {
         }
     }
 
+    @Test
+    fun openPostComposer() {
+        launchTimelineFor("test@somenet.dev", "\\S0meP@sS1134", timelineTestRule) {
+            tapOnCreateNewPost()
+        } verify {
+            newPostComposerIsDisplayed()
+        }
+    }
+
     @After
     fun tearDown() {
         replacePostCatalogWith(InMemoryPostsCatalog())

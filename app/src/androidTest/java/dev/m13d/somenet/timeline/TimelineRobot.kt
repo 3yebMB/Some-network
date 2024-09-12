@@ -1,7 +1,9 @@
 package dev.m13d.somenet.timeline
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import dev.m13d.somenet.R
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.signup.launchSignUpScreen
@@ -25,6 +27,12 @@ class TimelineRobot(
     private val rule: ComposeTestRule
 ) {
 
+    fun tapOnCreateNewPost() {
+        val createNewPost = rule.activity.getString(R.string.createNewPost)
+        rule.onNodeWithTag(createNewPost)
+            .performClick()
+    }
+
     infix fun verify(
         block: TimelineVerification.() -> Unit,
     ): TimelineVerification {
@@ -46,5 +54,11 @@ class TimelineVerification(
             rule.onNodeWithText(post.text)
                 .assertIsDisplayed()
         }
+    }
+
+    fun newPostComposerIsDisplayed() {
+        val createNewPost = rule.activity.getString(R.string.createNewPost)
+        rule.onNodeWithText(createNewPost)
+            .assertIsDisplayed()
     }
 }

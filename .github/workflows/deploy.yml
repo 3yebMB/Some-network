@@ -78,11 +78,16 @@ jobs:
         with:
           name: app-debug-androidTest
 
+      - name: 'Google Cloud Auth'
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.FIREBASE_AUTH }}'
+
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.SOME_PROJECT_ID }}
-          service_account_key: ${{ secrets.FIREBASE_AUTH }}
+#          service_account_key: ${{ secrets.FIREBASE_AUTH }}
           export_default_credentials: true
 
       - name: Run instrumental tests in Firebase Test Lab

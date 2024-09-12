@@ -11,6 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,8 +23,10 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
@@ -41,6 +47,7 @@ class TimelineScreenState {
 fun TimelineScreen(
     userId: String,
     timelineViewModel: TimelineViewModel,
+    onCreateNewPost: () -> Unit,
 ) {
     val screenState by remember { mutableStateOf(TimelineScreenState()) }
     val timelineState by timelineViewModel.timelineState.observeAsState()
@@ -57,16 +64,40 @@ fun TimelineScreen(
             .padding(16.dp),
     ) {
         ScreenTitle(titleResource = R.string.timeline)
-        PostsList(screenState.posts)
+        Spacer(Modifier.height(16.dp))
+        Box(modifier = Modifier.fillMaxSize()) {
+            PostsList(
+                screenState.posts,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+            FloatingActionButton(
+                onClick = { onCreateNewPost() },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp)
+                    .testTag(stringResource(id = R.string.createNewPost))
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(id = R.string.createNewPost),
+                )
+            }
+        }
     }
 }
 
 @Composable
-private fun PostsList(posts: List<Post>) {
+private fun PostsList(
+    posts: List<Post>,
+    modifier: Modifier = Modifier,
+) {
     if (posts.isEmpty()) {
-        Text(text = stringResource(id = R.string.emptyTimelineMessage))
+        Text(
+            text = stringResource(id = R.string.emptyTimelineMessage),
+            modifier = modifier,
+        )
     } else {
-        LazyColumn {
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(posts) { post ->
                 PostItem(post = post)
                 Spacer(modifier = Modifier.height(8.dp))

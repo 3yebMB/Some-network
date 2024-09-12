@@ -2,6 +2,7 @@ package dev.m13d.somenet.signup.states
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlinx.coroutines.CoroutineScope
@@ -16,7 +17,7 @@ class SignUpScreenState(
     var isBadEmail by mutableStateOf(false)
     var isBadPassword by mutableStateOf(false)
     var about by mutableStateOf("")
-    var infoMessage: Int? by mutableStateOf(null)
+    var infoMessage by mutableIntStateOf(0)
     var isInfoMessageShowing by mutableStateOf(false)
     var isLoading by mutableStateOf(false)
 
@@ -53,7 +54,7 @@ class SignUpScreenState(
     }
 
     fun resetUiState() {
-        infoMessage = null
+        infoMessage = 0
         lastSubmittedEmail = email
         lastSubmittedPassword = password
         isInfoMessageShowing = false

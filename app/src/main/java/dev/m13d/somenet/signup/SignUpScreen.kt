@@ -106,9 +106,10 @@ fun SignUpScreen(
                 Text(text = stringResource(id = R.string.signUp))
             }
         }
-        screenState.infoMessage?.let {
-            InfoMessage(isVisible = screenState.isInfoMessageShowing, stringResource = it)
-        }
+        InfoMessage(
+            isVisible = screenState.isInfoMessageShowing,
+            stringResource = screenState.infoMessage,
+        )
         LoadingBlock(screenState.isLoading)
     }
 }

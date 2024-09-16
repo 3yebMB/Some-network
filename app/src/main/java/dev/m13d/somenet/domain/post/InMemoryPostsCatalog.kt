@@ -4,7 +4,7 @@ class InMemoryPostsCatalog(
     private val availablePosts: List<Post> = emptyList(),
 ) : PostsCatalog {
 
-    override fun postsFor(userIds: List<String>): List<Post> {
+    override suspend fun postsFor(userIds: List<String>): List<Post> {
         return availablePosts.filter { userIds.contains(it.userId) }
     }
 }

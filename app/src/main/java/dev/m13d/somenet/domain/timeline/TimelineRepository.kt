@@ -10,7 +10,7 @@ class TimelineRepository(
     private val userCatalog: UserCatalog,
     private val postCatalog: PostsCatalog,
 ) {
-    fun getTimelineFor(userId: String): TimelineState {
+    suspend fun getTimelineFor(userId: String): TimelineState {
         return try {
             val userIds = listOf(userId) + userCatalog.followedBy(userId)
             val postsForUser = postCatalog.postsFor(userIds)

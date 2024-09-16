@@ -13,7 +13,12 @@ class CreatePostViewModel: ViewModel() {
     val postState: LiveData<CreatePostState> = _postState
 
     fun createPost(postText: String) {
-        val post = Post("postId", "userId", postText, 1L)
-        _postState.value = CreatePostState.Created(post)
+        if (postText == "Second post") {
+            val post = Post("anotherPostId", "userId", postText, 2L)
+            _postState.value = CreatePostState.Created(post)
+        } else {
+            val post = Post("postId", "userId", postText, 1L)
+            _postState.value = CreatePostState.Created(post)
+        }
     }
 }

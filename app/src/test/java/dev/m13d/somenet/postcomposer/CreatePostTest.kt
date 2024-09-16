@@ -14,14 +14,23 @@ class CreatePostTest {
 
     @Test
     fun postIsCreated() {
-
-        val viewModel = CreatePostViewModel()
-
         val postText = "First post"
         val post = Post("postId", "userId", postText, 1L)
+        val viewModel = CreatePostViewModel()
+
         viewModel.createPost(postText)
 
-
         assertEquals(CreatePostState.Created(post), viewModel.postState.value)
+    }
+
+    @Test
+    fun anotherPostCreated() {
+        val postText = "Second post"
+        val anotherPost = Post("anotherPostId", "userId", postText, 2L)
+        val viewModel = CreatePostViewModel()
+
+        viewModel.createPost(postText)
+
+        assertEquals(CreatePostState.Created(anotherPost), viewModel.postState.value)
     }
 }

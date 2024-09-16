@@ -32,13 +32,16 @@ import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.timeline.states.TimelineState
+import dev.m13d.somenet.ui.component.LoadingBlock
 import dev.m13d.somenet.ui.component.ScreenTitle
 
 class TimelineScreenState {
+    private var loadedUserId by mutableStateOf("")
     var posts by mutableStateOf(emptyList<Post>())
-    var loadedUserId by mutableStateOf("")
+    var isLoading by mutableStateOf(false)
 
     fun updatePosts(newPosts: List<Post>) {
+        isLoading = false
         this.posts = newPosts
     }
 
@@ -47,6 +50,10 @@ class TimelineScreenState {
             loadedUserId = userId
             true
         } else false
+    }
+
+    fun showLoading() {
+        isLoading = true
     }
 }
 
@@ -62,36 +69,45 @@ fun TimelineScreen(
         timelineViewModel.timelineFor(userId)
     }
 
-    if (timelineState is TimelineState.Posts) {
-        val posts = (timelineState as TimelineState.Posts).posts
-        screenState.updatePosts(posts)
+    when (timelineState) {
+        is TimelineState.Loading -> screenState.showLoading()
+        is TimelineState.Posts -> {
+            val posts = (timelineState as TimelineState.Posts).posts
+            screenState.updatePosts(posts)
+        } 
+        TimelineState.BackendError -> {}
+        TimelineState.OfflineError -> {}
+        else -> {}
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-    ) {
-        ScreenTitle(titleResource = R.string.timeline)
-        Spacer(Modifier.height(16.dp))
-        Box(modifier = Modifier.fillMaxSize()) {
-            PostsList(
-                screenState.posts,
-                modifier = Modifier.align(Alignment.TopCenter)
-            )
-            FloatingActionButton(
-                onClick = { onCreateNewPost() },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp)
-                    .testTag(stringResource(id = R.string.createNewPost))
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(id = R.string.createNewPost),
+    Box {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+        ) {
+            ScreenTitle(titleResource = R.string.timeline)
+            Spacer(Modifier.height(16.dp))
+            Box(modifier = Modifier.fillMaxSize()) {
+                PostsList(
+                    screenState.posts,
+                    modifier = Modifier.align(Alignment.TopCenter)
                 )
+                FloatingActionButton(
+                    onClick = { onCreateNewPost() },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(16.dp)
+                        .testTag(stringResource(id = R.string.createNewPost))
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(id = R.string.createNewPost),
+                    )
+                }
             }
         }
+        LoadingBlock(screenState.isLoading)
     }
 }
 
@@ -120,14 +136,15 @@ private fun PostItem(
     post: Post,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier
-        .fillMaxWidth()
-        .clip(shape = RoundedCornerShape(16.dp))
-        .border(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.onSurface,
-            shape = RoundedCornerShape(16.dp)
-        )
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(shape = RoundedCornerShape(16.dp))
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onSurface,
+                shape = RoundedCornerShape(16.dp)
+            )
     ) {
         Text(
             text = post.text,

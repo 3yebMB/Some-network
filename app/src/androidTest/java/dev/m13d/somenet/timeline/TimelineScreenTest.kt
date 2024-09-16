@@ -3,6 +3,7 @@ package dev.m13d.somenet.timeline
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dev.m13d.somenet.MainActivity
 import dev.m13d.somenet.domain.exceptions.BackendException
+import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.post.PostsCatalog
@@ -73,6 +74,16 @@ class TimelineScreenTest {
         }
     }
 
+    @Test
+    fun showOfflineError() {
+        replacePostCatalogWith(OfflinePostCatalog())
+        launchTimelineFor("offline-error@somenet.dev", "\\S0meP@sS1134", timelineTestRule) {
+            //no operations
+        } verify {
+            offlineErrorIsDisplayed()
+        }
+    }
+
     @After
     fun tearDown() {
         replacePostCatalogWith(InMemoryPostsCatalog())
@@ -95,6 +106,12 @@ class TimelineScreenTest {
     class UnavailablePostCatalog : PostsCatalog {
         override suspend fun postsFor(userIds: List<String>): List<Post> {
             throw BackendException()
+        }
+    }
+
+    class OfflinePostCatalog : PostsCatalog {
+        override suspend fun postsFor(userIds: List<String>): List<Post> {
+            throw ConnectionUnavailableException()
         }
     }
 }

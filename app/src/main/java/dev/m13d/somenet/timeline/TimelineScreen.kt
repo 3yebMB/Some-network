@@ -101,7 +101,7 @@ fun TimelineScreen(
             screenState.updatePosts(posts)
         }
         is TimelineState.BackendError -> screenState.showInfoMessage(R.string.fetchingTimelineError)
-        is TimelineState.OfflineError -> {}
+        is TimelineState.OfflineError -> screenState.showInfoMessage(R.string.offlineError)
         else -> {}
     }
 

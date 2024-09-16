@@ -73,4 +73,10 @@ class TimelineVerification(
         rule.onNodeWithText(errorMessage)
             .assertIsDisplayed()
     }
+
+    fun offlineErrorIsDisplayed() {
+        val errorMessage = rule.activity.getString(R.string.offlineError)
+        rule.onNodeWithText(errorMessage)
+            .assertIsDisplayed()
+    }
 }

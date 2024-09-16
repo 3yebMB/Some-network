@@ -36,11 +36,18 @@ import dev.m13d.somenet.ui.component.ScreenTitle
 
 class TimelineScreenState {
     var posts by mutableStateOf(emptyList<Post>())
+    var loadedUserId by mutableStateOf("")
 
     fun updatePosts(newPosts: List<Post>) {
         this.posts = newPosts
     }
 
+    fun shouldLoadPostsFor(userId: String): Boolean {
+        return if (loadedUserId != userId) {
+            loadedUserId = userId
+            true
+        } else false
+    }
 }
 
 @Composable
@@ -51,7 +58,9 @@ fun TimelineScreen(
 ) {
     val screenState by remember { mutableStateOf(TimelineScreenState()) }
     val timelineState by timelineViewModel.timelineState.observeAsState()
-    timelineViewModel.timelineFor(userId)
+    if (screenState.shouldLoadPostsFor(userId)) {
+        timelineViewModel.timelineFor(userId)
+    }
 
     if (timelineState is TimelineState.Posts) {
         val posts = (timelineState as TimelineState.Posts).posts

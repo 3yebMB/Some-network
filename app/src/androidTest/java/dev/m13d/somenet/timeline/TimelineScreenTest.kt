@@ -2,6 +2,7 @@ package dev.m13d.somenet.timeline
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dev.m13d.somenet.MainActivity
+import dev.m13d.somenet.domain.exceptions.BackendException
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.post.PostsCatalog
@@ -62,6 +63,16 @@ class TimelineScreenTest {
         }
     }
 
+    @Test
+    fun showBackendError() {
+        replacePostCatalogWith(UnavailablePostCatalog())
+        launchTimelineFor("backend-error@somenet.dev", "\\S0meP@sS1134", timelineTestRule) {
+            //no operations
+        } verify {
+            backendErrorIsDisplayed()
+        }
+    }
+
     @After
     fun tearDown() {
         replacePostCatalogWith(InMemoryPostsCatalog())
@@ -78,6 +89,12 @@ class TimelineScreenTest {
         override suspend fun postsFor(userIds: List<String>): List<Post> {
             delay(2000L)
             return emptyList()
+        }
+    }
+
+    class UnavailablePostCatalog : PostsCatalog {
+        override suspend fun postsFor(userIds: List<String>): List<Post> {
+            throw BackendException()
         }
     }
 }

@@ -67,4 +67,10 @@ class TimelineVerification(
         rule.onNodeWithTag(loading)
             .assertIsDisplayed()
     }
+
+    fun backendErrorIsDisplayed() {
+        val errorMessage = rule.activity.getString(R.string.fetchingTimelineError)
+        rule.onNodeWithText(errorMessage)
+            .assertIsDisplayed()
+    }
 }

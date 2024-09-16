@@ -1,6 +1,7 @@
 package dev.m13d.somenet.timeline
 
 import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.timeline.TimelineRepository
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
@@ -18,7 +19,10 @@ class RenderingTimelineStatesTest {
         InMemoryUserCatalog(),
         InMemoryPostsCatalog(),
     )
-    private val viewModel = TimelineViewModel(timelineRepository)
+    private val viewModel = TimelineViewModel(
+        timelineRepository,
+        TestDispatchers(),
+    )
 
     @Test
     fun timelineStatesExposedToObserver() {

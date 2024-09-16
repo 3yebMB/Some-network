@@ -1,6 +1,7 @@
 package dev.m13d.somenet.timeline
 
 import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.timeline.TimelineRepository
@@ -43,7 +44,8 @@ class LoadTimelineTest {
         val userCatalog = InMemoryUserCatalog()
         val postCatalog = InMemoryPostsCatalog(availablePosts)
         val viewModel = TimelineViewModel(
-            TimelineRepository(userCatalog, postCatalog)
+            TimelineRepository(userCatalog, postCatalog),
+            TestDispatchers(),
         )
         viewModel.timelineFor("annaId")
         assertEquals(TimelineState.Posts(emptyList()), viewModel.timelineState.value)
@@ -54,7 +56,8 @@ class LoadTimelineTest {
         val userCatalog = InMemoryUserCatalog()
         val postCatalog = InMemoryPostsCatalog(availablePosts)
         val viewModel = TimelineViewModel(
-            TimelineRepository(userCatalog, postCatalog)
+            TimelineRepository(userCatalog, postCatalog),
+            TestDispatchers(),
         )
         viewModel.timelineFor(tim.id)
         assertEquals(TimelineState.Posts(timPosts), viewModel.timelineState.value)
@@ -67,7 +70,8 @@ class LoadTimelineTest {
         )
         val postCatalog = InMemoryPostsCatalog(availablePosts)
         val viewModel = TimelineViewModel(
-            TimelineRepository(userCatalog, postCatalog)
+            TimelineRepository(userCatalog, postCatalog),
+            TestDispatchers(),
         )
         viewModel.timelineFor(anabel.id)
         assertEquals(TimelineState.Posts(lucyPosts), viewModel.timelineState.value)
@@ -80,7 +84,8 @@ class LoadTimelineTest {
         )
         val postCatalog = InMemoryPostsCatalog(availablePosts)
         val viewModel = TimelineViewModel(
-            TimelineRepository(userCatalog, postCatalog)
+            TimelineRepository(userCatalog, postCatalog),
+            TestDispatchers(),
         )
         viewModel.timelineFor(sarah.id)
         assertEquals(TimelineState.Posts(lucyPosts + sarahPosts), viewModel.timelineState.value)

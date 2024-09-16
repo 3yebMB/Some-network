@@ -4,12 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.m13d.somenet.app.CoroutineDispatchers
 import dev.m13d.somenet.domain.timeline.TimelineRepository
 import dev.m13d.somenet.timeline.states.TimelineState
 import kotlinx.coroutines.launch
 
 class TimelineViewModel(
     private val timelineRepository: TimelineRepository,
+    private val dispatchers: CoroutineDispatchers,
 ) : ViewModel() {
 
     private var _timelineState = MutableLiveData<TimelineState>()

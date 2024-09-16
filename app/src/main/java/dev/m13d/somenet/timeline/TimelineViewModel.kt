@@ -14,6 +14,7 @@ class TimelineViewModel (
     val timelineState: LiveData<TimelineState> = _timelineState
 
     fun timelineFor(userId: String) {
+        _timelineState.value = TimelineState.Loading
         val result = timelineRepository.getTimelineFor(userId)
         _timelineState.value = result
     }

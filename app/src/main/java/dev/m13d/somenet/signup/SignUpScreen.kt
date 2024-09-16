@@ -1,15 +1,7 @@
 package dev.m13d.somenet.signup
 
-import androidx.annotation.StringRes
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,9 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
 import dev.m13d.somenet.signup.states.SignUpScreenState
 import dev.m13d.somenet.signup.states.SignUpState
+import dev.m13d.somenet.ui.component.InfoMessage
 import dev.m13d.somenet.ui.component.LoadingBlock
 import dev.m13d.somenet.ui.component.ScreenTitle
 
@@ -111,41 +102,6 @@ fun SignUpScreen(
 }
 
 @Composable
-fun InfoMessage(
-    isVisible: Boolean,
-    @StringRes stringResource: Int,
-) {
-    AnimatedVisibility(
-        visible = isVisible,
-        enter = slideInVertically(
-            initialOffsetY = { fullHeight -> -fullHeight },
-            animationSpec = tween(durationMillis = 150, easing = FastOutLinearInEasing)
-        ),
-        exit = fadeOut(
-            targetAlpha = 0f,
-            animationSpec = tween(durationMillis = 250, easing = FastOutLinearInEasing)
-        ),
-    ) {
-        Surface(
-            color = MaterialTheme.colorScheme.error,
-            shadowElevation = 4.dp,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                Text(
-                    text = stringResource(id = stringResource),
-                    color = MaterialTheme.colorScheme.onError,
-                    modifier = Modifier.padding(16.dp),
-                )
-            }
-        }
-    }
-}
-
-@Composable
 private fun LoginField(
     value: String,
     isError: Boolean,
@@ -196,7 +152,6 @@ private fun PasswordField(
         onValueChange = onValueChange,
     )
 }
-
 
 @Composable
 private fun VisibilityToggle(

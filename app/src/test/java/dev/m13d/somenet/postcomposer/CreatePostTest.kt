@@ -4,6 +4,7 @@ import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.user.InMemoryUserData
 import dev.m13d.somenet.infrastructure.ControllableClock
+import dev.m13d.somenet.infrastructure.ControllableIdGenerator
 import dev.m13d.somenet.postcomposer.states.CreatePostState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Test
@@ -21,7 +22,11 @@ class CreatePostTest {
     fun postIsCreated() {
         val postText = "First post"
         val post = Post("postId", "userId", postText, 1L)
-        val viewModel = CreatePostViewModel(userData, ControllableClock(1L))
+        val viewModel = CreatePostViewModel(
+            userData,
+            ControllableClock(1L),
+            ControllableIdGenerator("postId")
+        )
 
         viewModel.createPost(postText)
 
@@ -31,8 +36,12 @@ class CreatePostTest {
     @Test
     fun anotherPostCreated() {
         val postText = "Second post"
-        val anotherPost = Post("anotherPostId", "userId", postText, 2L)
-        val viewModel = CreatePostViewModel(userData, ControllableClock(2L))
+        val anotherPost = Post("post2Id", "userId", postText, 2L)
+        val viewModel = CreatePostViewModel(
+            userData,
+            ControllableClock(2L),
+            ControllableIdGenerator("post2Id")
+        )
 
         viewModel.createPost(postText)
 

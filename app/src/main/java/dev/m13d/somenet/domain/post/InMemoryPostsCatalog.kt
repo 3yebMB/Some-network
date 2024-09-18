@@ -7,4 +7,8 @@ class InMemoryPostsCatalog(
     override suspend fun postsFor(userIds: List<String>): List<Post> {
         return availablePosts.filter { userIds.contains(it.userId) }
     }
+
+    override fun addPost(userId: String, postText: String): Post {
+        TODO("Not yet implemented")
+    }
 }

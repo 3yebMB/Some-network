@@ -21,6 +21,8 @@ class CreatePostViewModel(
     fun createPost(postText: String) {
         if (postText == ":backend:") {
             _postState.value = CreatePostState.BackendError
+        } else if (postText == ":offline:") {
+            _postState.value = CreatePostState.OfflineError
         } else {
             val post = createNewPost(postText)
             _postState.value = CreatePostState.Created(post)

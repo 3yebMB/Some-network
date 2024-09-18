@@ -6,6 +6,8 @@ sealed class CreatePostState {
 
     object BackendError : CreatePostState()
 
+    object OfflineError : CreatePostState()
+
     data class Created(val post: Post): CreatePostState()
 
 }

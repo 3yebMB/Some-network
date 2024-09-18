@@ -1,6 +1,7 @@
 package dev.m13d.somenet.postcomposer
 
 import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.post.PostRepository
 import dev.m13d.somenet.domain.user.InMemoryUserData
 import dev.m13d.somenet.infrastructure.ControllableClock
@@ -20,7 +21,12 @@ class FailedPostCreationTest {
         val userData = InMemoryUserData("userId")
         val clock = ControllableClock(1L)
         val idGenerator = ControllableIdGenerator("post1Id")
-        val viewModel = CreatePostViewModel(PostRepository(userData, clock, idGenerator))
+        val viewModel = CreatePostViewModel(PostRepository(
+            userData, InMemoryPostsCatalog(
+                idGenerator = idGenerator,
+                clock = clock,
+            )
+        ))
 
         viewModel.createPost(":backend:")
 
@@ -32,7 +38,12 @@ class FailedPostCreationTest {
         val userData = InMemoryUserData("userId")
         val clock = ControllableClock(1L)
         val idGenerator = ControllableIdGenerator("post2Id")
-        val viewModel = CreatePostViewModel(PostRepository(userData, clock, idGenerator))
+        val viewModel = CreatePostViewModel(PostRepository(
+            userData, InMemoryPostsCatalog(
+                idGenerator = idGenerator,
+                clock = clock,
+            )
+        ))
 
         viewModel.createPost(":offline:")
 

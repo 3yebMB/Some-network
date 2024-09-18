@@ -21,13 +21,17 @@ class CreatePostViewModel(
     val postState: LiveData<CreatePostState> = _postState
 
     fun createPost(postText: String) {
-        try {
+        _postState.value = createNewPost(postText)
+    }
+
+    private fun createNewPost(postText: String): CreatePostState {
+        return try {
             val post = addPost(userData.loggedInUserId(), postText)
-            _postState.value = CreatePostState.Created(post)
+            CreatePostState.Created(post)
         } catch (backendException: BackendException) {
-            _postState.value = CreatePostState.BackendError
+            CreatePostState.BackendError
         } catch (offlineException: ConnectionUnavailableException) {
-            _postState.value = CreatePostState.OfflineError
+            CreatePostState.OfflineError
         }
     }
 
@@ -38,7 +42,6 @@ class CreatePostViewModel(
         } else if (postText == ":offline:") {
             ConnectionUnavailableException()
         }
-
         val postId = idGenerator.next()
         val timestamp = clock.now()
         return Post(postId, userId, postText, timestamp)

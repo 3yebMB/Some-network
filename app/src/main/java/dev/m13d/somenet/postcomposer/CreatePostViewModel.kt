@@ -21,30 +21,32 @@ class CreatePostViewModel(
     val postState: LiveData<CreatePostState> = _postState
 
     fun createPost(postText: String) {
-        _postState.value = createNewPost(postText)
+        _postState.value = PostRepository().createNewPost(postText)
     }
 
-    private fun createNewPost(postText: String): CreatePostState {
-        return try {
-            val post = addPost(userData.loggedInUserId(), postText)
-            CreatePostState.Created(post)
-        } catch (backendException: BackendException) {
-            CreatePostState.BackendError
-        } catch (offlineException: ConnectionUnavailableException) {
-            CreatePostState.OfflineError
-        }
-    }
+    inner class PostRepository {
 
-    @Suppress("ThrowableNotThrown")
-    private fun addPost(userId: String, postText: String): Post {
-        if (postText == ":backend:") {
-            BackendException()
-        } else if (postText == ":offline:") {
-            ConnectionUnavailableException()
+        internal fun createNewPost(postText: String): CreatePostState {
+            return try {
+                val post = addPost(userData.loggedInUserId(), postText)
+                CreatePostState.Created(post)
+            } catch (backendException: BackendException) {
+                CreatePostState.BackendError
+            } catch (offlineException: ConnectionUnavailableException) {
+                CreatePostState.OfflineError
+            }
         }
-        val postId = idGenerator.next()
-        val timestamp = clock.now()
-        return Post(postId, userId, postText, timestamp)
 
+        private fun addPost(userId: String, postText: String): Post {
+            if (postText == ":backend:") {
+                throw BackendException()
+            } else if (postText == ":offline:") {
+                throw ConnectionUnavailableException()
+            }
+            val postId = idGenerator.next()
+            val timestamp = clock.now()
+            return Post(postId, userId, postText, timestamp)
+
+        }
     }
 }

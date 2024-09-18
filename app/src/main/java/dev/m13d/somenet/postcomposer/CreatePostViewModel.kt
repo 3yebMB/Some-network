@@ -4,9 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dev.m13d.somenet.domain.post.PostRepository
-import dev.m13d.somenet.domain.user.InMemoryUserData
-import dev.m13d.somenet.infrastructure.Clock
-import dev.m13d.somenet.infrastructure.IdGenerator
 import dev.m13d.somenet.postcomposer.states.CreatePostState
 
 class CreatePostViewModel(

@@ -1,6 +1,5 @@
 package dev.m13d.somenet.domain.post
 
-import dev.m13d.somenet.domain.exceptions.BackendException
 import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.infrastructure.Clock
 import dev.m13d.somenet.infrastructure.IdGenerator
@@ -18,11 +17,6 @@ class InMemoryPostsCatalog(
     }
 
     override fun addPost(userId: String, postText: String): Post {
-        if (postText == ":backend:") {
-            throw BackendException()
-        } else if (postText == ":offline:") {
-            throw ConnectionUnavailableException()
-        }
         val postId = idGenerator.next()
         val timestamp = clock.now()
         return Post(postId, userId, postText, timestamp)

@@ -15,15 +15,12 @@ import kotlin.test.assertEquals
 @ExtendWith(InstantTaskExecutorExtension::class)
 class CreatePostTest {
 
-    private val userId = "userId"
-    private val userData = InMemoryUserData(userId)
-
     @Test
     fun postIsCreated() {
         val postText = "First post"
         val post = Post("postId", "userId", postText, 1L)
         val viewModel = CreatePostViewModel(
-            userData,
+            InMemoryUserData("userId"),
             ControllableClock(1L),
             ControllableIdGenerator("postId")
         )
@@ -38,7 +35,7 @@ class CreatePostTest {
         val postText = "Second post"
         val anotherPost = Post("post2Id", "userId", postText, 2L)
         val viewModel = CreatePostViewModel(
-            userData,
+            InMemoryUserData("userId"),
             ControllableClock(2L),
             ControllableIdGenerator("post2Id")
         )

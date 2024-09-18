@@ -10,16 +10,14 @@ import dev.m13d.somenet.infrastructure.IdGenerator
 import dev.m13d.somenet.postcomposer.states.CreatePostState
 
 class CreatePostViewModel(
-    private val userData: InMemoryUserData,
-    private val clock: Clock,
-    private val idGenerator: IdGenerator,
+    private val postRepository: PostRepository,
 ) : ViewModel() {
 
     private var _postState = MutableLiveData<CreatePostState>()
     val postState: LiveData<CreatePostState> = _postState
 
     fun createPost(postText: String) {
-        val result = PostRepository(userData, clock, idGenerator).createNewPost(postText)
+        val result = postRepository.createNewPost(postText)
         _postState.value = result
     }
 }

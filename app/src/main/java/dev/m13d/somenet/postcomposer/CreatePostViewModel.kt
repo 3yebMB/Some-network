@@ -5,13 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.user.InMemoryUserData
-import dev.m13d.somenet.infrastructure.ControllableClock
+import dev.m13d.somenet.infrastructure.Clock
 import dev.m13d.somenet.postcomposer.states.CreatePostState
-
 
 class CreatePostViewModel(
     private val userData: InMemoryUserData,
-    private val clock: ControllableClock,
+    private val clock: Clock,
 ) : ViewModel() {
 
         private var _postState = MutableLiveData<CreatePostState>()

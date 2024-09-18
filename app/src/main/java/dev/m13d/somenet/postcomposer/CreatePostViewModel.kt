@@ -3,6 +3,8 @@ package dev.m13d.somenet.postcomposer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dev.m13d.somenet.domain.exceptions.BackendException
+import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.user.InMemoryUserData
 import dev.m13d.somenet.infrastructure.Clock
@@ -19,19 +21,27 @@ class CreatePostViewModel(
     val postState: LiveData<CreatePostState> = _postState
 
     fun createPost(postText: String) {
-        if (postText == ":backend:") {
-            _postState.value = CreatePostState.BackendError
-        } else if (postText == ":offline:") {
-            _postState.value = CreatePostState.OfflineError
-        } else {
+        try {
             val post = addPost(userData.loggedInUserId(), postText)
             _postState.value = CreatePostState.Created(post)
+        } catch (backendException: BackendException) {
+            _postState.value = CreatePostState.BackendError
+        } catch (offlineException: ConnectionUnavailableException) {
+            _postState.value = CreatePostState.OfflineError
         }
     }
 
+    @Suppress("ThrowableNotThrown")
     private fun addPost(userId: String, postText: String): Post {
+        if (postText == ":backend:") {
+            BackendException()
+        } else if (postText == ":offline:") {
+            ConnectionUnavailableException()
+        }
+
         val postId = idGenerator.next()
         val timestamp = clock.now()
         return Post(postId, userId, postText, timestamp)
+
     }
 }

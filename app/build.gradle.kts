@@ -66,6 +66,15 @@ android {
             events("passed", "failed", "skipped", "standardOut", "standardError")
         }
     }
+    sourceSets {
+        val sharedTestDirectory = "src/sharedTest/java"
+        getByName("androidTest") {
+            java.srcDir(sharedTestDirectory)
+        }
+        getByName("test") {
+            java.srcDir(sharedTestDirectory)
+        }
+    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"

@@ -2,8 +2,8 @@ package dev.m13d.somenet.infrastructure
 
 class ControllableClock(
     private val timestamp: Long,
-): Clock {
-    
+) : Clock {
+
     override fun now(): Long {
         return timestamp
     }

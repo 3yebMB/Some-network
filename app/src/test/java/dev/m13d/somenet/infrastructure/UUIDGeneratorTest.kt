@@ -20,6 +20,6 @@ class UUIDGeneratorTest {
     fun generateCorrectUUID() {
         val uuid = UUIDGenerator().next()
         val pattern = Pattern.compile(UUID_REGEX)
-        assertTrue(pattern.matcher(uuid).matches(),)
+        assertTrue(pattern.matcher(uuid).matches())
     }
 }

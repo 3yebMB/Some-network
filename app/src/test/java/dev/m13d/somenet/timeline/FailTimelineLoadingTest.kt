@@ -2,10 +2,8 @@ package dev.m13d.somenet.timeline
 
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.app.TestDispatchers
-import dev.m13d.somenet.domain.exceptions.BackendException
-import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
-import dev.m13d.somenet.domain.post.Post
-import dev.m13d.somenet.domain.post.PostsCatalog
+import dev.m13d.somenet.domain.post.OfflinePostCatalog
+import dev.m13d.somenet.domain.post.UnavailablePostCatalog
 import dev.m13d.somenet.domain.timeline.TimelineRepository
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.timeline.states.TimelineState
@@ -40,25 +38,5 @@ class FailTimelineLoadingTest {
         )
         viewModel.timelineFor(":irrelevant:")
         assertEquals(TimelineState.OfflineError, viewModel.timelineState.value)
-    }
-
-    private class UnavailablePostCatalog : PostsCatalog {
-        override suspend fun postsFor(userIds: List<String>): List<Post> {
-            throw BackendException()
-        }
-
-        override fun addPost(userId: String, postText: String): Post {
-            TODO("Not yet implemented")
-        }
-    }
-
-    private class OfflinePostCatalog : PostsCatalog {
-        override suspend fun postsFor(userIds: List<String>): List<Post> {
-            throw ConnectionUnavailableException()
-        }
-
-        override fun addPost(userId: String, postText: String): Post {
-            TODO("Not yet implemented")
-        }
     }
 }

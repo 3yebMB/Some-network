@@ -86,9 +86,7 @@ jobs:
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
-          project_id: ${{ secrets.SOME_PROJECT_ID }}
-          service_account_key: ${{ secrets.GOOGLE_SERVICES_JSON }}
-          export_default_credentials: true
+          project_id: ${{ secrets.SOME_PROJECT_ID }}  
 
       - name: Run instrumental tests in Firebase Test Lab
         run: gcloud firebase test android run --type instrumentation --app app-debug/app-debug.apk --test app-debug-androidTest/app-debug-androidTest.apk --device model=blueline,version=28

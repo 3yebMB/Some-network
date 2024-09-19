@@ -9,7 +9,7 @@ import dev.m13d.somenet.domain.user.UserRepository
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 import dev.m13d.somenet.signup.SignUpViewModel
 import dev.m13d.somenet.timeline.TimelineViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val applicationModule = module {

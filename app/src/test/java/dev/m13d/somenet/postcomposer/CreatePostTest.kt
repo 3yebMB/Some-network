@@ -1,6 +1,7 @@
 package dev.m13d.somenet.postcomposer
 
 import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.post.PostRepository
@@ -24,12 +25,16 @@ class CreatePostTest {
         val userData = InMemoryUserData("userId")
         val clock = ControllableClock(1L)
         val idGenerator = ControllableIdGenerator("postId")
-        val viewModel = CreatePostViewModel(PostRepository(
-            userData, InMemoryPostsCatalog(
-                idGenerator = idGenerator,
-                clock = clock,
-            )
-        ))
+        val viewModel = CreatePostViewModel(
+            PostRepository(
+                userData,
+                InMemoryPostsCatalog(
+                    idGenerator = idGenerator,
+                    clock = clock,
+                )
+            ),
+            TestDispatchers(),
+        )
 
         viewModel.createPost(postText)
 
@@ -43,12 +48,16 @@ class CreatePostTest {
         val userData = InMemoryUserData("userId")
         val clock = ControllableClock(2L)
         val idGenerator = ControllableIdGenerator("post2Id")
-        val viewModel = CreatePostViewModel(PostRepository(
-            userData, InMemoryPostsCatalog(
-                idGenerator = idGenerator,
-                clock = clock,
-            )
-        ))
+        val viewModel = CreatePostViewModel(
+            PostRepository(
+                userData,
+                InMemoryPostsCatalog(
+                    idGenerator = idGenerator,
+                    clock = clock,
+                )
+            ),
+            TestDispatchers(),
+        )
 
         viewModel.createPost(postText)
 

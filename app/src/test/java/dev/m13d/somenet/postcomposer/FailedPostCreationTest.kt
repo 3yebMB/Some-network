@@ -1,6 +1,7 @@
 package dev.m13d.somenet.postcomposer
 
 import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.post.OfflinePostCatalog
 import dev.m13d.somenet.domain.post.PostRepository
 import dev.m13d.somenet.domain.post.UnavailablePostCatalog
@@ -21,7 +22,8 @@ class FailedPostCreationTest {
             PostRepository(
                 InMemoryUserData("userId"),
                 UnavailablePostCatalog()
-            )
+            ),
+            TestDispatchers(),
         )
 
         viewModel.createPost(":backend:")
@@ -35,7 +37,8 @@ class FailedPostCreationTest {
             PostRepository(
                 InMemoryUserData("userId"),
                 OfflinePostCatalog()
-            )
+            ),
+            TestDispatchers(),
         )
 
         viewModel.createPost(":offline:")

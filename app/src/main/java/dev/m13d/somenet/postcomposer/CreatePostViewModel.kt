@@ -8,6 +8,7 @@ import dev.m13d.somenet.app.CoroutineDispatchers
 import dev.m13d.somenet.domain.post.PostRepository
 import dev.m13d.somenet.postcomposer.states.CreatePostState
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CreatePostViewModel(
     private val postRepository: PostRepository,
@@ -19,7 +20,9 @@ class CreatePostViewModel(
 
     fun createPost(postText: String) {
         viewModelScope.launch {
-            val result = postRepository.createNewPost(postText)
+            val result = withContext(dispatchers.background) {
+                postRepository.createNewPost(postText)
+            }
             _postState.value = result
         }
     }

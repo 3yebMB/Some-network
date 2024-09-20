@@ -5,6 +5,8 @@ import dev.m13d.somenet.MainActivity
 import dev.m13d.somenet.domain.exceptions.BackendException
 import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
+import dev.m13d.somenet.domain.user.OfflineUserCatalog
+import dev.m13d.somenet.domain.user.UnavailableUserCatalog
 import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.domain.user.UserCatalog
 import kotlinx.coroutines.delay
@@ -152,37 +154,16 @@ class SignUpTest {
         }
         loadKoinModules(replaceModule)
     }
-}
 
-class DelayingUserCatalog : UserCatalog {
+    class DelayingUserCatalog : UserCatalog {
 
-    override suspend fun createUser(email: String, password: String, about: String): User {
-        delay(1000L)
-        return User("someId", email, about)
-    }
+        override suspend fun createUser(email: String, password: String, about: String): User {
+            delay(1000L)
+            return User("someId", email, about)
+        }
 
-    override fun followedBy(userId: String): List<String> {
-        TODO("Not yet implemented")
-    }
-}
-
-class OfflineUserCatalog : UserCatalog {
-    override suspend fun createUser(email: String, password: String, about: String): User {
-        throw ConnectionUnavailableException()
-    }
-
-    override fun followedBy(userId: String): List<String> {
-        TODO("Not yet implemented")
+        override fun followedBy(userId: String): List<String> {
+            TODO("Not yet implemented")
+        }
     }
 }
-
-class UnavailableUserCatalog : UserCatalog {
-    override suspend fun createUser(email: String, password: String, about: String): User {
-        throw BackendException()
-    }
-
-    override fun followedBy(userId: String): List<String> {
-        TODO("Not yet implemented")
-    }
-}
-

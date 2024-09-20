@@ -5,8 +5,10 @@ import dev.m13d.somenet.MainActivity
 import dev.m13d.somenet.domain.exceptions.BackendException
 import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
+import dev.m13d.somenet.domain.post.OfflinePostCatalog
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.post.PostsCatalog
+import dev.m13d.somenet.domain.post.UnavailablePostCatalog
 import kotlinx.coroutines.delay
 import org.junit.After
 import org.junit.Rule
@@ -100,26 +102,6 @@ class TimelineScreenTest {
         override suspend fun postsFor(userIds: List<String>): List<Post> {
             delay(2000L)
             return emptyList()
-        }
-
-        override fun addPost(userId: String, postText: String): Post {
-            TODO("Not yet implemented")
-        }
-    }
-
-    class UnavailablePostCatalog : PostsCatalog {
-        override suspend fun postsFor(userIds: List<String>): List<Post> {
-            throw BackendException()
-        }
-
-        override fun addPost(userId: String, postText: String): Post {
-            TODO("Not yet implemented")
-        }
-    }
-
-    class OfflinePostCatalog : PostsCatalog {
-        override suspend fun postsFor(userIds: List<String>): List<Post> {
-            throw ConnectionUnavailableException()
         }
 
         override fun addPost(userId: String, postText: String): Post {

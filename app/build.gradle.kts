@@ -68,12 +68,7 @@ android {
     }
     sourceSets {
         val sharedTestDirectory = "src/sharedTest/java"
-        getByName("androidTest") {
-            java.srcDir(sharedTestDirectory)
-        }
-        getByName("test") {
-            java.srcDir(sharedTestDirectory)
-        }
+        getByName("main").java.srcDir(sharedTestDirectory)
     }
     packaging {
         resources {

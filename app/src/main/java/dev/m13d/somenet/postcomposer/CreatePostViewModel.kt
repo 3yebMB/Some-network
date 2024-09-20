@@ -21,10 +21,9 @@ class CreatePostViewModel(
     fun createPost(postText: String) {
         viewModelScope.launch {
             _postState.value = CreatePostState.Loading
-            val result = withContext(dispatchers.background) {
+            _postState.value = withContext(dispatchers.background) {
                 postRepository.createNewPost(postText)
             }
-            _postState.value = result
         }
     }
 }

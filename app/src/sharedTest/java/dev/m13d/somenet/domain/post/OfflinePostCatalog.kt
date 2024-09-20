@@ -7,7 +7,7 @@ class OfflinePostCatalog : PostsCatalog {
         throw ConnectionUnavailableException()
     }
 
-    override fun addPost(userId: String, postText: String): Post {
+    override suspend fun addPost(userId: String, postText: String): Post {
         throw ConnectionUnavailableException()
     }
 }

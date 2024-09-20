@@ -99,12 +99,13 @@ class TimelineScreenTest {
     }
 
     class DelayingPostCatalog : PostsCatalog {
+
         override suspend fun postsFor(userIds: List<String>): List<Post> {
             delay(2000L)
             return emptyList()
         }
 
-        override fun addPost(userId: String, postText: String): Post {
+        override suspend fun addPost(userId: String, postText: String): Post {
             TODO("Not yet implemented")
         }
     }

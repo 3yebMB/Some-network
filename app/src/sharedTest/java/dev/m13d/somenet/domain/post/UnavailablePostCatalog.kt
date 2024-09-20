@@ -7,7 +7,7 @@ class UnavailablePostCatalog : PostsCatalog {
         throw BackendException()
     }
 
-    override fun addPost(userId: String, postText: String): Post {
+    override suspend fun addPost(userId: String, postText: String): Post {
         throw BackendException()
     }
 }

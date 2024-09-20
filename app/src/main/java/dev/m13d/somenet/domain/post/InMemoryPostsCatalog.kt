@@ -16,7 +16,7 @@ class InMemoryPostsCatalog(
         return availablePosts.filter { userIds.contains(it.userId) }
     }
 
-    override fun addPost(userId: String, postText: String): Post {
+    override suspend fun addPost(userId: String, postText: String): Post {
         val postId = idGenerator.next()
         val timestamp = clock.now()
         return Post(postId, userId, postText, timestamp)

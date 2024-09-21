@@ -1,7 +1,6 @@
 package dev.m13d.somenet
 
 import android.os.Bundle
-import android.os.Parcelable.Creator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -13,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dev.m13d.somenet.postcomposer.CreateNewPostScreen
+import dev.m13d.somenet.postcomposer.CreatePostViewModel
 import dev.m13d.somenet.signup.SignUpScreen
 import dev.m13d.somenet.signup.SignUpViewModel
 import dev.m13d.somenet.timeline.TimelineScreen
@@ -30,6 +30,7 @@ class MainActivity : ComponentActivity() {
 
     private val signUpViewModel: SignUpViewModel by viewModel()
     private val timelineViewModel: TimelineViewModel by viewModel()
+    private val createPostViewModel: CreatePostViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +58,9 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(CREATE_NEW_POST) {
-                            CreateNewPostScreen()
+                            CreateNewPostScreen(createPostViewModel) {
+                                navController.navigateUp()
+                            }
                         }
                     }
 //                        modifier = Modifier.padding(innerPadding)

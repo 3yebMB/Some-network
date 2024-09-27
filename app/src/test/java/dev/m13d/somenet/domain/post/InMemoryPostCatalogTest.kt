@@ -21,4 +21,16 @@ class InMemoryPostCatalogTest {
 
         assertEquals(listOf(tomPost), result)
     }
+
+    @Test
+    fun postNotFound() = runBlocking {
+        val postCatalog = InMemoryPostsCatalog(
+            availablePosts = listOf(annaPost, lucyPost)
+        )
+
+        val result = postCatalog.postsFor(listOf(tomId))
+
+        assertEquals(emptyList(), result)
+    }
+
 }

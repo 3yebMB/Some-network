@@ -14,7 +14,7 @@ class InMemoryPostCatalogTest {
     @Test
     fun postFound() = runBlocking {
         val postCatalog = InMemoryPostsCatalog(
-            availablePosts = listOf(annaPost, tomPost, lucyPost)
+            availablePosts = mutableListOf(annaPost, tomPost, lucyPost)
         )
 
         val result = postCatalog.postsFor(listOf(tomId))
@@ -25,12 +25,22 @@ class InMemoryPostCatalogTest {
     @Test
     fun postNotFound() = runBlocking {
         val postCatalog = InMemoryPostsCatalog(
-            availablePosts = listOf(annaPost, lucyPost)
+            availablePosts = mutableListOf(annaPost, lucyPost)
         )
 
         val result = postCatalog.postsFor(listOf(tomId))
 
         assertEquals(emptyList(), result)
+    }
+
+    @Test
+    fun addNewPost() = runBlocking {
+        val postCatalog = InMemoryPostsCatalog()
+        val newAddedPost = postCatalog.addPost(tomId, "Tom's new post")
+
+        val result = postCatalog.postsFor(listOf(tomId))
+
+        assertEquals(listOf(newAddedPost), result)
     }
 
 }

@@ -37,7 +37,7 @@ class LoadTimelineTest {
         Post("post3", sarah.id, "post 3", 3L),
     )
 
-    private val availablePosts = timPosts + lucyPosts + sarahPosts
+    private val availablePosts = (timPosts + lucyPosts + sarahPosts).toMutableList()
 
     @Test
     fun noPostsAvailable() {

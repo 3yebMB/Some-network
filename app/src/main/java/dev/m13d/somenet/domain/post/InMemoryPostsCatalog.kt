@@ -6,7 +6,7 @@ import dev.m13d.somenet.infrastructure.SystemClock
 import dev.m13d.somenet.infrastructure.UUIDGenerator
 
 class InMemoryPostsCatalog(
-    private val availablePosts: List<Post> = emptyList(),
+    private val availablePosts: MutableList<Post> = mutableListOf(),
     private val idGenerator: IdGenerator = UUIDGenerator(),
     private val clock: Clock = SystemClock(),
 ) : PostsCatalog {
@@ -18,6 +18,8 @@ class InMemoryPostsCatalog(
     override suspend fun addPost(userId: String, postText: String): Post {
         val postId = idGenerator.next()
         val timestamp = clock.now()
-        return Post(postId, userId, postText, timestamp)
+        val post = Post(postId, userId, postText, timestamp)
+        availablePosts.add(post)
+        return post
     }
 }

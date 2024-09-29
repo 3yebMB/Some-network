@@ -11,6 +11,7 @@ junit = "5.11.1"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 kotlinCoroutineTest = "1.9.0"
+kotlinxDatetime = "0.6.1"
 lifecycleRuntimeKtx = "2.8.6"
 activityCompose = "1.9.2"
 composeBom = "2024.09.02"
@@ -45,6 +46,7 @@ junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", vers
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
 androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "archCoreTesting" }
 kotlin-coroutine-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutineTest" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

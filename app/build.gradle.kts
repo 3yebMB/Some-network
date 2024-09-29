@@ -96,6 +96,7 @@ dependencies {
     implementation(libs.bundles.compose.ui)
     implementation(platform(libs.koin.bom))
     implementation(libs.bundles.koin)
+    implementation(libs.kotlinx.datetime)
 
     testRuntimeOnly(libs.junit.jupiter.engine)
 

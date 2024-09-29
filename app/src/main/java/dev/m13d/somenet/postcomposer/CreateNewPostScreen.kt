@@ -24,17 +24,30 @@ import dev.m13d.somenet.R
 import dev.m13d.somenet.postcomposer.states.CreatePostState
 import dev.m13d.somenet.ui.component.ScreenTitle
 
+class CreateNewPostScreenState {
+    var isPostSubmitted by mutableStateOf(false)
+
+    fun setPostSubmitted() {
+        isPostSubmitted = true
+    }
+}
+
 @Composable
 fun CreateNewPostScreen(
     createPostViewModel: CreatePostViewModel,
     onPostCreated: () -> Unit,
 ) {
 
+    val screenState by remember { mutableStateOf(CreateNewPostScreenState()) }
     var postText by remember { mutableStateOf("") }
 
     val createPostState by createPostViewModel.postState.observeAsState()
     when(createPostState) {
-        is CreatePostState.Created -> onPostCreated()
+        is CreatePostState.Created -> {
+            if (screenState.isPostSubmitted) {
+                onPostCreated()
+            }
+        }
         else -> {}
     }
 
@@ -43,7 +56,10 @@ fun CreateNewPostScreen(
         Box(modifier = Modifier.fillMaxSize()) {
             PostComposer(postText) { postText = it }
             FloatingActionButton(
-                onClick = { createPostViewModel.createPost(postText) },
+                onClick = {
+                    screenState.setPostSubmitted()
+                    createPostViewModel.createPost(postText)
+                },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .testTag(stringResource(R.string.submitPost))

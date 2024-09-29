@@ -37,6 +37,28 @@ class CreateNewPostScreenTest {
         }
     }
 
+    @Test
+    fun createMultiplePost() {
+        val timestampWithTimezoneOffset = LocalDateTime
+            .of(2024, 9, 21, 15, 30)
+            .toInstant(ZoneOffset.ofTotalSeconds(0))
+            .toEpochMilli()
+
+        replaceUserDataWith(InMemoryUserData("mihalyId"))
+        replacePostCatalogWith(InMemoryPostsCatalog(clock = ControllableClock(timestampWithTimezoneOffset)))
+
+        launchPostComposerFor("mihaly@somenet.dev", createNewPostRule) {
+            typePost("My First Post")
+            submit()
+            tapOnCreateNewPost()
+            typePost("My Second Post")
+            submit()
+        } verify {
+            newCreatedPostIsShown("mihalyId", "21-09-2024 17:30", "My First Post")
+            newCreatedPostIsShown("mihalyId", "21-09-2024 17:30", "My Second Post")
+        }
+    }
+
     @After
     fun tearDown() {
         replacePostCatalogWith(InMemoryPostsCatalog())

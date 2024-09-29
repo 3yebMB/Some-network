@@ -1,8 +1,10 @@
 package dev.m13d.somenet.timeline
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,6 +38,8 @@ import dev.m13d.somenet.timeline.states.TimelineState
 import dev.m13d.somenet.ui.component.InfoMessage
 import dev.m13d.somenet.ui.component.LoadingBlock
 import dev.m13d.somenet.ui.component.ScreenTitle
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun TimelineScreen(
@@ -131,9 +135,28 @@ private fun PostItem(
                 shape = RoundedCornerShape(16.dp)
             )
     ) {
-        Text(
-            text = post.text,
-            modifier = Modifier.padding(8.dp)
-        )
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(text = post.userId)
+                Text(text = post.timestamp.toDateTime())
+            }
+            Text(
+                text = post.text,
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
     }
+}
+
+private fun Long.toDateTime(): String {
+    val dateTimeFormat = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
+    return dateTimeFormat.format(this)
 }

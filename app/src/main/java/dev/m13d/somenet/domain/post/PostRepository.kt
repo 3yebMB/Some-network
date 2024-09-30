@@ -2,11 +2,11 @@ package dev.m13d.somenet.domain.post
 
 import dev.m13d.somenet.domain.exceptions.BackendException
 import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
-import dev.m13d.somenet.domain.user.InMemoryUserDataStore
+import dev.m13d.somenet.domain.user.UserDataStore
 import dev.m13d.somenet.postcomposer.states.CreatePostState
 
 class PostRepository(
-    private val userData: InMemoryUserDataStore,
+    private val userData: UserDataStore,
     private val postsCatalog: PostsCatalog,
 ) {
 

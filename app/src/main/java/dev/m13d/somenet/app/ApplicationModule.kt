@@ -7,6 +7,7 @@ import dev.m13d.somenet.domain.timeline.TimelineRepository
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.InMemoryUserDataStore
 import dev.m13d.somenet.domain.user.UserCatalog
+import dev.m13d.somenet.domain.user.UserDataStore
 import dev.m13d.somenet.domain.user.UserRepository
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 import dev.m13d.somenet.postcomposer.CreatePostViewModel
@@ -20,7 +21,7 @@ val applicationModule = module {
     single<CoroutineDispatchers> { DefaultDispatchers() }
     single<UserCatalog> { InMemoryUserCatalog() }
     single<PostsCatalog> { InMemoryPostsCatalog() }
-    single { InMemoryUserDataStore() }
+    single<UserDataStore> { InMemoryUserDataStore() }
     factory { RegexCredentialValidator() }
     factory { UserRepository(userCatalog = get(), userDataStore = get()) }
     factory { TimelineRepository(userCatalog = get(), postCatalog = get()) }

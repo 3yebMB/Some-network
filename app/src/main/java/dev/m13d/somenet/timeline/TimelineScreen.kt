@@ -92,7 +92,6 @@ fun TimelineScreen(
             }
         }
         InfoMessage(
-            isVisible = screenState.isInfoMessageShowing,
             stringResource = screenState.infoMessage,
         )
         LoadingBlock(screenState.isLoading)

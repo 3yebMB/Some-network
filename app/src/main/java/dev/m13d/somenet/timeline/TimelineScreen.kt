@@ -38,8 +38,7 @@ import dev.m13d.somenet.timeline.states.TimelineState
 import dev.m13d.somenet.ui.component.InfoMessage
 import dev.m13d.somenet.ui.component.LoadingBlock
 import dev.m13d.somenet.ui.component.ScreenTitle
-import java.text.SimpleDateFormat
-import java.util.Locale
+import dev.m13d.somenet.ui.extentions.toDateTime
 
 @Composable
 fun TimelineScreen(
@@ -154,9 +153,4 @@ private fun PostItem(
             )
         }
     }
-}
-
-private fun Long.toDateTime(): String {
-    val dateTimeFormat = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
-    return dateTimeFormat.format(this)
 }

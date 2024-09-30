@@ -1,6 +1,6 @@
 package dev.m13d.somenet.domain.user
 
-class InMemoryUserData(
+class InMemoryUserDataStore(
     private val loggedInUserId: String,
 ) {
 

@@ -5,7 +5,7 @@ import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.post.PostRepository
-import dev.m13d.somenet.domain.user.InMemoryUserData
+import dev.m13d.somenet.domain.user.InMemoryUserDataStore
 import dev.m13d.somenet.infrastructure.ControllableClock
 import dev.m13d.somenet.infrastructure.ControllableIdGenerator
 import dev.m13d.somenet.postcomposer.states.CreatePostState
@@ -27,7 +27,7 @@ class RenderingCreatePostStateTest {
     private val idGenerator = ControllableIdGenerator(postId)
     private val clock = ControllableClock(timestamp)
     private val postCatalog = InMemoryPostsCatalog(idGenerator = idGenerator, clock = clock)
-    private val userData = InMemoryUserData(loggedInUserId)
+    private val userData = InMemoryUserDataStore(loggedInUserId)
     private val postRepository = PostRepository(userData, postCatalog)
     private val dispatchers = TestDispatchers()
     private val viewModel = CreatePostViewModel(postRepository, dispatchers)

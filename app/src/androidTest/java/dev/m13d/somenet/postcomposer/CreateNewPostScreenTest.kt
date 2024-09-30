@@ -22,7 +22,7 @@ class CreateNewPostScreenTest {
     val createNewPostRule = createAndroidComposeRule<MainActivity>()
 
     private val timestamp = Calendar.getInstance()
-        .also { it.set(2024, 9, 21, 15, 30) }
+        .also { it.set(2024, 8, 21, 17, 30) }
         .timeInMillis
 
     @Test

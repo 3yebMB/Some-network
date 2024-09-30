@@ -94,7 +94,7 @@ class CreateNewPostScreenTest {
     @After
     fun tearDown() {
         replacePostCatalogWith(InMemoryPostsCatalog())
-        replaceUserDataWith(InMemoryUserDataStore(""))
+        replaceUserDataWith(InMemoryUserDataStore())
     }
 
     private fun replacePostCatalogWith(postsCatalog: PostsCatalog) {

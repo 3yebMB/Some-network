@@ -20,7 +20,7 @@ val applicationModule = module {
     single<CoroutineDispatchers> { DefaultDispatchers() }
     single<UserCatalog> { InMemoryUserCatalog() }
     single<PostsCatalog> { InMemoryPostsCatalog() }
-    single { InMemoryUserDataStore("") }
+    single { InMemoryUserDataStore() }
     factory { RegexCredentialValidator() }
     factory { UserRepository(userCatalog = get()) }
     factory { TimelineRepository(userCatalog = get(), postCatalog = get()) }

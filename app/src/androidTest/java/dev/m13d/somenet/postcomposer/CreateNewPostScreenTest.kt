@@ -11,23 +11,21 @@ import org.junit.Rule
 import org.junit.Test
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.util.Calendar
 
 class CreateNewPostScreenTest {
 
     @get:Rule
     val createNewPostRule = createAndroidComposeRule<MainActivity>()
 
-    private val timestampWithTimezoneOffset = LocalDateTime
-        .of(2024, 9, 21, 15, 30)
-        .toInstant(ZoneOffset.ofTotalSeconds(0))
-        .toEpochMilli()
+    private val timestamp = Calendar.getInstance()
+        .also { it.set(2024, 9, 21, 15, 30) }
+        .timeInMillis
 
     @Test
     fun createNewPost() {
         replaceUserDataWith(InMemoryUserData("mihalyId"))
-        replacePostCatalogWith(InMemoryPostsCatalog(clock = ControllableClock(timestampWithTimezoneOffset)))
+        replacePostCatalogWith(InMemoryPostsCatalog(clock = ControllableClock(timestamp)))
 
         launchPostComposerFor("mihaly@somenet.dev", createNewPostRule) {
             typePost("My New Post")
@@ -40,7 +38,7 @@ class CreateNewPostScreenTest {
     @Test
     fun createMultiplePost() {
         replaceUserDataWith(InMemoryUserData("mihalyId"))
-        replacePostCatalogWith(InMemoryPostsCatalog(clock = ControllableClock(timestampWithTimezoneOffset)))
+        replacePostCatalogWith(InMemoryPostsCatalog(clock = ControllableClock(timestamp)))
 
         launchPostComposerFor("mihaly@somenet.dev", createNewPostRule) {
             typePost("My First Post")

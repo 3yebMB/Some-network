@@ -8,6 +8,7 @@ import dev.m13d.somenet.domain.post.OfflinePostCatalog
 import dev.m13d.somenet.domain.post.PostsCatalog
 import dev.m13d.somenet.domain.post.UnavailablePostCatalog
 import dev.m13d.somenet.domain.user.InMemoryUserDataStore
+import dev.m13d.somenet.domain.user.UserDataStore
 import dev.m13d.somenet.infrastructure.ControllableClock
 import org.junit.After
 import org.junit.Rule
@@ -27,7 +28,6 @@ class CreateNewPostScreenTest {
 
     @Test
     fun createNewPost() {
-        replaceUserDataWith(InMemoryUserDataStore("mihalyId"))
         replacePostCatalogWith(InMemoryPostsCatalog(clock = ControllableClock(timestamp)))
 
         launchPostComposerFor("mihaly@somenet.dev", createNewPostRule) {
@@ -40,7 +40,6 @@ class CreateNewPostScreenTest {
 
     @Test
     fun createMultiplePost() {
-        replaceUserDataWith(InMemoryUserDataStore("mihalyId"))
         replacePostCatalogWith(InMemoryPostsCatalog(clock = ControllableClock(timestamp)))
 
         launchPostComposerFor("mihaly@somenet.dev", createNewPostRule) {
@@ -104,7 +103,7 @@ class CreateNewPostScreenTest {
         loadKoinModules(module)
     }
 
-    private fun replaceUserDataWith(userData: InMemoryUserDataStore) {
+    private fun replaceUserDataWith(userData: UserDataStore) {
         val module = module {
             single { userData }
         }

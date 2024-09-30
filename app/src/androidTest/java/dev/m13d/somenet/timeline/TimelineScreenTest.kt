@@ -2,14 +2,12 @@ package dev.m13d.somenet.timeline
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dev.m13d.somenet.MainActivity
-import dev.m13d.somenet.domain.exceptions.BackendException
-import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
+import dev.m13d.somenet.domain.post.DelayingPostCatalog
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.post.OfflinePostCatalog
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.post.PostsCatalog
 import dev.m13d.somenet.domain.post.UnavailablePostCatalog
-import kotlinx.coroutines.delay
 import org.junit.After
 import org.junit.Rule
 import org.junit.Test
@@ -96,17 +94,5 @@ class TimelineScreenTest {
             factory<PostsCatalog> { postsCatalog }
         }
         loadKoinModules(replaceModule)
-    }
-
-    class DelayingPostCatalog : PostsCatalog {
-
-        override suspend fun postsFor(userIds: List<String>): List<Post> {
-            delay(2000L)
-            return emptyList()
-        }
-
-        override suspend fun addPost(userId: String, postText: String): Post {
-            TODO("Not yet implemented")
-        }
     }
 }

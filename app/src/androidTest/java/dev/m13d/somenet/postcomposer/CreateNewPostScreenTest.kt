@@ -3,6 +3,7 @@ package dev.m13d.somenet.postcomposer
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dev.m13d.somenet.MainActivity
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
+import dev.m13d.somenet.domain.post.OfflinePostCatalog
 import dev.m13d.somenet.domain.post.PostsCatalog
 import dev.m13d.somenet.domain.post.UnavailablePostCatalog
 import dev.m13d.somenet.domain.user.InMemoryUserData
@@ -62,6 +63,18 @@ class CreateNewPostScreenTest {
             submit()
         } verify {
             backendErrorIsDisplayed()
+        }
+    }
+
+    @Test
+    fun showOfflineError() {
+        replacePostCatalogWith(OfflinePostCatalog())
+
+        launchPostComposerFor("mia@somenet.dev", createNewPostRule) {
+            typePost("My New Post")
+            submit()
+        } verify {
+            offlineErrorIsDisplayed()
         }
     }
 

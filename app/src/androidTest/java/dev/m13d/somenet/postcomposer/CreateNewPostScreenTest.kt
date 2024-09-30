@@ -4,6 +4,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dev.m13d.somenet.MainActivity
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.post.PostsCatalog
+import dev.m13d.somenet.domain.post.UnavailablePostCatalog
 import dev.m13d.somenet.domain.user.InMemoryUserData
 import dev.m13d.somenet.infrastructure.ControllableClock
 import org.junit.After
@@ -49,6 +50,18 @@ class CreateNewPostScreenTest {
         } verify {
             newCreatedPostIsShown("mihalyId", "21-09-2024 17:30", "My First Post")
             newCreatedPostIsShown("mihalyId", "21-09-2024 17:30", "My Second Post")
+        }
+    }
+
+    @Test
+    fun showBackendError() {
+        replacePostCatalogWith(UnavailablePostCatalog())
+
+        launchPostComposerFor("dan@somenet.dev", createNewPostRule) {
+            typePost("Some Post")
+            submit()
+        } verify {
+            backendErrorIsDisplayed()
         }
     }
 

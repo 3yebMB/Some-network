@@ -2,6 +2,7 @@ package dev.m13d.somenet.postcomposer
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dev.m13d.somenet.MainActivity
+import dev.m13d.somenet.domain.post.DelayingPostCatalog
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.post.OfflinePostCatalog
 import dev.m13d.somenet.domain.post.PostsCatalog
@@ -51,6 +52,18 @@ class CreateNewPostScreenTest {
         } verify {
             newCreatedPostIsShown("mihalyId", "21-09-2024 17:30", "My First Post")
             newCreatedPostIsShown("mihalyId", "21-09-2024 17:30", "My Second Post")
+        }
+    }
+
+    @Test
+    fun showLoadingBlock() {
+        replacePostCatalogWith(DelayingPostCatalog())
+
+        launchPostComposerFor("robert@somenet.dev", createNewPostRule) {
+            typePost("Waiting")
+            submit()
+        } verify {
+            loadingBlockIsShown()
         }
     }
 

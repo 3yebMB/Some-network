@@ -29,19 +29,26 @@ import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
 import dev.m13d.somenet.postcomposer.states.CreatePostState
 import dev.m13d.somenet.ui.component.InfoMessage
+import dev.m13d.somenet.ui.component.LoadingBlock
 import dev.m13d.somenet.ui.component.ScreenTitle
 
 class CreateNewPostScreenState {
     var isPostSubmitted by mutableStateOf(false)
     var currentMessage by mutableIntStateOf(0)
+    var isLoading by mutableStateOf(false)
 
     fun setPostSubmitted() {
         isPostSubmitted = true
     }
 
     fun showMessage(@StringRes message: Int) {
+        isLoading = false
         if (currentMessage != message)
             currentMessage = message
+    }
+
+    fun showLoading() {
+        isLoading = true
     }
 }
 
@@ -56,6 +63,8 @@ fun CreateNewPostScreen(
 
     val createPostState by createPostViewModel.postState.observeAsState()
     when(createPostState) {
+        is CreatePostState.Loading ->
+            screenState.showLoading()
         is CreatePostState.Created -> {
             if (screenState.isPostSubmitted) {
                 onPostCreated()
@@ -95,6 +104,7 @@ fun CreateNewPostScreen(
             }
         }
         InfoMessage(stringResource = screenState.currentMessage)
+        LoadingBlock(isShowing = screenState.isLoading)
     }
 }
 

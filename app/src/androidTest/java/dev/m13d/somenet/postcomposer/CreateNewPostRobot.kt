@@ -66,6 +66,12 @@ class CreateNewPostVerificationRobot(
         rule.onNodeWithText(postContent).assertIsDisplayed()
     }
 
+    fun loadingBlockIsShown() {
+        val loading = rule.activity.getString(R.string.loading)
+        rule.onNodeWithTag(loading)
+            .assertIsDisplayed()
+    }
+
     fun backendErrorIsDisplayed() {
         val errorMessage = rule.activity.getString(R.string.creatingPostError)
         rule.onNodeWithText(errorMessage)

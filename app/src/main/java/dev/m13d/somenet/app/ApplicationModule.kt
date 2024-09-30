@@ -22,7 +22,7 @@ val applicationModule = module {
     single<PostsCatalog> { InMemoryPostsCatalog() }
     single { InMemoryUserDataStore() }
     factory { RegexCredentialValidator() }
-    factory { UserRepository(userCatalog = get()) }
+    factory { UserRepository(userCatalog = get(), userDataStore = get()) }
     factory { TimelineRepository(userCatalog = get(), postCatalog = get()) }
     factory { PostRepository(userData = get(), postsCatalog = get()) }
 

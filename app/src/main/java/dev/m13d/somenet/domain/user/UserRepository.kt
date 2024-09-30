@@ -7,6 +7,7 @@ import dev.m13d.somenet.signup.states.SignUpState
 
 class UserRepository(
     private val userCatalog: UserCatalog,
+    val userDataStore: InMemoryUserDataStore,
 ) {
     suspend fun signUp(
         email: String,
@@ -15,6 +16,7 @@ class UserRepository(
     ): SignUpState {
         return try {
             val user = userCatalog.createUser(email, password, about)
+            userDataStore.storeLoggedInUserId(user.id)
             SignUpState.SignedUp(user)
         } catch (duplicateAccount: DuplicateAccountException) {
             SignUpState.DuplicateAccount

@@ -3,6 +3,7 @@ package dev.m13d.somenet.signup
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
+import dev.m13d.somenet.domain.user.InMemoryUserDataStore
 import dev.m13d.somenet.domain.user.UserRepository
 import dev.m13d.somenet.domain.validation.CredentialsValidationResult
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
@@ -31,7 +32,7 @@ class CredentialsValidationTest {
     fun invalidEmail(email: String) {
         val viewModel = SignUpViewModel(
             RegexCredentialValidator(),
-            UserRepository(InMemoryUserCatalog()),
+            UserRepository(InMemoryUserCatalog(), InMemoryUserDataStore()),
             TestDispatchers(),
         )
         viewModel.createAccount(email, ":password:", "about")
@@ -53,7 +54,7 @@ class CredentialsValidationTest {
     fun invalidPassword(password: String) {
         val viewModel = SignUpViewModel(
             RegexCredentialValidator(),
-            UserRepository(InMemoryUserCatalog()),
+            UserRepository(InMemoryUserCatalog(), InMemoryUserDataStore()),
             TestDispatchers(),
         )
         viewModel.createAccount("michael@somenet.dev", password, ":about:")

@@ -3,6 +3,7 @@ package dev.m13d.somenet.signup
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
+import dev.m13d.somenet.domain.user.InMemoryUserDataStore
 import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.domain.user.UserRepository
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
@@ -19,7 +20,7 @@ class CreateAnAccountTest {
     private val credentialValidator = RegexCredentialValidator()
     private val viewModel = SignUpViewModel(
         credentialValidator,
-        UserRepository(InMemoryUserCatalog()),
+        UserRepository(InMemoryUserCatalog(), InMemoryUserDataStore()),
         TestDispatchers(),
     )
 
@@ -43,7 +44,7 @@ class CreateAnAccountTest {
         val orsolya = User("OrsolyaId", "orsolya@somenet.dev", "Facts about Orsolya")
 
         val users = mutableMapOf(password to mutableListOf(orsolya))
-        val userRepository = UserRepository(InMemoryUserCatalog(users))
+        val userRepository = UserRepository(InMemoryUserCatalog(users), InMemoryUserDataStore())
         val viewModel = SignUpViewModel(credentialValidator, userRepository, TestDispatchers())
 
         viewModel.createAccount(orsolya.email, password, orsolya.about)

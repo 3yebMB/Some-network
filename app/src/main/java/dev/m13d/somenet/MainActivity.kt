@@ -4,11 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -17,9 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -33,10 +34,26 @@ import dev.m13d.somenet.ui.theme.SoMeNetTheme
 
 class MainActivity : ComponentActivity() {
 
-    private companion object {
-        private const val SIGNUP = "SignUpScreen"
-        private const val TIMELINE = "Timeline"
-        private const val CREATE_NEW_POST = "CreateNewPost"
+    sealed class Screen(val route: String) {
+
+        object SignUp: Screen("SignUpScreen")
+
+        object Home: Screen("home/{userId}") {
+            fun createRoute(userId: String) = "home/$userId"
+        }
+
+        sealed class MainScreen(
+            route: String,
+            @StringRes val title: Int,
+            @DrawableRes val icon: Int,
+        ) : Screen(route) {
+
+            object Timeline: MainScreen("Timeline", R.string.timeline, R.drawable.ic_timeline)
+
+            object Friends: MainScreen("Timeline", R.string.friends, R.drawable.ic_friends)
+        }
+
+        object PostComposer: Screen("CreateNewPost")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,15 +63,15 @@ class MainActivity : ComponentActivity() {
             SoMeNetTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = SIGNUP) {
-                        composable(SIGNUP) {
+                    NavHost(navController = navController, startDestination = Screen.SignUp.route) {
+                        composable(Screen.SignUp.route) {
                             SignUpScreen { signedUpUserId ->
-                                navController.navigate("home/$signedUpUserId") {
-                                    popUpTo(SIGNUP) { inclusive = true }
+                                navController.navigate(Screen.Home.createRoute(signedUpUserId)) {
+                                    popUpTo(Screen.SignUp.route) { inclusive = true }
                                 }
                             }
                         }
-                        composable(route = "home/{userId}") { backStackEntry ->
+                        composable(route = Screen.Home.route) { backStackEntry ->
                             HomeScreen(userId = backStackEntry.arguments?.getString("userId") ?: "")
                         }
                     }
@@ -67,25 +84,26 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun HomeScreen(userId: String) {
         val navController = rememberNavController()
+        val homeScreens = listOf(Screen.MainScreen.Timeline, Screen.MainScreen.Friends)
         Scaffold(bottomBar = {
-            HomeScreenBottomNavigation(navController)
+            HomeScreenBottomNavigation(navController, homeScreens)
         }) { innerPadding ->
             NavHost(
                 navController = navController,
-                startDestination = TIMELINE,
+                startDestination = homeScreens.first().route,
                 modifier = Modifier.padding(50.dp),
             ) {
-                composable(route = TIMELINE) {
+                composable(route = Screen.MainScreen.Timeline.route) {
                     TimelineScreen(
                         userId = userId,
-                    ) { navController.navigate(CREATE_NEW_POST) }
+                    ) { navController.navigate(Screen.PostComposer.route) }
                 }
-                composable(CREATE_NEW_POST) {
+                composable(route = Screen.PostComposer.route) {
                     CreateNewPostScreen {
                         navController.navigateUp()
                     }
                 }
-                composable("friends") {
+                composable(route = "friends") {
                     Friends()
                 }
             }
@@ -93,17 +111,20 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun HomeScreenBottomNavigation(navController: NavHostController) {
-        val screens = listOf(TIMELINE, "friends")
+    private fun HomeScreenBottomNavigation(
+        navController: NavHostController,
+        homeScreens: List<Screen.MainScreen>
+    ) {
         val currentDestination = currentDestination(navController)
         NavigationBar {
-            screens.forEach { screen ->
+            homeScreens.forEach { screen ->
+                val title = stringResource(id = screen.title)
                 NavigationBarItem(
-                    icon = { Icons.Default.Add },
-                    label = { Text(text = screen) },
-                    selected = currentDestination == screen,
+                    icon = { Icon(painter = painterResource(id = screen.icon), contentDescription = title) },
+                    label = { Text(text = title) },
+                    selected = currentDestination == screen.route,
                     onClick = {
-                        navController.navigate(screen) {
+                        navController.navigate(screen.route) {
                             popUpTo(navController.graph.findStartDestination().id) {
                                 saveState = true
                             }

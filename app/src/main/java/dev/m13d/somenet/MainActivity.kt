@@ -11,13 +11,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dev.m13d.somenet.postcomposer.CreateNewPostScreen
-import dev.m13d.somenet.postcomposer.CreatePostViewModel
 import dev.m13d.somenet.signup.SignUpScreen
-import dev.m13d.somenet.signup.SignUpViewModel
 import dev.m13d.somenet.timeline.TimelineScreen
-import dev.m13d.somenet.timeline.TimelineViewModel
 import dev.m13d.somenet.ui.theme.SoMeNetTheme
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -31,9 +27,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val navController = rememberNavController()
             SoMeNetTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = SIGNUP) {
                         composable(SIGNUP) {
                             SignUpScreen { signedUpUserId ->

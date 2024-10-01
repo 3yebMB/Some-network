@@ -31,6 +31,7 @@ import dev.m13d.somenet.postcomposer.states.CreatePostState
 import dev.m13d.somenet.ui.component.InfoMessage
 import dev.m13d.somenet.ui.component.LoadingBlock
 import dev.m13d.somenet.ui.component.ScreenTitle
+import org.koin.androidx.compose.koinViewModel
 
 class CreateNewPostScreenState {
     var isPostSubmitted by mutableStateOf(false)
@@ -54,10 +55,9 @@ class CreateNewPostScreenState {
 
 @Composable
 fun CreateNewPostScreen(
-    createPostViewModel: CreatePostViewModel,
     onPostCreated: () -> Unit,
 ) {
-
+    val createPostViewModel = koinViewModel<CreatePostViewModel>()
     val screenState by remember { mutableStateOf(CreateNewPostScreenState()) }
     var postText by remember { mutableStateOf("") }
 

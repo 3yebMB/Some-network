@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import dev.m13d.somenet.postcomposer.CreateNewPostScreen
 import dev.m13d.somenet.postcomposer.CreatePostViewModel
 import dev.m13d.somenet.signup.SignUpScreen
@@ -28,10 +27,6 @@ class MainActivity : ComponentActivity() {
         private const val CREATE_NEW_POST = "CreateNewPost"
     }
 
-    private val signUpViewModel: SignUpViewModel by viewModel()
-    private val timelineViewModel: TimelineViewModel by viewModel()
-    private val createPostViewModel: CreatePostViewModel by viewModel()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -41,24 +36,20 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     NavHost(navController = navController, startDestination = SIGNUP) {
                         composable(SIGNUP) {
-                            SignUpScreen(signUpViewModel) { signedUpUserId ->
+                            SignUpScreen { signedUpUserId ->
                                 navController.navigate("$TIMELINE/$signedUpUserId") {
                                     popUpTo(SIGNUP) { inclusive = true }
                                 }
                             }
                         }
-                        composable(
-                            route = "$TIMELINE/{userId}",
-                            arguments = listOf(navArgument("userId") { })
-                        ) { backStackEntry ->
+                        composable(route = "$TIMELINE/{userId}") { backStackEntry ->
                             TimelineScreen(
                                 userId = backStackEntry.arguments?.getString("userId") ?: "",
-                                timelineViewModel = timelineViewModel,
                                 onCreateNewPost = { navController.navigate(CREATE_NEW_POST) }
                             )
                         }
                         composable(CREATE_NEW_POST) {
-                            CreateNewPostScreen(createPostViewModel) {
+                            CreateNewPostScreen {
                                 navController.navigateUp()
                             }
                         }

@@ -32,18 +32,14 @@ import dev.m13d.somenet.signup.states.SignUpState
 import dev.m13d.somenet.ui.component.InfoMessage
 import dev.m13d.somenet.ui.component.LoadingBlock
 import dev.m13d.somenet.ui.component.ScreenTitle
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SignUpScreen(
-    signUpViewModel: SignUpViewModel,
     onSignedUp: (String) -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    val screenState by remember {
-        mutableStateOf(
-            SignUpScreenState(coroutineScope)
-        )
-    }
+    val signUpViewModel = koinViewModel<SignUpViewModel>()
+    val screenState by remember { mutableStateOf(SignUpScreenState()) }
     val signUpState by signUpViewModel.signUpState.observeAsState()
 
     when (signUpState) {

@@ -39,13 +39,14 @@ import dev.m13d.somenet.ui.component.InfoMessage
 import dev.m13d.somenet.ui.component.LoadingBlock
 import dev.m13d.somenet.ui.component.ScreenTitle
 import dev.m13d.somenet.ui.extentions.toDateTime
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TimelineScreen(
     userId: String,
-    timelineViewModel: TimelineViewModel,
     onCreateNewPost: () -> Unit,
 ) {
+    val timelineViewModel = koinViewModel<TimelineViewModel>()
     val coroutineScope = rememberCoroutineScope()
     val screenState by remember { mutableStateOf(TimelineScreenState(coroutineScope)) }
     val timelineState by timelineViewModel.timelineState.observeAsState()

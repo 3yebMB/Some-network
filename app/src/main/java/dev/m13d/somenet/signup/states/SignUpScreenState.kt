@@ -5,13 +5,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-class SignUpScreenState(
-    private val coroutineScope: CoroutineScope,
-) {
+class SignUpScreenState {
     var email by mutableStateOf("")
     var password by mutableStateOf("")
     var isBadEmail by mutableStateOf(false)
@@ -37,15 +32,10 @@ class SignUpScreenState(
         isBadPassword = true
     }
 
-    fun toggleInfoMessage(@StringRes message: Int) = coroutineScope.launch {
+    fun toggleInfoMessage(@StringRes message: Int) {
         isLoading = false
         if (infoMessage != message) {
             infoMessage = message
-            if (!isInfoMessageShowing) {
-                isInfoMessageShowing = true
-                delay(1500L)
-                isInfoMessageShowing = false
-            }
         }
     }
 

@@ -5,30 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import dev.m13d.somenet.friends.FriendsScreen
 import dev.m13d.somenet.home.HomeScreen
 import dev.m13d.somenet.navigation.Screen
-import dev.m13d.somenet.postcomposer.CreateNewPostScreen
 import dev.m13d.somenet.signup.SignUpScreen
-import dev.m13d.somenet.timeline.TimelineScreen
 import dev.m13d.somenet.ui.theme.SoMeNetTheme
 
 class MainActivity : ComponentActivity() {
@@ -49,7 +33,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         composable(route = Screen.Home.route) { backStackEntry ->
-                            HomeScreen(userId = backStackEntry.arguments?.getString("userId") ?: "")
+                            HomeScreen(userId = backStackEntry.arguments?.getString(Screen.Home.userId) ?: "")
                         }
                     }
 //                        modifier = Modifier.padding(innerPadding)

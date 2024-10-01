@@ -1,6 +1,8 @@
 package dev.m13d.somenet.friends
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import dev.m13d.somenet.R
@@ -38,7 +40,8 @@ class FriendsVerification(
 
     fun friendsScreenIsPresent() {
         val friends = rule.activity.getString(R.string.friends)
-        rule.onNodeWithText(friends)
+        rule.onAllNodesWithText(friends)
+            .onFirst()
             .assertIsDisplayed()
     }
 }

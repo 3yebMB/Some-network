@@ -36,9 +36,9 @@ class MainActivity : ComponentActivity() {
 
     sealed class Screen(val route: String) {
 
-        object SignUp: Screen("SignUpScreen")
+        object SignUp : Screen("SignUpScreen")
 
-        object Home: Screen("home/{userId}") {
+        object Home : Screen("home/{userId}") {
             fun createRoute(userId: String) = "home/$userId"
         }
 
@@ -48,12 +48,12 @@ class MainActivity : ComponentActivity() {
             @DrawableRes val icon: Int,
         ) : Screen(route) {
 
-            object Timeline: MainScreen("Timeline", R.string.timeline, R.drawable.ic_timeline)
+            object Timeline : MainScreen("Timeline", R.string.timeline, R.drawable.ic_timeline)
 
-            object Friends: MainScreen("Timeline", R.string.friends, R.drawable.ic_friends)
+            object Friends : MainScreen("Timeline", R.string.friends, R.drawable.ic_friends)
         }
 
-        object PostComposer: Screen("CreateNewPost")
+        object PostComposer : Screen("CreateNewPost")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,13 +85,17 @@ class MainActivity : ComponentActivity() {
     fun HomeScreen(userId: String) {
         val navController = rememberNavController()
         val homeScreens = listOf(Screen.MainScreen.Timeline, Screen.MainScreen.Friends)
+        val currentDestination = currentDestination(navController)
+        val isMainScreenDestination = homeScreens.any { it.route == currentDestination }
         Scaffold(bottomBar = {
-            HomeScreenBottomNavigation(navController, homeScreens)
+            if (isMainScreenDestination) {
+                HomeScreenBottomNavigation(navController, homeScreens)
+            }
         }) { innerPadding ->
             NavHost(
                 navController = navController,
                 startDestination = homeScreens.first().route,
-                modifier = Modifier.padding(50.dp),
+                modifier = Modifier.padding(if (isMainScreenDestination) 50.dp else 0.dp),
             ) {
                 composable(route = Screen.MainScreen.Timeline.route) {
                     TimelineScreen(
@@ -113,14 +117,19 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun HomeScreenBottomNavigation(
         navController: NavHostController,
-        homeScreens: List<Screen.MainScreen>
+        homeScreens: List<Screen.MainScreen>,
     ) {
         val currentDestination = currentDestination(navController)
         NavigationBar {
             homeScreens.forEach { screen ->
                 val title = stringResource(id = screen.title)
                 NavigationBarItem(
-                    icon = { Icon(painter = painterResource(id = screen.icon), contentDescription = title) },
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = screen.icon),
+                            contentDescription = title,
+                        )
+                    },
                     label = { Text(text = title) },
                     selected = currentDestination == screen.route,
                     onClick = {

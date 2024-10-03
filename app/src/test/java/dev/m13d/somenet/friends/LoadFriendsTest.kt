@@ -1,6 +1,5 @@
 package dev.m13d.somenet.friends
 
-import androidx.compose.ui.util.trace
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.domain.user.User
@@ -27,8 +26,7 @@ class LoadFriendsTest {
 
     @Test
     fun loadedSinglePerson() {
-        val user = User("tomId", ":email:", ":about:")
-        val tom = Friend(user, isFollow = false)
+        val tom = Friend(User("tomId", ":email:", ":about:"), isFollow = false)
         val viewModel = FriendsViewModel()
 
         viewModel.loadFriends("jerryId")
@@ -38,10 +36,10 @@ class LoadFriendsTest {
 
     @Test
     fun loadedMultipleFriends() {
-        val friendAnna = Friend(User("annaId", "", ""), isFollow = true)
-        val friendSara = Friend(User("saraId", "", ""), isFollow = false)
-        val friendTom = Friend(User("tomId", "", ""), isFollow = false)
-        val friends = listOf(friendAnna, friendSara, friendTom)
+        val anna = Friend(User("annaId", "", ""), isFollow = true)
+        val sara = Friend(User("saraId", "", ""), isFollow = false)
+        val tom = Friend(User("tomId", "", ""), isFollow = false)
+        val friends = listOf(anna, sara, tom)
         val viewModel = FriendsViewModel()
 
         viewModel.loadFriends("lucyId")

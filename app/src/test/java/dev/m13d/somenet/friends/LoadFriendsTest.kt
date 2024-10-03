@@ -19,7 +19,18 @@ class LoadFriendsTest {
 
     @Test
     fun noFriendsExisted() {
-        val viewModel = FriendsViewModel(FriendsRepository(InMemoryFriendsCatalog()))
+        val viewModel = FriendsViewModel(FriendsRepository(InMemoryFriendsCatalog(
+            mapOf(
+                "jerryId" to listOf(Friend(User("tomId", ":email:", ":about:"), isFollow = false)),
+                "lucyId" to listOf(
+                    Friend(User("annaId", "", ""), isFollow = true),
+                    Friend(User("saraId", "", ""), isFollow = false),
+                    Friend(User("tomId", ":email:", ":about:"), isFollow = false)
+                ),
+                "samId" to emptyList(),
+            )
+        )
+        ))
 
         viewModel.loadFriends("samId")
 
@@ -29,7 +40,18 @@ class LoadFriendsTest {
     @Test
     fun loadedSinglePerson() {
         val tom = Friend(User("tomId", ":email:", ":about:"), isFollow = false)
-        val viewModel = FriendsViewModel(FriendsRepository(InMemoryFriendsCatalog()))
+        val viewModel = FriendsViewModel(FriendsRepository(InMemoryFriendsCatalog(
+            mapOf(
+                "jerryId" to listOf(Friend(User("tomId", ":email:", ":about:"), isFollow = false)),
+                "lucyId" to listOf(
+                    Friend(User("annaId", "", ""), isFollow = true),
+                    Friend(User("saraId", "", ""), isFollow = false),
+                    Friend(User("tomId", ":email:", ":about:"), isFollow = false)
+                ),
+                "samId" to emptyList(),
+            )
+        )
+        ))
 
         viewModel.loadFriends("jerryId")
 
@@ -42,7 +64,18 @@ class LoadFriendsTest {
         val sara = Friend(User("saraId", "", ""), isFollow = false)
         val tom = Friend(User("tomId", "", ""), isFollow = false)
         val friends = listOf(anna, sara, tom)
-        val viewModel = FriendsViewModel(FriendsRepository(InMemoryFriendsCatalog()))
+        val viewModel = FriendsViewModel(FriendsRepository(InMemoryFriendsCatalog(
+            mapOf(
+                "jerryId" to listOf(Friend(User("tomId", ":email:", ":about:"), isFollow = false)),
+                "lucyId" to listOf(
+                    Friend(User("annaId", "", ""), isFollow = true),
+                    Friend(User("saraId", "", ""), isFollow = false),
+                    Friend(User("tomId", ":email:", ":about:"), isFollow = false)
+                ),
+                "samId" to emptyList(),
+            )
+        )
+        ))
 
         viewModel.loadFriends("lucyId")
 

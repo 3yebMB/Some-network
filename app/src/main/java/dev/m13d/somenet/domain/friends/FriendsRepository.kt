@@ -5,7 +5,7 @@ import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.friends.states.FriendsState
 
 class FriendsRepository(
-    private val friendsCatalog: InMemoryFriendsCatalog,
+    private val friendsCatalog: FriendsCatalog,
 ) {
     fun loadFriendsFor(userId: String): FriendsState {
         return try {

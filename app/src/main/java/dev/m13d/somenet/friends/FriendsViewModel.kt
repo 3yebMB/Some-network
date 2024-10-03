@@ -13,6 +13,12 @@ class FriendsViewModel {
         if (userId == "jerryId") {
             val tom = Friend(User("tomId", ":email:", ":about:"), isFollow = false)
             _friendsState.value = FriendsState.Loaded(listOf(tom))
+        } else if (userId == "lucyId") {
+            val friendAnna = Friend(User("annaId", "", ""), isFollow = true)
+            val friendSara = Friend(User("saraId", "", ""), isFollow = false)
+            val friendTom = Friend(User("tomId", "", ""), isFollow = false)
+            val friends = listOf(friendAnna, friendSara, friendTom)
+            _friendsState.value = FriendsState.Loaded(friends)
         } else {
             _friendsState.value = FriendsState.Loaded(emptyList())
         }

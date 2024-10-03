@@ -6,9 +6,9 @@ import dev.m13d.somenet.domain.user.Friend
 
 class InMemoryFriendsCatalog(
     private val friendsForUserId: Map<String, List<Friend>>
-) {
+) : FriendsCatalog {
 
-    fun loadFriendsFor(userId: String): List<Friend> {
+    override fun loadFriendsFor(userId: String): List<Friend> {
         when(userId) {
             "mihalyId" -> throw BackendException()
             "jovId" -> throw ConnectionUnavailableException()

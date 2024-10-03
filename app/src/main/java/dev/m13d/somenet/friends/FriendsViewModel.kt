@@ -29,6 +29,9 @@ class FriendsViewModel {
             "mihalyId" -> {
                 _friendsState.value = FriendsState.BackendError
             }
+            "jovId" -> {
+                _friendsState.value = FriendsState.Offline
+            }
         }
     }
 }

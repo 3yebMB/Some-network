@@ -16,7 +16,16 @@ class FailFriendsLoadingTest {
         val viewModel = FriendsViewModel()
 
         viewModel.loadFriends("mihalyId")
- 
+
         assertEquals(FriendsState.BackendError, viewModel.friendsState.value)
+    }
+
+    @Test
+    fun offlineError() {
+        val viewModel = FriendsViewModel()
+
+        viewModel.loadFriends("jovId")
+
+        assertEquals(FriendsState.Offline, viewModel.friendsState.value)
     }
 }

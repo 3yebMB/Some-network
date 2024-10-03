@@ -6,6 +6,8 @@ sealed class FriendsState {
 
     object BackendError : FriendsState()
 
+    object Offline : FriendsState()
+
     data class Loaded(val friends: List<Friend>) : FriendsState()
 
 }

@@ -21,10 +21,9 @@ class FriendsViewModel(
     fun loadFriends(userId: String) {
         viewModelScope.launch {
             _friendsState.value = FriendsState.Loading
-            val friendsState = withContext(dispatchers.background) {
+            _friendsState.value = withContext(dispatchers.background) {
                 friendsRepository.loadFriendsFor(userId)
             }
-            _friendsState.value = friendsState
         }
     }
 }

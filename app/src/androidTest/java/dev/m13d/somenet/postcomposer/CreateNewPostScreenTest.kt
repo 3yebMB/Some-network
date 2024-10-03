@@ -98,16 +98,15 @@ class CreateNewPostScreenTest {
 
     private fun replacePostCatalogWith(postsCatalog: PostsCatalog) {
         val module = module {
-            single { postsCatalog }
+            single<PostsCatalog> { postsCatalog }
         }
         loadKoinModules(module)
     }
 
     private fun replaceUserDataWith(userData: UserDataStore) {
         val module = module {
-            single { userData }
+            single<UserDataStore> { userData }
         }
         loadKoinModules(module)
     }
 }
-

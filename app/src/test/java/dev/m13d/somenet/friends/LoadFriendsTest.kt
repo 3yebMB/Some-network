@@ -1,6 +1,8 @@
 package dev.m13d.somenet.friends
 
 import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.domain.friends.FriendsRepository
+import dev.m13d.somenet.domain.friends.InMemoryFriendsCatalog
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.friends.states.FriendsState
@@ -17,7 +19,7 @@ class LoadFriendsTest {
 
     @Test
     fun noFriendsExisted() {
-        val viewModel = FriendsViewModel()
+        val viewModel = FriendsViewModel(FriendsRepository(InMemoryFriendsCatalog()))
 
         viewModel.loadFriends("samId")
 
@@ -27,7 +29,7 @@ class LoadFriendsTest {
     @Test
     fun loadedSinglePerson() {
         val tom = Friend(User("tomId", ":email:", ":about:"), isFollow = false)
-        val viewModel = FriendsViewModel()
+        val viewModel = FriendsViewModel(FriendsRepository(InMemoryFriendsCatalog()))
 
         viewModel.loadFriends("jerryId")
 
@@ -40,7 +42,7 @@ class LoadFriendsTest {
         val sara = Friend(User("saraId", "", ""), isFollow = false)
         val tom = Friend(User("tomId", "", ""), isFollow = false)
         val friends = listOf(anna, sara, tom)
-        val viewModel = FriendsViewModel()
+        val viewModel = FriendsViewModel(FriendsRepository(InMemoryFriendsCatalog()))
 
         viewModel.loadFriends("lucyId")
 

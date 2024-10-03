@@ -1,6 +1,8 @@
 package dev.m13d.somenet.friends
 
 import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.domain.friends.FriendsRepository
+import dev.m13d.somenet.domain.friends.InMemoryFriendsCatalog
 import dev.m13d.somenet.friends.states.FriendsState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Test
@@ -13,7 +15,7 @@ class FailFriendsLoadingTest {
 
     @Test
     fun backendError() {
-        val viewModel = FriendsViewModel()
+        val viewModel = FriendsViewModel(FriendsRepository(InMemoryFriendsCatalog()))
 
         viewModel.loadFriends("mihalyId")
 
@@ -22,7 +24,7 @@ class FailFriendsLoadingTest {
 
     @Test
     fun offlineError() {
-        val viewModel = FriendsViewModel()
+        val viewModel = FriendsViewModel(FriendsRepository(InMemoryFriendsCatalog()))
 
         viewModel.loadFriends("jovId")
 

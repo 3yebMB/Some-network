@@ -8,11 +8,11 @@ class InMemoryFriendsCatalog(
     private val friendsForUserId: Map<String, List<Friend>>
 ) : FriendsCatalog {
 
-    override fun loadFriendsFor(userId: String): List<Friend> {
-        when(userId) {
-            "mihalyId" -> throw BackendException()
-            "jovId" -> throw ConnectionUnavailableException()
-        }
+    override suspend fun loadFriendsFor(userId: String): List<Friend> {
+//        when(userId) {
+//            "mihalyId" -> throw BackendException()
+//            "jovId" -> throw ConnectionUnavailableException()
+//        }
         return friendsForUserId.getValue(userId)
     }
 }

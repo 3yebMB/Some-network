@@ -39,14 +39,14 @@ class FailFriendsLoadingTest {
 
     private class UnavailableFriendsCatalog : FriendsCatalog {
 
-        override fun loadFriendsFor(userId: String): List<Friend> {
+        override suspend fun loadFriendsFor(userId: String): List<Friend> {
             throw BackendException()
         }
     }
 
     private class OfflineFriendsCatalog : FriendsCatalog {
 
-        override fun loadFriendsFor(userId: String): List<Friend> {
+        override suspend fun loadFriendsFor(userId: String): List<Friend> {
             throw ConnectionUnavailableException()
         }
     }

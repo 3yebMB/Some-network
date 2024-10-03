@@ -17,20 +17,20 @@ import kotlin.uuid.ExperimentalUuidApi
 @ExtendWith(InstantTaskExecutorExtension::class)
 class LoadFriendsTest {
 
+    private val anna = Friend(User("annaId", "", ""), isFollow = true)
+    private val sara = Friend(User("saraId", "", ""), isFollow = false)
+    private val tom = Friend(User("tomId", "", ""), isFollow = false)
+    private val friendsCatalog = InMemoryFriendsCatalog(
+        mapOf(
+            "jerryId" to listOf(tom),
+            "lucyId" to listOf(anna, sara, tom),
+            "samId" to emptyList(),
+        )
+    )
+
     @Test
     fun noFriendsExisted() {
-        val viewModel = FriendsViewModel(FriendsRepository(InMemoryFriendsCatalog(
-            mapOf(
-                "jerryId" to listOf(Friend(User("tomId", ":email:", ":about:"), isFollow = false)),
-                "lucyId" to listOf(
-                    Friend(User("annaId", "", ""), isFollow = true),
-                    Friend(User("saraId", "", ""), isFollow = false),
-                    Friend(User("tomId", ":email:", ":about:"), isFollow = false)
-                ),
-                "samId" to emptyList(),
-            )
-        )
-        ))
+        val viewModel = FriendsViewModel(FriendsRepository(friendsCatalog))
 
         viewModel.loadFriends("samId")
 
@@ -39,19 +39,7 @@ class LoadFriendsTest {
 
     @Test
     fun loadedSinglePerson() {
-        val tom = Friend(User("tomId", ":email:", ":about:"), isFollow = false)
-        val viewModel = FriendsViewModel(FriendsRepository(InMemoryFriendsCatalog(
-            mapOf(
-                "jerryId" to listOf(Friend(User("tomId", ":email:", ":about:"), isFollow = false)),
-                "lucyId" to listOf(
-                    Friend(User("annaId", "", ""), isFollow = true),
-                    Friend(User("saraId", "", ""), isFollow = false),
-                    Friend(User("tomId", ":email:", ":about:"), isFollow = false)
-                ),
-                "samId" to emptyList(),
-            )
-        )
-        ))
+        val viewModel = FriendsViewModel(FriendsRepository(friendsCatalog))
 
         viewModel.loadFriends("jerryId")
 
@@ -60,22 +48,8 @@ class LoadFriendsTest {
 
     @Test
     fun loadedMultipleFriends() {
-        val anna = Friend(User("annaId", "", ""), isFollow = true)
-        val sara = Friend(User("saraId", "", ""), isFollow = false)
-        val tom = Friend(User("tomId", "", ""), isFollow = false)
         val friends = listOf(anna, sara, tom)
-        val viewModel = FriendsViewModel(FriendsRepository(InMemoryFriendsCatalog(
-            mapOf(
-                "jerryId" to listOf(Friend(User("tomId", ":email:", ":about:"), isFollow = false)),
-                "lucyId" to listOf(
-                    Friend(User("annaId", "", ""), isFollow = true),
-                    Friend(User("saraId", "", ""), isFollow = false),
-                    Friend(User("tomId", ":email:", ":about:"), isFollow = false)
-                ),
-                "samId" to emptyList(),
-            )
-        )
-        ))
+        val viewModel = FriendsViewModel(FriendsRepository(friendsCatalog))
 
         viewModel.loadFriends("lucyId")
 

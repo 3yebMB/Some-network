@@ -15,28 +15,20 @@ import kotlin.test.assertEquals
 @ExtendWith(InstantTaskExecutorExtension::class)
 class FailFriendsLoadingTest {
 
+    private val anna = Friend(User("annaId", "", ""), isFollow = true)
+    private val sara = Friend(User("saraId", "", ""), isFollow = false)
+    private val tom = Friend(User("tomId", "", ""), isFollow = false)
+    private val friendsCatalog = InMemoryFriendsCatalog(
+        mapOf(
+            "jerryId" to listOf(tom),
+            "lucyId" to listOf(anna, sara, tom),
+            "samId" to emptyList(),
+        )
+    )
+
     @Test
     fun backendError() {
-        val viewModel = FriendsViewModel(
-            FriendsRepository(
-                InMemoryFriendsCatalog(
-                    mapOf(
-                        "jerryId" to listOf(
-                            Friend(
-                                User("tomId", ":email:", ":about:"),
-                                isFollow = false
-                            )
-                        ),
-                        "lucyId" to listOf(
-                            Friend(User("annaId", "", ""), isFollow = true),
-                            Friend(User("saraId", "", ""), isFollow = false),
-                            Friend(User("tomId", ":email:", ":about:"), isFollow = false)
-                        ),
-                        "samId" to emptyList(),
-                    )
-                )
-            )
-        )
+        val viewModel = FriendsViewModel(FriendsRepository(friendsCatalog))
 
         viewModel.loadFriends("mihalyId")
 
@@ -45,26 +37,7 @@ class FailFriendsLoadingTest {
 
     @Test
     fun offlineError() {
-        val viewModel = FriendsViewModel(
-            FriendsRepository(
-                InMemoryFriendsCatalog(
-                    mapOf(
-                        "jerryId" to listOf(
-                            Friend(
-                                User("tomId", ":email:", ":about:"),
-                                isFollow = false
-                            )
-                        ),
-                        "lucyId" to listOf(
-                            Friend(User("annaId", "", ""), isFollow = true),
-                            Friend(User("saraId", "", ""), isFollow = false),
-                            Friend(User("tomId", ":email:", ":about:"), isFollow = false)
-                        ),
-                        "samId" to emptyList(),
-                    )
-                )
-            )
-        )
+        val viewModel = FriendsViewModel(FriendsRepository(friendsCatalog))
 
         viewModel.loadFriends("jovId")
 

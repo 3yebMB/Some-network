@@ -9,7 +9,7 @@ import dev.m13d.somenet.friends.states.FriendsState
 class FriendsViewModel {
     private val _friendsState = MutableLiveData<FriendsState>()
     val friendsState: LiveData<FriendsState> = _friendsState
-    
+
     fun loadFriends(userId: String) {
         when (userId) {
             "jerryId" -> {
@@ -25,6 +25,9 @@ class FriendsViewModel {
             }
             "samId" -> {
                 _friendsState.value = FriendsState.Loaded(emptyList())
+            }
+            "mihalyId" -> {
+                _friendsState.value = FriendsState.BackendError
             }
         }
     }

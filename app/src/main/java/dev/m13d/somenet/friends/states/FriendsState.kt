@@ -4,6 +4,8 @@ import dev.m13d.somenet.domain.user.Friend
 
 sealed class FriendsState {
 
+    object BackendError : FriendsState()
+
     data class Loaded(val friends: List<Friend>) : FriendsState()
 
 }

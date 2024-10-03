@@ -11,27 +11,30 @@ class FriendsViewModel {
     val friendsState: LiveData<FriendsState> = _friendsState
 
     fun loadFriends(userId: String) {
-        when (userId) {
+        val friendsState = when (userId) {
             "jerryId" -> {
                 val tom = Friend(User("tomId", ":email:", ":about:"), isFollow = false)
-                _friendsState.value = FriendsState.Loaded(listOf(tom))
+                FriendsState.Loaded(listOf(tom))
             }
             "lucyId" -> {
                 val anna = Friend(User("annaId", "", ""), isFollow = true)
                 val sara = Friend(User("saraId", "", ""), isFollow = false)
                 val tom = Friend(User("tomId", "", ""), isFollow = false)
                 val friends = listOf(anna, sara, tom)
-                _friendsState.value = FriendsState.Loaded(friends)
+                FriendsState.Loaded(friends)
             }
             "samId" -> {
-                _friendsState.value = FriendsState.Loaded(emptyList())
+                FriendsState.Loaded(emptyList())
             }
             "mihalyId" -> {
-                _friendsState.value = FriendsState.BackendError
+                FriendsState.BackendError
             }
             "jovId" -> {
-                _friendsState.value = FriendsState.Offline
+                FriendsState.Offline
             }
+
+            else -> { TODO() }
         }
+        _friendsState.value = friendsState
     }
 }

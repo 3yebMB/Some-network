@@ -1,14 +1,12 @@
 package dev.m13d.somenet.friends
 
 import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.exceptions.BackendException
 import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.domain.friends.FriendsCatalog
 import dev.m13d.somenet.domain.friends.FriendsRepository
-import dev.m13d.somenet.domain.friends.InMemoryFriendsCatalog
 import dev.m13d.somenet.domain.user.Friend
-import dev.m13d.somenet.domain.user.UnavailableUserCatalog
-import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.friends.states.FriendsState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Test
@@ -21,7 +19,10 @@ class FailFriendsLoadingTest {
 
     @Test
     fun backendError() {
-        val viewModel = FriendsViewModel(FriendsRepository(UnavailableFriendsCatalog()))
+        val viewModel = FriendsViewModel(
+            FriendsRepository(UnavailableFriendsCatalog()),
+            TestDispatchers()
+        )
 
         viewModel.loadFriends(":irrelevant:")
 
@@ -30,7 +31,10 @@ class FailFriendsLoadingTest {
 
     @Test
     fun offlineError() {
-        val viewModel = FriendsViewModel(FriendsRepository(OfflineFriendsCatalog()))
+        val viewModel = FriendsViewModel(
+            FriendsRepository(OfflineFriendsCatalog()),
+            TestDispatchers()
+        )
 
         viewModel.loadFriends(":irrelevant:")
 

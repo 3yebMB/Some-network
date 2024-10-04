@@ -4,6 +4,7 @@ import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.friends.FriendsRepository
 import dev.m13d.somenet.domain.friends.InMemoryFriendsCatalog
+import dev.m13d.somenet.domain.user.Following
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.friends.states.FriendsState
@@ -19,27 +20,37 @@ import kotlin.uuid.ExperimentalUuidApi
 @ExtendWith(InstantTaskExecutorExtension::class)
 class RenderingFriendsStateTest {
 
-    private val tom = Friend(aUser().withId("tomId").build(), isFollower = true)
-    private val anna = Friend(aUser().withId("annaId").build(), isFollower = true)
+    private val mihaly = aUser().withId("mihalyId").build()
+    private val tom = aUser().withId("tomId").build()
+    private val anna = aUser().withId("annaId").build()
+
+    private val friendTom = Friend(tom, isFollower = true)
+    private val friendAnna = Friend(anna, isFollower = true)
+
     private val friendsCatalog = InMemoryFriendsCatalog(
         mapOf(
-            "mihalyId" to listOf(tom, anna)
+            mihaly.id to listOf(friendTom, friendAnna)
         )
     )
-    private val viewModel = FriendsViewModel(FriendsRepository(
-        friendsCatalog,
-        InMemoryUserCatalog()
-    ), TestDispatchers())
+    private val userCatalog = InMemoryUserCatalog(
+        users = mutableMapOf(":irrelevant:" to mutableListOf(tom, anna)),
+        followings = mutableListOf(Following(mihaly.id, tom.id), Following(mihaly.id, anna.id))
+    )
+
+    private val viewModel = FriendsViewModel(
+        FriendsRepository(friendsCatalog, userCatalog),
+        TestDispatchers()
+    )
 
     @Test
     fun friendsStatesExposedToObserver() {
         val deliveredState = mutableListOf<FriendsState>()
 
         viewModel.friendsState.observeForever { deliveredState.add(it) }
-        viewModel.loadFriends("mihalyId")
+        viewModel.loadFriends(mihaly.id)
 
         assertEquals(
-            listOf(FriendsState.Loading, FriendsState.Loaded(listOf(tom, anna))),
+            listOf(FriendsState.Loading, FriendsState.Loaded(listOf(friendTom, friendAnna))),
             deliveredState
         )
     }

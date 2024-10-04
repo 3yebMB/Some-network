@@ -1,6 +1,8 @@
 package dev.m13d.somenet.timeline
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -30,6 +32,12 @@ class TimelineRobot(
     fun tapOnCreateNewPost() {
         val createNewPost = rule.activity.getString(R.string.createNewPost)
         rule.onNodeWithTag(createNewPost)
+            .performClick()
+    }
+
+    fun tapOnFriendsTab() {
+        val friends = rule.activity.getString(R.string.friends)
+        rule.onNodeWithText(friends)
             .performClick()
     }
 
@@ -77,6 +85,13 @@ class TimelineVerification(
     fun offlineErrorIsDisplayed() {
         val errorMessage = rule.activity.getString(R.string.offlineError)
         rule.onNodeWithText(errorMessage)
+            .assertIsDisplayed()
+    }
+
+    fun friendsScreenIsDisplayed() {
+        val friends = rule.activity.getString(R.string.friends)
+        rule.onAllNodesWithText(friends)
+            .onFirst()
             .assertIsDisplayed()
     }
 }

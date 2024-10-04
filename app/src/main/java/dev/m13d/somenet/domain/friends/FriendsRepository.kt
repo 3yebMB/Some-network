@@ -6,7 +6,6 @@ import dev.m13d.somenet.domain.user.UserCatalog
 import dev.m13d.somenet.friends.states.FriendsState
 
 class FriendsRepository(
-    private val friendsCatalog: FriendsCatalog,
     private val userCatalog: UserCatalog,
 ) {
     suspend fun loadFriendsFor(userId: String): FriendsState {

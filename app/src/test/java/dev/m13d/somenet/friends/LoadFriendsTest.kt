@@ -3,11 +3,9 @@ package dev.m13d.somenet.friends
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.friends.FriendsRepository
-import dev.m13d.somenet.domain.friends.InMemoryFriendsCatalog
 import dev.m13d.somenet.domain.user.Following
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
-import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.friends.states.FriendsState
 import dev.m13d.somenet.infrastructure.builder.UserBuilder.Companion.aUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,19 +28,11 @@ class LoadFriendsTest {
     private val friendAnna = Friend(anna, isFollower = true)
     private val friendSara = Friend(sara, isFollower = false)
 
-    private val friendsCatalog = InMemoryFriendsCatalog(
-        mapOf(
-            anna.id to listOf(friendTom),
-            lucy.id to listOf(friendAnna, friendSara, friendTom),
-            sara.id to emptyList(),
-        )
-    )
-
     @Test
     fun noFriendsExisted() {
 
         val userCatalog = InMemoryUserCatalog()
-        val viewModel = FriendsViewModel(FriendsRepository(friendsCatalog, userCatalog), TestDispatchers())
+        val viewModel = FriendsViewModel(FriendsRepository(userCatalog), TestDispatchers())
 
         viewModel.loadFriends(sara.id)
 
@@ -54,7 +44,7 @@ class LoadFriendsTest {
         val userCatalog = InMemoryUserCatalog(
             users = mutableMapOf(":irrelevant:" to mutableListOf(tom))
         )
-        val viewModel = FriendsViewModel(FriendsRepository(friendsCatalog, userCatalog), TestDispatchers())
+        val viewModel = FriendsViewModel(FriendsRepository(userCatalog), TestDispatchers())
 
         viewModel.loadFriends(anna.id)
 
@@ -67,7 +57,7 @@ class LoadFriendsTest {
             users = mutableMapOf(":irrelevant:" to mutableListOf(anna, sara, tom)),
             followings = mutableListOf(Following(lucy.id, anna.id))
         )
-        val viewModel = FriendsViewModel(FriendsRepository(friendsCatalog, userCatalog), TestDispatchers())
+        val viewModel = FriendsViewModel(FriendsRepository(userCatalog), TestDispatchers())
 
         viewModel.loadFriends(lucy.id)
 

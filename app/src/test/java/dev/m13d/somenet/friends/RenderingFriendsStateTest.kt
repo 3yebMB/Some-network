@@ -3,7 +3,6 @@ package dev.m13d.somenet.friends
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.friends.FriendsRepository
-import dev.m13d.somenet.domain.friends.InMemoryFriendsCatalog
 import dev.m13d.somenet.domain.user.Following
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
@@ -27,18 +26,13 @@ class RenderingFriendsStateTest {
     private val friendTom = Friend(tom, isFollower = true)
     private val friendAnna = Friend(anna, isFollower = true)
 
-    private val friendsCatalog = InMemoryFriendsCatalog(
-        mapOf(
-            mihaly.id to listOf(friendTom, friendAnna)
-        )
-    )
     private val userCatalog = InMemoryUserCatalog(
         users = mutableMapOf(":irrelevant:" to mutableListOf(tom, anna)),
         followings = mutableListOf(Following(mihaly.id, tom.id), Following(mihaly.id, anna.id))
     )
 
     private val viewModel = FriendsViewModel(
-        FriendsRepository(friendsCatalog, userCatalog),
+        FriendsRepository(userCatalog),
         TestDispatchers()
     )
 

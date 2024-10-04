@@ -18,8 +18,8 @@ import kotlin.uuid.ExperimentalUuidApi
 @ExtendWith(InstantTaskExecutorExtension::class)
 class RenderingFriendsStateTest {
 
-    private val tom = Friend(aUser().withId("tomId").build(), isFollow = true)
-    private val anna = Friend(aUser().withId("annaId").build(), isFollow = true)
+    private val tom = Friend(aUser().withId("tomId").build(), isFollower = true)
+    private val anna = Friend(aUser().withId("annaId").build(), isFollower = true)
     private val friendsCatalog = InMemoryFriendsCatalog(
         mapOf(
             "mihalyId" to listOf(tom, anna)

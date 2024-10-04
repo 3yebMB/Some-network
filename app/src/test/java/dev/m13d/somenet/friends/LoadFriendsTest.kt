@@ -5,6 +5,7 @@ import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.friends.FriendsRepository
 import dev.m13d.somenet.domain.friends.InMemoryFriendsCatalog
 import dev.m13d.somenet.domain.user.Friend
+import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.friends.states.FriendsState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,7 +36,7 @@ class LoadFriendsTest {
     @Test
     fun noFriendsExisted() {
         val viewModel = FriendsViewModel(
-            FriendsRepository(friendsCatalog),
+            FriendsRepository(friendsCatalog, InMemoryUserCatalog()),
             TestDispatchers()
         )
 
@@ -47,7 +48,7 @@ class LoadFriendsTest {
     @Test
     fun loadedSinglePerson() {
         val viewModel = FriendsViewModel(
-            FriendsRepository(friendsCatalog),
+            FriendsRepository(friendsCatalog, InMemoryUserCatalog()),
             TestDispatchers()
         )
 
@@ -60,7 +61,7 @@ class LoadFriendsTest {
     fun loadedMultipleFriends() {
         val friends = listOf(friendAnna, friendSara, friendTom)
         val viewModel = FriendsViewModel(
-            FriendsRepository(friendsCatalog),
+            FriendsRepository(friendsCatalog, InMemoryUserCatalog()),
             TestDispatchers()
         )
 

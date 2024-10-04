@@ -7,6 +7,8 @@ import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.domain.friends.FriendsCatalog
 import dev.m13d.somenet.domain.friends.FriendsRepository
 import dev.m13d.somenet.domain.user.Friend
+import dev.m13d.somenet.domain.user.OfflineUserCatalog
+import dev.m13d.somenet.domain.user.UnavailableUserCatalog
 import dev.m13d.somenet.friends.states.FriendsState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Test
@@ -20,7 +22,10 @@ class FailFriendsLoadingTest {
     @Test
     fun backendError() {
         val viewModel = FriendsViewModel(
-            FriendsRepository(UnavailableFriendsCatalog()),
+            FriendsRepository(
+                UnavailableFriendsCatalog(),
+                UnavailableUserCatalog()
+            ),
             TestDispatchers()
         )
 
@@ -32,7 +37,10 @@ class FailFriendsLoadingTest {
     @Test
     fun offlineError() {
         val viewModel = FriendsViewModel(
-            FriendsRepository(OfflineFriendsCatalog()),
+            FriendsRepository(
+                OfflineFriendsCatalog(),
+                OfflineUserCatalog()
+            ),
             TestDispatchers()
         )
 

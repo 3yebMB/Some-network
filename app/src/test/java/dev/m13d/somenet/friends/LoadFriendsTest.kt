@@ -18,13 +18,16 @@ import kotlin.uuid.ExperimentalUuidApi
 @ExtendWith(InstantTaskExecutorExtension::class)
 class LoadFriendsTest {
 
-    private val anna = Friend(User("annaId", "", ""), isFollower = true)
-    private val sara = Friend(User("saraId", "", ""), isFollower = false)
-    private val tom = Friend(User("tomId", "", ""), isFollower = false)
+    private val anna = User("annaId", "", "")
+    private val sara = User("saraId", "", "")
+    private val tom = User("tomId", "", "")
+    private val friendAnna = Friend(anna, isFollower = true)
+    private val friendSara = Friend(sara, isFollower = false)
+    private val friendTom = Friend(tom, isFollower = false)
     private val friendsCatalog = InMemoryFriendsCatalog(
         mapOf(
-            "jerryId" to listOf(tom),
-            "lucyId" to listOf(anna, sara, tom),
+            "jerryId" to listOf(friendTom),
+            "lucyId" to listOf(friendAnna, friendSara, friendTom),
             "samId" to emptyList(),
         )
     )
@@ -50,12 +53,12 @@ class LoadFriendsTest {
 
         viewModel.loadFriends("jerryId")
 
-        assertEquals(FriendsState.Loaded(listOf(tom)), viewModel.friendsState.value)
+        assertEquals(FriendsState.Loaded(listOf(friendTom)), viewModel.friendsState.value)
     }
 
     @Test
     fun loadedMultipleFriends() {
-        val friends = listOf(anna, sara, tom)
+        val friends = listOf(friendAnna, friendSara, friendTom)
         val viewModel = FriendsViewModel(
             FriendsRepository(friendsCatalog),
             TestDispatchers()

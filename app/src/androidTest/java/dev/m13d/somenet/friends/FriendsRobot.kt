@@ -9,13 +9,15 @@ import dev.m13d.somenet.R
 import dev.m13d.somenet.timeline.launchTimelineFor
 import dev.m13d.somenet.utils.ComposeTestRule
 
-fun launchFriendsFor(
-    email: String,
+fun launchFriends(
     rule: ComposeTestRule,
     block: FriendsRobot.() -> Unit,
 ): FriendsRobot {
-    launchTimelineFor(email, "Pas$123.", rule) {}
-        return FriendsRobot(rule).apply(block)
+    launchTimelineFor("email@mail.com", "Pas$123.", rule) {}
+    return FriendsRobot(rule).apply{
+        tapOnFriends()
+        block()
+    }
 }
 
 class FriendsRobot(
@@ -28,20 +30,19 @@ class FriendsRobot(
     }
 
     infix fun verify(
-        block: FriendsVerification.() -> Unit
+        block: FriendsVerification.() -> Unit,
     ): FriendsVerification {
         return FriendsVerification(rule).apply(block)
     }
 }
 
 class FriendsVerification(
-    private val rule: ComposeTestRule
+    private val rule: ComposeTestRule,
 ) {
 
-    fun friendsScreenIsPresent() {
-        val friends = rule.activity.getString(R.string.friends)
-        rule.onAllNodesWithText(friends)
-            .onFirst()
+    fun emptyFriendsMessageIsDisplayed() {
+        val emptyFriendsMessage = rule.activity.getString(R.string.emptyFriendsMessage)
+        rule.onNodeWithText(emptyFriendsMessage)
             .assertIsDisplayed()
     }
 }

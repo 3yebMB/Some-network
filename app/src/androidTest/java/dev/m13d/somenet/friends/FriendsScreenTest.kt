@@ -11,11 +11,11 @@ class FriendsScreenTest {
     val rule = createAndroidComposeRule<MainActivity>()
 
     @Test
-    fun displayFriends() {
-        launchFriendsFor("email@mail.com", rule) {
-            tapOnFriends()
+    fun showEmptyFriendsMessage() {
+        launchFriends(rule) {
+            //no operations
         } verify {
-            friendsScreenIsPresent()
+            emptyFriendsMessageIsDisplayed()
         }
     }
 }

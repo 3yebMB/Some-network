@@ -1,11 +1,10 @@
 package dev.m13d.somenet.friends
 
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import dev.m13d.somenet.R
+import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.timeline.launchTimelineFor
 import dev.m13d.somenet.utils.ComposeTestRule
 
@@ -14,7 +13,7 @@ fun launchFriends(
     block: FriendsRobot.() -> Unit,
 ): FriendsRobot {
     launchTimelineFor("email@mail.com", "Pas$123.", rule) {}
-    return FriendsRobot(rule).apply{
+    return FriendsRobot(rule).apply {
         tapOnFriends()
         block()
     }
@@ -44,5 +43,12 @@ class FriendsVerification(
         val emptyFriendsMessage = rule.activity.getString(R.string.emptyFriendsMessage)
         rule.onNodeWithText(emptyFriendsMessage)
             .assertIsDisplayed()
+    }
+
+    fun friendsAreDisplayed(vararg friends: Friend) {
+        friends.forEach { friend ->
+            rule.onNodeWithText(friend.user.id)
+                .assertIsDisplayed()
+        }
     }
 }

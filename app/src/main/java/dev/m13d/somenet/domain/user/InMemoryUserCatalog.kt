@@ -9,6 +9,9 @@ class InMemoryUserCatalog(
     private val followings: List<Following> = mutableListOf(),
 ) : UserCatalog {
 
+    private val allUsers: List<User>
+        get() = users.values.flatten()
+
     override suspend fun createUser(
         email: String,
         password: String,
@@ -29,12 +32,11 @@ class InMemoryUserCatalog(
 
     override suspend fun loadFriendsFor(userId: String): List<Friend> {
         val friendsFollowedByUser = followedBy(userId)
-        val allUsers = users.values.flatten()
         return allUsers.map { user -> Friend(user, user.id in friendsFollowedByUser) }
     }
 
     private fun checkAccountExists(email: String) {
-        if (users.values.flatten().any { it.email == email })
+        if (allUsers.any { it.email == email })
             throw DuplicateAccountException()
     }
 

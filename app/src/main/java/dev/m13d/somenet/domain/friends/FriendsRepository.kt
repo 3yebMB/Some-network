@@ -11,8 +11,8 @@ class FriendsRepository(
 ) {
     suspend fun loadFriendsFor(userId: String): FriendsState {
         return try {
-            val friendsForUserId = friendsCatalog.loadFriendsFor(userId)
-            FriendsState.Loaded(friendsForUserId)
+            val friendsForUser = userCatalog.loadFriendsFor(userId)
+            FriendsState.Loaded(friendsForUser)
         } catch (backendException: BackendException) {
             FriendsState.BackendError
         } catch (offlineException: ConnectionUnavailableException) {

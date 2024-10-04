@@ -8,7 +8,11 @@ class UnavailableUserCatalog : UserCatalog {
         throw BackendException()
     }
 
-    override fun followedBy(userId: String): List<String> {
+    override suspend fun followedBy(userId: String): List<String> {
+        throw BackendException()
+    }
+
+    override suspend fun loadFriendsFor(userId: String): List<Friend> {
         throw BackendException()
     }
 }

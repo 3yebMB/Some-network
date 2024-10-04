@@ -24,7 +24,11 @@ class StoreSignedUpUserDataTest {
             return User(desiredUserId, email, about)
         }
 
-        override fun followedBy(userId: String): List<String> {
+        override suspend fun followedBy(userId: String): List<String> {
+            TODO("Not yet implemented")
+        }
+
+        override suspend fun loadFriendsFor(userId: String): List<Friend> {
             TODO("Not yet implemented")
         }
     }

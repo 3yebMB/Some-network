@@ -8,7 +8,11 @@ class OfflineUserCatalog : UserCatalog {
         throw ConnectionUnavailableException()
     }
 
-    override fun followedBy(userId: String): List<String> {
+    override suspend fun followedBy(userId: String): List<String> {
+        throw ConnectionUnavailableException()
+    }
+
+    override suspend fun loadFriendsFor(userId: String): List<Friend> {
         throw ConnectionUnavailableException()
     }
 }

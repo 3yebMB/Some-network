@@ -13,9 +13,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
 import dev.m13d.somenet.ui.component.ScreenTitle
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun FriendsScreen() {
+fun FriendsScreen(userId: String) {
+
+    val friendsViewModel = koinViewModel<FriendsViewModel>()
+    friendsViewModel.loadFriends(userId)
+
     Box {
         Column(
             modifier = Modifier

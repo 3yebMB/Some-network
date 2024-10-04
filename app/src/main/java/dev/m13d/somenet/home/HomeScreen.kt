@@ -40,17 +40,17 @@ fun HomeScreen(userId: String) {
             modifier = Modifier.padding(if (isMainScreenDestination) 50.dp else 0.dp),
         ) {
             composable(route = Screen.MainScreen.Timeline.route) {
-                TimelineScreen(
-                    userId = userId,
-                ) { navController.navigate(Screen.PostComposer.route) }
+                TimelineScreen(userId = userId) {
+                    navController.navigate(Screen.PostComposer.route)
+                }
             }
             composable(route = Screen.PostComposer.route) {
                 CreateNewPostScreen {
                     navController.navigateUp()
                 }
             }
-            composable(route = "friends") {
-                FriendsScreen()
+            composable(route = Screen.MainScreen.Friends.route) {
+                FriendsScreen(userId = userId)
             }
         }
     }

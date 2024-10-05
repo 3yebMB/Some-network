@@ -30,11 +30,11 @@ class CreateNewPostScreenTest {
     fun createNewPost() {
         replacePostCatalogWith(InMemoryPostsCatalog(clock = ControllableClock(timestamp)))
 
-        launchPostComposerFor("mihaly@somenet.dev", createNewPostRule) {
+        launchPostComposerFor("max@somenet.dev", createNewPostRule) {
             typePost("My New Post")
             submit()
         } verify {
-            newCreatedPostIsShown("mihalyId", "21-09-2024 17:30", "My New Post")
+            newCreatedPostIsShown("maxId", "21-09-2024 17:30", "My New Post")
         }
     }
 
@@ -98,14 +98,14 @@ class CreateNewPostScreenTest {
 
     private fun replacePostCatalogWith(postsCatalog: PostsCatalog) {
         val module = module {
-            single<PostsCatalog> { postsCatalog }
+            single { postsCatalog }
         }
         loadKoinModules(module)
     }
 
     private fun replaceUserDataWith(userData: UserDataStore) {
         val module = module {
-            single<UserDataStore> { userData }
+            single { userData }
         }
         loadKoinModules(module)
     }

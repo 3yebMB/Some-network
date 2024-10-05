@@ -2,8 +2,6 @@ package dev.m13d.somenet.signup
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dev.m13d.somenet.MainActivity
-import dev.m13d.somenet.domain.exceptions.BackendException
-import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.OfflineUserCatalog
@@ -37,7 +35,7 @@ class SignUpTest {
     fun performSignUp() {
         launchSignUpScreen(signUpTestRule) {
             typeEmail("somemail@somenet.dev")
-            typePassword("p@\$Sw0rd")
+            typePassword("p@sSw0rd")
             submit()
         } verify {
             timelineScreenIsPresent()

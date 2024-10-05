@@ -17,7 +17,7 @@ class StoreSignedUpUserDataTest {
     }
 
     private class UserCatalogCreatingUserWith(
-        private val desiredUserId: String
+        private val desiredUserId: String,
     ) : UserCatalog {
 
         override suspend fun createUser(email: String, password: String, about: String): User {

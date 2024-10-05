@@ -24,7 +24,7 @@ fun launchPostComposerFor(
 }
 
 class CreateNewPostRobot(
-    private val rule: ComposeTestRule
+    private val rule: ComposeTestRule,
 ) {
     fun typePost(postContent: String) {
         val newPostHint = rule.activity.getString(R.string.newPostHint)
@@ -45,14 +45,14 @@ class CreateNewPostRobot(
     }
 
     infix fun verify(
-        block: CreateNewPostVerificationRobot.() -> Unit
+        block: CreateNewPostVerificationRobot.() -> Unit,
     ): CreateNewPostVerificationRobot {
         return CreateNewPostVerificationRobot(rule).apply(block)
     }
 }
 
 class CreateNewPostVerificationRobot(
-    private val rule: ComposeTestRule
+    private val rule: ComposeTestRule,
 ) {
     fun newCreatedPostIsShown(
         userId: String,

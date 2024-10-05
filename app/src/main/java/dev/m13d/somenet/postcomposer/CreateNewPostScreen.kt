@@ -62,18 +62,22 @@ fun CreateNewPostScreen(
     var postText by remember { mutableStateOf("") }
 
     val createPostState by createPostViewModel.postState.observeAsState()
-    when(createPostState) {
+    when (createPostState) {
         is CreatePostState.Loading ->
             screenState.showLoading()
+
         is CreatePostState.Created -> {
             if (screenState.isPostSubmitted) {
                 onPostCreated()
             }
         }
+
         is CreatePostState.BackendError ->
             screenState.showMessage(R.string.creatingPostError)
+
         is CreatePostState.OfflineError ->
             screenState.showMessage(R.string.offlineError)
+
         else -> {}
     }
 

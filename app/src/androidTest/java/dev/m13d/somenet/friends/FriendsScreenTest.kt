@@ -2,7 +2,6 @@ package dev.m13d.somenet.friends
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dev.m13d.somenet.MainActivity
-import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.User
@@ -52,7 +51,7 @@ class FriendsScreenTest {
 
     private fun replaceUserCatalogWith(userCatalog: UserCatalog) {
         val replaceModule = module {
-            factory<UserCatalog> { userCatalog }
+            factory { userCatalog }
         }
         loadKoinModules(replaceModule)
     }

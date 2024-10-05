@@ -4,7 +4,7 @@ import dev.m13d.somenet.domain.post.Post
 
 sealed class TimelineState {
 
-    object Loading: TimelineState()
+    object Loading : TimelineState()
 
     object BackendError : TimelineState()
 

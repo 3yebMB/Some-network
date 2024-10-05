@@ -26,7 +26,7 @@ fun launchTimelineFor(
 }
 
 class TimelineRobot(
-    private val rule: ComposeTestRule
+    private val rule: ComposeTestRule,
 ) {
 
     fun tapOnCreateNewPost() {
@@ -49,7 +49,7 @@ class TimelineRobot(
 }
 
 class TimelineVerification(
-    private val rule: ComposeTestRule
+    private val rule: ComposeTestRule,
 ) {
     fun emptyTimelineMessageIsShown() {
         val emptyTimelineMessage = rule.activity.getString(R.string.emptyTimelineMessage)

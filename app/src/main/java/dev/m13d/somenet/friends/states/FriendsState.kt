@@ -10,6 +10,6 @@ sealed class FriendsState {
 
     data class Loaded(val friends: List<Friend>) : FriendsState()
 
-    object  Loading: FriendsState()
+    object Loading : FriendsState()
 
 }

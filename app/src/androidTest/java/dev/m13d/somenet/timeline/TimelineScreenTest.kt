@@ -22,7 +22,7 @@ class TimelineScreenTest {
     @Test
     fun showEmptyTimelineMessage() {
         val email = "elizabeth@somenet.dev"
-        val password = "p@S\$w0rd="
+        val password = "p@Ssw0rd="
         launchTimelineFor(email, password, timelineTestRule) {
             // No operations
         } verify {
@@ -39,7 +39,7 @@ class TimelineScreenTest {
         replacePostCatalogWith(InMemoryPostsCatalog(mutableListOf(post1, post2)))
 
         launchTimelineFor(email, password, timelineTestRule) {
-
+            //no operations
         } verify {
             postsAreDisplayed(post1, post2)
         }
@@ -47,7 +47,7 @@ class TimelineScreenTest {
 
     @Test
     fun openPostComposer() {
-        launchTimelineFor("test@somenet.dev", "\\S0meP@sS1134", timelineTestRule) {
+        launchTimelineFor("test@somenet.dev", "S0meP@sS1134", timelineTestRule) {
             tapOnCreateNewPost()
         } verify {
             newPostComposerIsDisplayed()
@@ -66,7 +66,7 @@ class TimelineScreenTest {
     @Test
     fun showLoadingIndicator() {
         replacePostCatalogWith(DelayingPostCatalog())
-        launchTimelineFor("test-indicator@somenet.dev", "\\S0meP@sS1134", timelineTestRule) {
+        launchTimelineFor("test-indicator@somenet.dev", "S0meP@sS1134", timelineTestRule) {
             //no operations
         } verify {
             loadingIndicatorIsDisplayed()
@@ -76,7 +76,7 @@ class TimelineScreenTest {
     @Test
     fun showBackendError() {
         replacePostCatalogWith(UnavailablePostCatalog())
-        launchTimelineFor("backend-error@somenet.dev", "\\S0meP@sS1134", timelineTestRule) {
+        launchTimelineFor("backend-error@somenet.dev", "S0meP@sS1134", timelineTestRule) {
             //no operations
         } verify {
             backendErrorIsDisplayed()
@@ -86,7 +86,7 @@ class TimelineScreenTest {
     @Test
     fun showOfflineError() {
         replacePostCatalogWith(OfflinePostCatalog())
-        launchTimelineFor("offline-error@somenet.dev", "\\S0meP@sS1134", timelineTestRule) {
+        launchTimelineFor("offline-error@somenet.dev", "S0meP@sS1134", timelineTestRule) {
             //no operations
         } verify {
             offlineErrorIsDisplayed()
@@ -100,7 +100,7 @@ class TimelineScreenTest {
 
     private fun replacePostCatalogWith(postsCatalog: PostsCatalog) {
         val replaceModule = module {
-            factory<PostsCatalog> { postsCatalog }
+            factory { postsCatalog }
         }
         loadKoinModules(replaceModule)
     }

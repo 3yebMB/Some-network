@@ -19,7 +19,7 @@ class FriendsScreenTest {
     val rule = createAndroidComposeRule<MainActivity>()
 
     @Test
-    @Ignore("Going to filtering showing ourself")
+//    @Ignore("Going to filtering showing ourself")
     fun showEmptyFriendsMessage() {
         launchFriends(rule) {
             //no operations

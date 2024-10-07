@@ -3,6 +3,7 @@ package dev.m13d.somenet.friends
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dev.m13d.somenet.MainActivity
 import dev.m13d.somenet.domain.exceptions.BackendException
+import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.User
@@ -98,6 +99,17 @@ class FriendsScreenTest {
             //no operations
         } verify {
             backendErrorIsDisplayed()
+        }
+    }
+
+    @Test
+    fun showOfflineError() {
+        replaceUserCatalogWith(DelayingUserCatalog(loadFriend = { throw ConnectionUnavailableException() }))
+
+        launchFriends(rule) {
+            //no operations
+        } verify {
+            offlineErrorIsDisplayed()
         }
     }
 

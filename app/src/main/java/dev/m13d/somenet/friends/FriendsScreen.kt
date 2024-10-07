@@ -66,7 +66,10 @@ fun FriendsScreen(userId: String) {
         is FriendsState.BackendError -> screenState = screenState.copy(
             isLoading = false, error = R.string.fetchingFriendsError
         )
-        else -> {}
+        is FriendsState.Offline -> screenState = screenState.copy(
+            isLoading = false, error = R.string.offlineError
+        )
+        null -> {}
     }
 
     Box {

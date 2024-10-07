@@ -7,7 +7,6 @@ import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.domain.user.UserCatalog
 import org.junit.After
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.koin.core.context.loadKoinModules
@@ -18,8 +17,13 @@ class FriendsScreenTest {
     @get:Rule
     val rule = createAndroidComposeRule<MainActivity>()
 
+    private val tom = User("tomId", "tom@somenet.dev", "Something about Tom")
+    private val jerry = User("jerryId", "jerry@somenet.dev", "")
+    private val users = mutableMapOf("" to mutableListOf(tom, jerry))
+    private val friendTom = Friend(tom, isFollower = false)
+    private val friendJerry = Friend(jerry, isFollower = false)
+
     @Test
-//    @Ignore("Going to filtering showing ourself")
     fun showEmptyFriendsMessage() {
         launchFriends(rule) {
             //no operations
@@ -27,20 +31,26 @@ class FriendsScreenTest {
             emptyFriendsMessageIsDisplayed()
         }
     }
-
     @Test
     fun showAvailableFriends() {
-        val tom = User("tomId", "tom@somenet.dev", "")
-        val jerry = User("jerryId", "jerry@somenet.dev", "")
-        val users = mutableMapOf("" to mutableListOf(tom, jerry))
-        val friendTom = Friend(tom, isFollower = false)
-        val friendJerry = Friend(jerry, isFollower = false)
         replaceUserCatalogWith(InMemoryUserCatalog(users))
 
         launchFriends(rule) {
             //no operations
         } verify {
             friendsAreDisplayed(friendTom, friendJerry)
+        }
+    }
+
+    @Test
+    fun showRequiredFriendsInformation() {
+        val users = mutableMapOf("" to mutableListOf(tom))
+        replaceUserCatalogWith(InMemoryUserCatalog(users))
+
+        launchFriends(rule) {
+            //no operations
+        } verify {
+            friendInformationIsDisplayedFor(friendTom)
         }
     }
 

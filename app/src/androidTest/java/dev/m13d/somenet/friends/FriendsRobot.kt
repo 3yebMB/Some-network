@@ -51,4 +51,15 @@ class FriendsVerification(
                 .assertIsDisplayed()
         }
     }
+
+    fun friendInformationIsDisplayedFor(friend: Friend) {
+        val follow = rule.activity.getString(R.string.follow)
+
+        rule.onNodeWithText(friend.user.id)
+            .assertIsDisplayed()
+        rule.onNodeWithText(friend.user.about)
+            .assertIsDisplayed()
+        rule.onNodeWithText(follow)
+            .assertIsDisplayed()
+    }
 }

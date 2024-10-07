@@ -2,6 +2,7 @@ package dev.m13d.somenet.friends
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -57,10 +60,29 @@ private fun FriendsList(
             textAlign = TextAlign.Center,
         )
     } else {
+        val scrollState = rememberScrollState()
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(friends) { friend ->
-                Text(text = friend.user.id)
+                FriendItem(friend)
             }
+        }
+    }
+}
+
+@Composable
+private fun FriendItem(friend: Friend) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(text = friend.user.id)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = friend.user.about)
+        }
+        OutlinedButton(onClick = {}) {
+            Text(text = stringResource(R.string.follow))
         }
     }
 }

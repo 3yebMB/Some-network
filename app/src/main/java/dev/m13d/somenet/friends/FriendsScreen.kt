@@ -1,5 +1,6 @@
 package dev.m13d.somenet.friends
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,11 +12,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -64,25 +70,41 @@ private fun FriendsList(
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(friends) { friend ->
                 FriendItem(friend)
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
 }
 
 @Composable
-private fun FriendItem(friend: Friend) {
-    Row(
-        modifier = Modifier
+private fun FriendItem(
+    friend: Friend,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .clip(shape = RoundedCornerShape(16.dp))
             .fillMaxWidth()
-            .padding(16.dp)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onSurface,
+                shape = RoundedCornerShape(16.dp)
+            )
     ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(text = friend.user.id)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = friend.user.about)
-        }
-        OutlinedButton(onClick = {}) {
-            Text(text = stringResource(R.string.follow))
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(text = friend.user.id)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = friend.user.about)
+            }
+            OutlinedButton(onClick = {}) {
+                Text(text = stringResource(R.string.follow))
+            }
         }
     }
 }

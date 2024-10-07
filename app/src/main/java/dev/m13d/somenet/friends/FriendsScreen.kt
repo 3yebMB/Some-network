@@ -75,7 +75,8 @@ fun FriendsScreen(userId: String) {
             Spacer(modifier = Modifier.height(16.dp))
             FriendsList(
                 isRefreshing = screenState.isLoading,
-                friends = screenState.friends
+                friends = screenState.friends,
+                onRefresh = { friendsViewModel.loadFriends(userId) }
             )
         }
     }
@@ -86,11 +87,12 @@ private fun FriendsList(
     isRefreshing: Boolean,
     friends: List<Friend>,
     modifier: Modifier = Modifier,
+    onRefresh: () -> Unit,
 ) {
     val description = stringResource(R.string.loading)
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
-        onRefresh = { },
+        onRefresh = { onRefresh() },
         modifier = modifier.semantics { contentDescription = description },
     ) {
         if (friends.isEmpty()) {

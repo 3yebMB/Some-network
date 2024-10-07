@@ -17,19 +17,31 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import dev.m13d.somenet.R
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.friends.states.FriendsState
 import dev.m13d.somenet.ui.component.ScreenTitle
 import org.koin.androidx.compose.koinViewModel
+
+data class FriendsScreenState(
+    val isLoading: Boolean = false,
+    val friends: List<Friend> = emptyList(),
+)
 
 @Composable
 fun FriendsScreen(userId: String) {
@@ -38,7 +50,20 @@ fun FriendsScreen(userId: String) {
     if (friendsViewModel.friendsState.value == null) {
         friendsViewModel.loadFriends(userId)
     }
+    var screenState by remember { mutableStateOf(FriendsScreenState()) }
     val friendsState = friendsViewModel.friendsState.observeAsState().value
+
+    when (friendsState) {
+        is FriendsState.Loading -> screenState = screenState.copy(
+            isLoading = true
+        )
+
+        is FriendsState.Loaded -> screenState = screenState.copy(
+            isLoading = false, friends = friendsState.friends
+        )
+
+        else -> {}
+    }
 
     Box {
         Column(
@@ -48,29 +73,39 @@ fun FriendsScreen(userId: String) {
         ) {
             ScreenTitle(titleResource = R.string.friends)
             Spacer(modifier = Modifier.height(16.dp))
-            if (friendsState is FriendsState.Loaded) {
-                FriendsList(friendsState.friends)
-            }
+            FriendsList(
+                isRefreshing = screenState.isLoading,
+                friends = screenState.friends
+            )
         }
     }
 }
 
 @Composable
 private fun FriendsList(
+    isRefreshing: Boolean,
     friends: List<Friend>,
+    modifier: Modifier = Modifier,
 ) {
-    if (friends.isEmpty()) {
-        Text(
-            text = stringResource(R.string.emptyFriendsMessage),
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-        )
-    } else {
-        val scrollState = rememberScrollState()
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(friends) { friend ->
-                FriendItem(friend)
-                Spacer(modifier = Modifier.height(16.dp))
+    val description = stringResource(R.string.loading)
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+        onRefresh = { },
+        modifier = modifier.semantics { contentDescription = description },
+    ) {
+        if (friends.isEmpty()) {
+            Text(
+                text = stringResource(R.string.emptyFriendsMessage),
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+            )
+        } else {
+            val scrollState = rememberScrollState()
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(friends) { friend ->
+                    FriendItem(friend)
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
             }
         }
     }

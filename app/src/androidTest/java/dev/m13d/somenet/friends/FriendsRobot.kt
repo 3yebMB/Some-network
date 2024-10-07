@@ -1,6 +1,7 @@
 package dev.m13d.somenet.friends
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import dev.m13d.somenet.R
@@ -60,6 +61,12 @@ class FriendsVerification(
         rule.onNodeWithText(friend.user.about)
             .assertIsDisplayed()
         rule.onNodeWithText(follow)
+            .assertIsDisplayed()
+    }
+
+    fun loadingIndicatorIsShown() {
+        val loading = rule.activity.getString(R.string.loading)
+        rule.onNodeWithContentDescription(loading)
             .assertIsDisplayed()
     }
 }

@@ -2,11 +2,11 @@ package dev.m13d.somenet.friends
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dev.m13d.somenet.MainActivity
+import dev.m13d.somenet.domain.exceptions.BackendException
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.domain.user.UserCatalog
-import dev.m13d.somenet.signup.SignUpTest
 import kotlinx.coroutines.delay
 import org.junit.After
 import org.junit.Rule
@@ -36,7 +36,11 @@ class FriendsScreenTest {
 
     @Test
     fun showLoadingIndicator() {
-        replaceUserCatalogWith(DelayingUserCatalog(listOf(friendTom, friendJerry)))
+        val loadFriend: suspend () -> List<Friend> = {
+            delay(1500L)
+            listOf(friendTom, friendJerry)
+        }
+        replaceUserCatalogWith(DelayingUserCatalog(loadFriend = loadFriend))
 
         launchFriends(rule) {
             //no operations
@@ -46,7 +50,8 @@ class FriendsScreenTest {
     }
 
     private class DelayingUserCatalog(
-        private val friends: List<Friend>,
+        private val followedBy: suspend () -> List<String> = { emptyList() },
+        private val loadFriend: suspend () -> List<Friend> = { emptyList() },
     ) : UserCatalog {
 
         override suspend fun createUser(email: String, password: String, about: String): User {
@@ -54,12 +59,11 @@ class FriendsScreenTest {
         }
 
         override suspend fun followedBy(userId: String): List<String> {
-            return emptyList()
+            return followedBy()
         }
 
         override suspend fun loadFriendsFor(userId: String): List<Friend> {
-            delay(1000L)
-            return friends
+            return loadFriend()
         }
     }
 
@@ -83,6 +87,17 @@ class FriendsScreenTest {
             //no operations
         } verify {
             friendInformationIsDisplayedFor(friendTom)
+        }
+    }
+
+    @Test
+    fun showBackendError() {
+        replaceUserCatalogWith(DelayingUserCatalog(loadFriend = { throw BackendException() }))
+
+        launchFriends(rule) {
+            //no operations
+        } verify {
+            backendErrorIsDisplayed()
         }
     }
 

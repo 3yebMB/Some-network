@@ -1,5 +1,6 @@
 package dev.m13d.somenet.friends
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,12 +36,14 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import dev.m13d.somenet.R
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.friends.states.FriendsState
+import dev.m13d.somenet.ui.component.InfoMessage
 import dev.m13d.somenet.ui.component.ScreenTitle
 import org.koin.androidx.compose.koinViewModel
 
 data class FriendsScreenState(
     val isLoading: Boolean = false,
     val friends: List<Friend> = emptyList(),
+    @StringRes val error: Int = 0,
 )
 
 @Composable
@@ -57,11 +60,12 @@ fun FriendsScreen(userId: String) {
         is FriendsState.Loading -> screenState = screenState.copy(
             isLoading = true
         )
-
         is FriendsState.Loaded -> screenState = screenState.copy(
             isLoading = false, friends = friendsState.friends
         )
-
+        is FriendsState.BackendError -> screenState = screenState.copy(
+            isLoading = false, error = R.string.fetchingFriendsError
+        )
         else -> {}
     }
 
@@ -79,6 +83,7 @@ fun FriendsScreen(userId: String) {
                 onRefresh = { friendsViewModel.loadFriends(userId) }
             )
         }
+        InfoMessage(stringResource = screenState.error)
     }
 }
 

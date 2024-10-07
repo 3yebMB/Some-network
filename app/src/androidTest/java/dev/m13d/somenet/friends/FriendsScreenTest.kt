@@ -93,7 +93,8 @@ class FriendsScreenTest {
 
     @Test
     fun showBackendError() {
-        replaceUserCatalogWith(DelayingUserCatalog(loadFriend = { throw BackendException() }))
+        val loadFriend: suspend () -> List<Friend> = { throw BackendException() }
+        replaceUserCatalogWith(DelayingUserCatalog(loadFriend = loadFriend))
 
         launchFriends(rule) {
             //no operations
@@ -104,7 +105,8 @@ class FriendsScreenTest {
 
     @Test
     fun showOfflineError() {
-        replaceUserCatalogWith(DelayingUserCatalog(loadFriend = { throw ConnectionUnavailableException() }))
+        val loadFriend: suspend () -> List<Friend> = { throw ConnectionUnavailableException() }
+        replaceUserCatalogWith(DelayingUserCatalog(loadFriend = loadFriend))
 
         launchFriends(rule) {
             //no operations

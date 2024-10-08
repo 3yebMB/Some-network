@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.friends.FriendsRepository
+import dev.m13d.somenet.domain.user.Following
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.friends.states.FriendsScreenState
@@ -23,13 +24,13 @@ class ToggleFollowingTest {
     private val jerry = aUser().withId("jerryId").build()
     private val users = mutableMapOf(":irrelevant:" to mutableListOf(tom, jerry))
 
-    private val dispatchers = TestDispatchers()
+    private val testDispatchers = TestDispatchers()
     private val savedStateHandle = SavedStateHandle()
 
     @Test
     fun follow() {
         val repository = FriendsRepository(InMemoryUserCatalog(users))
-        val viewModel = FriendsViewModel(repository, dispatchers, savedStateHandle).apply {
+        val viewModel = FriendsViewModel(repository, testDispatchers, savedStateHandle).apply {
             loadFriends(tom.id)
         }
 
@@ -37,6 +38,22 @@ class ToggleFollowingTest {
 
         assertEquals(
             FriendsScreenState(friends = listOf(Friend(jerry, isFollowee = true))),
+            viewModel.screenState.value
+        )
+    }
+
+    @Test
+    fun unfollow() {
+        val followings = listOf(Following(jerry.id, tom.id))
+        val repository = FriendsRepository(InMemoryUserCatalog(users, followings))
+        val viewModel = FriendsViewModel(repository, testDispatchers, savedStateHandle).apply {
+            loadFriends(jerry.id)
+        }
+
+        viewModel.toggleFollowing(jerry.id, tom.id)
+
+        assertEquals(
+            FriendsScreenState(friends = listOf(Friend(tom, isFollowee = false))),
             viewModel.screenState.value
         )
     }

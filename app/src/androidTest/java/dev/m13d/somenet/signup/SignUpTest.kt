@@ -2,7 +2,7 @@ package dev.m13d.somenet.signup
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import dev.m13d.somenet.MainActivity
-import dev.m13d.somenet.domain.user.Friend
+import dev.m13d.somenet.domain.user.ControllableUserCatalog
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.OfflineUserCatalog
 import dev.m13d.somenet.domain.user.UnavailableUserCatalog
@@ -132,7 +132,12 @@ class SignUpTest {
 
     @Test
     fun displayLoadingBlock() {
-        replaceUserCatalogWith(DelayingUserCatalog())
+        val createUser: suspend (String, String, String) -> User = {id, email, about ->
+            delay(1500L)
+            User(id, email, about)
+        }
+        replaceUserCatalogWith(ControllableUserCatalog(userCreate = createUser))
+
         launchSignUpScreen(signUpTestRule) {
             typeEmail("alex@somenet.dev")
             typePassword("@1eX1092")
@@ -152,21 +157,5 @@ class SignUpTest {
             factory<UserCatalog> { userCatalog }
         }
         loadKoinModules(replaceModule)
-    }
-
-    class DelayingUserCatalog : UserCatalog {
-
-        override suspend fun createUser(email: String, password: String, about: String): User {
-            delay(1000L)
-            return User("someId", email, about)
-        }
-
-        override suspend fun followedBy(userId: String): List<String> {
-            TODO("Not yet implemented")
-        }
-
-        override suspend fun loadFriendsFor(userId: String): List<Friend> {
-            TODO("Not yet implemented")
-        }
     }
 }

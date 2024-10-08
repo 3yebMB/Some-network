@@ -24,8 +24,8 @@ class FriendsScreenTest {
     private val tom = User("tomId", "tom@somenet.dev", "Something about Tom")
     private val jerry = User("jerryId", "jerry@somenet.dev", "")
     private val users = mutableMapOf("" to mutableListOf(tom, jerry))
-    private val friendTom = Friend(tom, isFollower = false)
-    private val friendJerry = Friend(jerry, isFollower = false)
+    private val friendTom = Friend(tom, isFollowee = false)
+    private val friendJerry = Friend(jerry, isFollowee = false)
 
     @Test
     fun showEmptyFriendsMessage() {

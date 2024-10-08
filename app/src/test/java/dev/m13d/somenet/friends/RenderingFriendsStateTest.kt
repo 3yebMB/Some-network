@@ -8,7 +8,6 @@ import dev.m13d.somenet.domain.user.Following
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.friends.states.FriendsScreenState
-import dev.m13d.somenet.friends.states.FriendsState
 import dev.m13d.somenet.infrastructure.builder.UserBuilder.Companion.aUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Test
@@ -25,8 +24,8 @@ class RenderingFriendsStateTest {
     private val tom = aUser().withId("tomId").build()
     private val anna = aUser().withId("annaId").build()
 
-    private val friendTom = Friend(tom, isFollower = true)
-    private val friendAnna = Friend(anna, isFollower = true)
+    private val friendTom = Friend(tom, isFollowee = true)
+    private val friendAnna = Friend(anna, isFollowee = true)
 
     private val userCatalog = InMemoryUserCatalog(
         users = mutableMapOf(":irrelevant:" to mutableListOf(tom, anna)),

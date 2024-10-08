@@ -25,9 +25,9 @@ class LoadFriendsTest {
     private val anna = aUser().withId("annaId").build()
     private val sara = aUser().withId("saraId").build()
 
-    private val friendTom = Friend(tom, isFollower = false)
-    private val friendAnna = Friend(anna, isFollower = true)
-    private val friendSara = Friend(sara, isFollower = false)
+    private val friendTom = Friend(tom, isFollowee = false)
+    private val friendAnna = Friend(anna, isFollowee = true)
+    private val friendSara = Friend(sara, isFollowee = false)
 
     private val testDispatchers = TestDispatchers()
     private val savedStateHandle = SavedStateHandle()

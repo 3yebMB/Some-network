@@ -44,7 +44,7 @@ class ToggleFollowingTest {
 
     @Test
     fun unfollow() {
-        val followings = listOf(Following(jerry.id, tom.id))
+        val followings = mutableListOf(Following(jerry.id, tom.id))
         val repository = FriendsRepository(InMemoryUserCatalog(users, followings))
         val viewModel = FriendsViewModel(repository, testDispatchers, savedStateHandle).apply {
             loadFriends(jerry.id)

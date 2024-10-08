@@ -1,12 +1,13 @@
 package dev.m13d.somenet.domain.user
 
 import dev.m13d.somenet.domain.exceptions.DuplicateAccountException
+import dev.m13d.somenet.domain.friends.ToggleFollowing
 
 typealias PasswordUserType = MutableMap<String, MutableList<User>>
 
 class InMemoryUserCatalog(
     private val users: PasswordUserType = mutableMapOf(),
-    private val followings: List<Following> = mutableListOf(),
+    private val followings: MutableList<Following> = mutableListOf(),
 ) : UserCatalog {
 
     private val allUsers: List<User>
@@ -35,6 +36,17 @@ class InMemoryUserCatalog(
         return allUsers
             .filter { it.id != userId }
             .map { user -> Friend(user, user.id in friendsFollowedByUser) }
+    }
+
+    override fun toggleFollowing(userId: String, followeeId: String): ToggleFollowing {
+        val following = Following(userId, followeeId)
+        return if (followings.contains(following)) {
+            followings.remove(following)
+            ToggleFollowing(following, false)
+        } else {
+            followings.add(following)
+            ToggleFollowing(following, true)
+        }
     }
 
     private fun checkAccountExists(email: String) {

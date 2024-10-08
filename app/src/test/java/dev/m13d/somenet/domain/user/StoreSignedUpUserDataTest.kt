@@ -1,5 +1,6 @@
 package dev.m13d.somenet.domain.user
 
+import dev.m13d.somenet.domain.friends.ToggleFollowing
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -29,6 +30,10 @@ class StoreSignedUpUserDataTest {
         }
 
         override suspend fun loadFriendsFor(userId: String): List<Friend> {
+            TODO("Not yet implemented")
+        }
+
+        override fun toggleFollowing(userId: String, followeeId: String): ToggleFollowing {
             TODO("Not yet implemented")
         }
     }

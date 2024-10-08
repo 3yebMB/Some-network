@@ -1,5 +1,7 @@
 package dev.m13d.somenet.domain.user
 
+import dev.m13d.somenet.domain.friends.ToggleFollowing
+
 interface UserCatalog {
 
     suspend fun createUser(
@@ -11,4 +13,6 @@ interface UserCatalog {
     suspend fun followedBy(userId: String): List<String>
 
     suspend fun loadFriendsFor(userId: String): List<Friend>
+
+    fun toggleFollowing(userId: String, followeeId: String): ToggleFollowing
 }

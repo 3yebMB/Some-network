@@ -1,5 +1,7 @@
 package dev.m13d.somenet.domain.user
 
+import dev.m13d.somenet.domain.friends.ToggleFollowing
+
 class ControllableUserCatalog(
     private val userCreate: suspend (String, String, String) -> User = { email, _, about ->
         val userId = "${email.takeWhile { it == '@' }}Id"
@@ -19,5 +21,9 @@ class ControllableUserCatalog(
 
     override suspend fun loadFriendsFor(userId: String): List<Friend> {
         return friendsLoad()
+    }
+
+    override fun toggleFollowing(userId: String, followeeId: String): ToggleFollowing {
+        TODO("Not yet implemented")
     }
 }

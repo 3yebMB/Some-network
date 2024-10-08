@@ -66,7 +66,7 @@ class LoadTimelineTest {
     @Test
     fun postsFromFriends() {
         val userCatalog = InMemoryUserCatalog(
-            followings = listOf(Following(anabel.id, lucy.id))
+            followings = mutableListOf(Following(anabel.id, lucy.id))
         )
         val postCatalog = InMemoryPostsCatalog(availablePosts)
         val viewModel = TimelineViewModel(
@@ -80,7 +80,7 @@ class LoadTimelineTest {
     @Test
     fun allPostsAvailable() {
         val userCatalog = InMemoryUserCatalog(
-            followings = listOf(Following(sarah.id, lucy.id))
+            followings = mutableListOf(Following(sarah.id, lucy.id))
         )
         val postCatalog = InMemoryPostsCatalog(availablePosts)
         val viewModel = TimelineViewModel(

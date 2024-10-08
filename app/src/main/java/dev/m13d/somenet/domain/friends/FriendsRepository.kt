@@ -2,7 +2,6 @@ package dev.m13d.somenet.domain.friends
 
 import dev.m13d.somenet.domain.exceptions.BackendException
 import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
-import dev.m13d.somenet.domain.user.Following
 import dev.m13d.somenet.domain.user.UserCatalog
 import dev.m13d.somenet.friends.states.FollowState
 import dev.m13d.somenet.friends.states.FriendsState
@@ -22,9 +21,10 @@ class FriendsRepository(
     }
 
     fun updateFollowing(userId: String, followeeId: String): FollowState {
-        return if (userId == "tomId")
-            FollowState.Followed(Following(userId, followeeId))
+        val toggleResult = userCatalog.toggleFollowing(userId, followeeId)
+        return if (toggleResult.isAdded)
+            FollowState.Followed(toggleResult.following)
         else
-            FollowState.Unfollowed(Following(userId, followeeId))
+            FollowState.Unfollowed(toggleResult.following)
     }
 }

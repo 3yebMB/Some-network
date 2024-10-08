@@ -8,6 +8,7 @@ import dev.m13d.somenet.R
 import dev.m13d.somenet.app.CoroutineDispatchers
 import dev.m13d.somenet.domain.friends.FriendsRepository
 import dev.m13d.somenet.domain.user.Following
+import dev.m13d.somenet.friends.states.FollowState
 import dev.m13d.somenet.friends.states.FriendsScreenState
 import dev.m13d.somenet.friends.states.FriendsState
 import kotlinx.coroutines.launch
@@ -60,25 +61,15 @@ class FriendsViewModel(
         savedStateHandle[SCREEN_STATE_KEY] = updatedState
     }
 
-    sealed class FollowState {
-
-        data class Followed(val following: Following) : FollowState()
-
-        data class Unfollowed(val following: Following) : FollowState()
-    }
-
     private fun updateScreenState(friendsState: FriendsState) {
         val currentState = savedStateHandle[SCREEN_STATE_KEY] ?: FriendsScreenState()
         val newState = when (friendsState) {
             is FriendsState.Loading ->
                 currentState.copy(isLoading = true)
-
             is FriendsState.Loaded ->
                 currentState.copy(isLoading = false, friends = friendsState.friends)
-
             is FriendsState.BackendError ->
                 currentState.copy(isLoading = false, error = R.string.fetchingFriendsError)
-
             is FriendsState.Offline ->
                 currentState.copy(isLoading = false, error = R.string.offlineError)
         }

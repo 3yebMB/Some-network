@@ -9,7 +9,7 @@ class UserBuilder {
     private var userId = Uuid.random().toString()
 
     private var userEmail = "user@somenet.dev"
-    private var aboutUser = "About User ($userId)"
+    private var aboutUser = "About User"
 
     companion object {
         fun aUser(): UserBuilder {

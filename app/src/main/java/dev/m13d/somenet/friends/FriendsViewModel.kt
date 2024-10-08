@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import dev.m13d.somenet.R
 import dev.m13d.somenet.app.CoroutineDispatchers
 import dev.m13d.somenet.domain.friends.FriendsRepository
+import dev.m13d.somenet.domain.user.Friend
+import dev.m13d.somenet.domain.user.User
 import dev.m13d.somenet.friends.states.FriendsScreenState
 import dev.m13d.somenet.friends.states.FriendsState
 import kotlinx.coroutines.launch
@@ -33,6 +35,12 @@ class FriendsViewModel(
             }
             updateScreenState(result)
         }
+    }
+
+    fun toggleFollowing(userId: String, followeeId: String) {
+        val user = User(followeeId, "user@somenet.dev", "About User")
+        val newState = FriendsScreenState(friends = listOf(Friend(user, isFollowee = true)))
+        savedStateHandle[SCREEN_STATE_KEY] = newState
     }
 
     private fun updateScreenState(friendsState: FriendsState) {

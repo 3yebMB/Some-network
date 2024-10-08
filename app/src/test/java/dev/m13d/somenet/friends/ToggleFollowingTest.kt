@@ -19,15 +19,15 @@ import kotlin.uuid.ExperimentalUuidApi
 @ExtendWith(InstantTaskExecutorExtension::class)
 class ToggleFollowingTest {
 
+    private val tom = aUser().withId("tomId").build()
+    private val jerry = aUser().withId("jerryId").build()
+    private val users = mutableMapOf(":irrelevant:" to mutableListOf(tom, jerry))
+
+    private val dispatchers = TestDispatchers()
+    private val savedStateHandle = SavedStateHandle()
+
     @Test
     fun follow() {
-        val tom = aUser().withId("tomId").build()
-        val jerry = aUser().withId("jerryId").build()
-        val users = mutableMapOf(":irrelevant:" to mutableListOf(tom, jerry))
-
-        val dispatchers = TestDispatchers()
-        val savedStateHandle = SavedStateHandle()
-
         val repository = FriendsRepository(InMemoryUserCatalog(users))
         val viewModel = FriendsViewModel(repository, dispatchers, savedStateHandle).apply {
             loadFriends(tom.id)

@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import dev.m13d.somenet.R
 import dev.m13d.somenet.app.CoroutineDispatchers
 import dev.m13d.somenet.domain.friends.FriendsRepository
-import dev.m13d.somenet.domain.user.Following
 import dev.m13d.somenet.friends.states.FollowState
 import dev.m13d.somenet.friends.states.FriendsScreenState
 import dev.m13d.somenet.friends.states.FriendsState
@@ -37,17 +36,10 @@ class FriendsViewModel(
     }
 
     fun toggleFollowing(userId: String, followeeId: String) {
-        when(val result = updateFollowing(userId, followeeId)) {
+        when(val result = friendsRepository.updateFollowing(userId, followeeId)) {
             is FollowState.Followed -> updateFollowingState(result.following.followedId, true)
             is FollowState.Unfollowed -> updateFollowingState(result.following.followedId, false)
         }
-    }
-
-    private fun updateFollowing(userId: String, followeeId: String): FollowState {
-        return if (userId == "tomId")
-            FollowState.Followed(Following(userId, followeeId))
-        else
-            FollowState.Unfollowed(Following(userId, followeeId))
     }
 
     private fun updateFollowingState(followedId: String, isFollowee: Boolean) {

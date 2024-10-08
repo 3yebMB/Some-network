@@ -2,7 +2,9 @@ package dev.m13d.somenet.domain.friends
 
 import dev.m13d.somenet.domain.exceptions.BackendException
 import dev.m13d.somenet.domain.exceptions.ConnectionUnavailableException
+import dev.m13d.somenet.domain.user.Following
 import dev.m13d.somenet.domain.user.UserCatalog
+import dev.m13d.somenet.friends.states.FollowState
 import dev.m13d.somenet.friends.states.FriendsState
 
 class FriendsRepository(
@@ -17,5 +19,12 @@ class FriendsRepository(
         } catch (offlineException: ConnectionUnavailableException) {
             FriendsState.Offline
         }
+    }
+
+    fun updateFollowing(userId: String, followeeId: String): FollowState {
+        return if (userId == "tomId")
+            FollowState.Followed(Following(userId, followeeId))
+        else
+            FollowState.Unfollowed(Following(userId, followeeId))
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.m13d.somenet.R
 import dev.m13d.somenet.app.CoroutineDispatchers
 import dev.m13d.somenet.domain.friends.FriendsRepository
 import dev.m13d.somenet.friends.states.FriendsScreenState
@@ -29,10 +30,27 @@ class FriendsViewModel(
     fun loadFriends(userId: String) {
         viewModelScope.launch {
             _friendsState.value = FriendsState.Loading
-            _friendsState.value = withContext(dispatchers.background) {
+            updateScreenState(FriendsState.Loading)
+            val result = withContext(dispatchers.background) {
                 friendsRepository.loadFriendsFor(userId)
             }
-            savedStateHandle[SCREEN_STATE_KEY] = FriendsScreenState()
+            _friendsState.value = result
+            updateScreenState(result)
         }
+    }
+
+    private fun updateScreenState(friendsState: FriendsState) {
+        val currentState = savedStateHandle[SCREEN_STATE_KEY] ?: FriendsScreenState()
+        val newState = when(friendsState) {
+            is FriendsState.Loading ->
+                currentState.copy(isLoading = true)
+            is FriendsState.Loaded ->
+                currentState.copy(isLoading = false, friends = friendsState.friends)
+            is FriendsState.BackendError ->
+                currentState.copy(isLoading = false, error = R.string.fetchingFriendsError)
+            is FriendsState.Offline ->
+                currentState.copy(isLoading = false, error = R.string.offlineError)
+        }
+        savedStateHandle[SCREEN_STATE_KEY] = newState
     }
 }

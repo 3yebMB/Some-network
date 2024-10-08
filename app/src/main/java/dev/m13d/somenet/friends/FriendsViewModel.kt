@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dev.m13d.somenet.R
 import dev.m13d.somenet.app.CoroutineDispatchers
 import dev.m13d.somenet.domain.friends.FriendsRepository
+import dev.m13d.somenet.domain.user.Following
 import dev.m13d.somenet.friends.states.FriendsScreenState
 import dev.m13d.somenet.friends.states.FriendsState
 import kotlinx.coroutines.launch
@@ -35,15 +36,35 @@ class FriendsViewModel(
     }
 
     fun toggleFollowing(userId: String, followeeId: String) {
+        when(val result = updateFollowing(userId, followeeId)) {
+            is FollowState.Followed -> updateFollowingState(result.following.followedId, true)
+            is FollowState.Unfollowed -> updateFollowingState(result.following.followedId, false)
+        }
+    }
+
+    private fun updateFollowing(userId: String, followeeId: String): FollowState {
+        return if (userId == "tomId")
+            FollowState.Followed(Following(userId, followeeId))
+        else
+            FollowState.Unfollowed(Following(userId, followeeId))
+    }
+
+    private fun updateFollowingState(followedId: String, isFollowee: Boolean) {
         val currentState = savedStateHandle[SCREEN_STATE_KEY] ?: FriendsScreenState()
-        val index = currentState.friends.indexOfFirst { it.user.id == followeeId }
+        val index = currentState.friends.indexOfFirst { it.user.id == followedId }
         val matchingUser = currentState.friends[index]
-        val isFollowee = userId == "tomId"
         val updatedFriends = currentState.friends.toMutableList().apply {
             set(index, matchingUser.copy(isFollowee = isFollowee))
         }
         val updatedState = currentState.copy(friends = updatedFriends)
         savedStateHandle[SCREEN_STATE_KEY] = updatedState
+    }
+
+    sealed class FollowState {
+
+        data class Followed(val following: Following) : FollowState()
+
+        data class Unfollowed(val following: Following) : FollowState()
     }
 
     private fun updateScreenState(friendsState: FriendsState) {

@@ -24,17 +24,13 @@ class FriendsViewModel(
     }
 
     val screenState: LiveData<FriendsScreenState> = savedStateHandle.getLiveData(SCREEN_STATE_KEY)
-    private val _friendsState = MutableLiveData<FriendsState>()
-    val friendsState: LiveData<FriendsState> = _friendsState
 
     fun loadFriends(userId: String) {
         viewModelScope.launch {
-            _friendsState.value = FriendsState.Loading
             updateScreenState(FriendsState.Loading)
             val result = withContext(dispatchers.background) {
                 friendsRepository.loadFriendsFor(userId)
             }
-            _friendsState.value = result
             updateScreenState(result)
         }
     }

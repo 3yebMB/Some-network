@@ -44,27 +44,10 @@ import org.koin.androidx.compose.koinViewModel
 fun FriendsScreen(userId: String) {
 
     val friendsViewModel = koinViewModel<FriendsViewModel>()
-    if (friendsViewModel.friendsState.value == null) {
+    if (friendsViewModel.screenState.value == null) {
         friendsViewModel.loadFriends(userId)
     }
-    var screenState by remember { mutableStateOf(FriendsScreenState()) }
-    val friendsState = friendsViewModel.friendsState.observeAsState().value
-
-    when (friendsState) {
-        is FriendsState.Loading -> screenState = screenState.copy(
-            isLoading = true
-        )
-        is FriendsState.Loaded -> screenState = screenState.copy(
-            isLoading = false, friends = friendsState.friends
-        )
-        is FriendsState.BackendError -> screenState = screenState.copy(
-            isLoading = false, error = R.string.fetchingFriendsError
-        )
-        is FriendsState.Offline -> screenState = screenState.copy(
-            isLoading = false, error = R.string.offlineError
-        )
-        null -> {}
-    }
+    val screenState = friendsViewModel.screenState.observeAsState().value ?: FriendsScreenState()
 
     Box {
         Column(

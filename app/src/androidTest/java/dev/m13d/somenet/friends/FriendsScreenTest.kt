@@ -37,11 +37,11 @@ class FriendsScreenTest {
 
     @Test
     fun showLoadingIndicator() {
-        val loadFriend: suspend () -> List<Friend> = {
+        val friendsLoad: suspend () -> List<Friend> = {
             delay(1500L)
             listOf(friendTom, friendJerry)
         }
-        replaceUserCatalogWith(DelayingUserCatalog(loadFriend = loadFriend))
+        replaceUserCatalogWith(ControllableUserCatalog(friendsLoad = friendsLoad))
 
         launchFriends(rule) {
             //no operations
@@ -50,9 +50,9 @@ class FriendsScreenTest {
         }
     }
 
-    private class DelayingUserCatalog(
-        private val followedBy: suspend () -> List<String> = { emptyList() },
-        private val loadFriend: suspend () -> List<Friend> = { emptyList() },
+    private class ControllableUserCatalog(
+        private val followedByLoad: suspend () -> List<String> = { emptyList() },
+        private val friendsLoad: suspend () -> List<Friend> = { emptyList() },
     ) : UserCatalog {
 
         override suspend fun createUser(email: String, password: String, about: String): User {
@@ -60,11 +60,11 @@ class FriendsScreenTest {
         }
 
         override suspend fun followedBy(userId: String): List<String> {
-            return followedBy()
+            return followedByLoad()
         }
 
         override suspend fun loadFriendsFor(userId: String): List<Friend> {
-            return loadFriend()
+            return friendsLoad()
         }
     }
 
@@ -93,8 +93,8 @@ class FriendsScreenTest {
 
     @Test
     fun showBackendError() {
-        val loadFriend: suspend () -> List<Friend> = { throw BackendException() }
-        replaceUserCatalogWith(DelayingUserCatalog(loadFriend = loadFriend))
+        val friendsLoad: suspend () -> List<Friend> = { throw BackendException() }
+        replaceUserCatalogWith(ControllableUserCatalog(friendsLoad = friendsLoad))
 
         launchFriends(rule) {
             //no operations
@@ -105,8 +105,8 @@ class FriendsScreenTest {
 
     @Test
     fun showOfflineError() {
-        val loadFriend: suspend () -> List<Friend> = { throw ConnectionUnavailableException() }
-        replaceUserCatalogWith(DelayingUserCatalog(loadFriend = loadFriend))
+        val friendsLoad: suspend () -> List<Friend> = { throw ConnectionUnavailableException() }
+        replaceUserCatalogWith(ControllableUserCatalog(friendsLoad = friendsLoad))
 
         launchFriends(rule) {
             //no operations

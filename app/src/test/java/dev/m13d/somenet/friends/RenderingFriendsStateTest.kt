@@ -1,5 +1,6 @@
 package dev.m13d.somenet.friends
 
+import androidx.lifecycle.SavedStateHandle
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.friends.FriendsRepository
@@ -33,7 +34,8 @@ class RenderingFriendsStateTest {
 
     private val viewModel = FriendsViewModel(
         FriendsRepository(userCatalog),
-        TestDispatchers()
+        TestDispatchers(),
+        SavedStateHandle(),
     )
 
     @Test

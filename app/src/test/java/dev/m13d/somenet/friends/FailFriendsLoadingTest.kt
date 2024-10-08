@@ -1,5 +1,6 @@
 package dev.m13d.somenet.friends
 
+import androidx.lifecycle.SavedStateHandle
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.friends.FriendsRepository
@@ -19,7 +20,8 @@ class FailFriendsLoadingTest {
     fun backendError() {
         val viewModel = FriendsViewModel(
             FriendsRepository(UnavailableUserCatalog()),
-            TestDispatchers()
+            TestDispatchers(),
+            SavedStateHandle(),
         )
 
         viewModel.loadFriends(":irrelevant:")
@@ -31,7 +33,8 @@ class FailFriendsLoadingTest {
     fun offlineError() {
         val viewModel = FriendsViewModel(
             FriendsRepository(OfflineUserCatalog()),
-            TestDispatchers()
+            TestDispatchers(),
+            SavedStateHandle(),
         )
 
         viewModel.loadFriends(":irrelevant:")

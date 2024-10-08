@@ -56,6 +56,7 @@ val applicationModule = module {
         FriendsViewModel(
             friendsRepository = get(),
             dispatchers = get(),
+            savedStateHandle = get(),
         )
     }
 }

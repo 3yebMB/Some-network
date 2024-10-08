@@ -7,6 +7,7 @@ import dev.m13d.somenet.domain.friends.FriendsRepository
 import dev.m13d.somenet.domain.user.Following
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
+import dev.m13d.somenet.friends.states.FriendsScreenState
 import dev.m13d.somenet.friends.states.FriendsState
 import dev.m13d.somenet.infrastructure.builder.UserBuilder.Companion.aUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -40,14 +41,14 @@ class RenderingFriendsStateTest {
 
     @Test
     fun friendsStatesExposedToObserver() {
-        val deliveredState = mutableListOf<FriendsState>()
+        val loading = FriendsScreenState(isLoading = true)
+        val loaded = FriendsScreenState(isLoading = false, friends = listOf(friendTom, friendAnna))
+        val deliveredState = mutableListOf<FriendsScreenState>()
 
-        viewModel.friendsState.observeForever { deliveredState.add(it) }
+        viewModel.screenState.observeForever { deliveredState.add(it) }
+
         viewModel.loadFriends(mihaly.id)
 
-        assertEquals(
-            listOf(FriendsState.Loading, FriendsState.Loaded(listOf(friendTom, friendAnna))),
-            deliveredState
-        )
+        assertEquals(listOf(loading, loaded), deliveredState)
     }
 }

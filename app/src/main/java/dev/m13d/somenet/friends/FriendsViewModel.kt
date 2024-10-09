@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.m13d.somenet.R
 import dev.m13d.somenet.app.CoroutineDispatchers
+import dev.m13d.somenet.domain.exceptions.BackendException
 import dev.m13d.somenet.domain.friends.FriendsRepository
 import dev.m13d.somenet.friends.states.FollowState
 import dev.m13d.somenet.friends.states.FriendsScreenState
@@ -39,7 +40,16 @@ class FriendsViewModel(
         viewModelScope.launch {
             updateListOfFriendships(followeeId)
             val updateFollowing = withContext(dispatchers.background) {
-                friendsRepository.updateFollowing(userId, followeeId)
+                try {
+                    friendsRepository.updateFollowing(userId, followeeId)
+                } catch (backendException: BackendException) {
+                    val currentState = savedStateHandle[SCREEN_STATE_KEY] ?: FriendsScreenState()
+                    val newState = currentState.copy(
+                        error = R.string.errorFollowingFriend,
+                        currentlyUpdatingFriends = currentState.currentlyUpdatingFriends - listOf(followeeId)
+                    )
+                    savedStateHandle[SCREEN_STATE_KEY] = newState
+                }
             }
             when (updateFollowing) {
                 is FollowState.Followed ->

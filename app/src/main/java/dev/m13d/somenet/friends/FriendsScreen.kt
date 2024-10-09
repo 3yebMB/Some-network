@@ -151,6 +151,7 @@ private fun FriendItem(
                     contentDescription =
                         if (friend.isFollowee) unfollowContentDescription else followContentDescription
                 },
+                enabled = !isTogglingFriendship,
                 onClick = { toggleFollowingFor(friend.user.id) }
             ) {
                 if (isTogglingFriendship) {

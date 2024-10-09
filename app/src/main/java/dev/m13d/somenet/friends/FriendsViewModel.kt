@@ -50,6 +50,9 @@ class FriendsViewModel(
 
                 is FollowState.BackendError ->
                     errorUpdatingFollowing(followeeId, R.string.errorFollowingFriend)
+
+                is FollowState.Offline ->
+                    errorUpdatingFollowing(followeeId, R.string.offlineError)
             }
         }
     }

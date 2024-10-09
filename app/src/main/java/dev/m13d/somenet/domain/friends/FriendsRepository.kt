@@ -29,6 +29,8 @@ class FriendsRepository(
                 FollowState.Unfollowed(toggleResult.following)
         } catch (backendException: BackendException) {
             FollowState.BackendError
+        } catch (offlineException: ConnectionUnavailableException) {
+            FollowState.Offline
         }
     }
 }

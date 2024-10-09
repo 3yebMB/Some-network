@@ -109,6 +109,18 @@ class FriendsScreenTest {
         }
     }
 
+    @Test
+    fun unfollowAFriend() {
+        replaceUserCatalogWith(InMemoryUserCatalog(users))
+
+        launchFriends(rule) {
+            tapOnFollowFriendFor(friendJerry)
+            tapOnUnfollowFriendFor(friendJerry)
+        } verify {
+            followingIsRemovedFor(friendJerry)
+        }
+    }
+
     @After
     fun tearDown() {
         replaceUserCatalogWith(InMemoryUserCatalog())

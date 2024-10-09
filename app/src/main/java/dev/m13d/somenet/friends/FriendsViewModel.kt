@@ -43,12 +43,7 @@ class FriendsViewModel(
                 try {
                     friendsRepository.updateFollowing(userId, followeeId)
                 } catch (backendException: BackendException) {
-                    val currentState = savedStateHandle[SCREEN_STATE_KEY] ?: FriendsScreenState()
-                    val newState = currentState.copy(
-                        error = R.string.errorFollowingFriend,
-                        currentlyUpdatingFriends = currentState.currentlyUpdatingFriends - listOf(followeeId)
-                    )
-                    savedStateHandle[SCREEN_STATE_KEY] = newState
+                    errorUpdatingFollowing(followeeId)
                 }
             }
             when (updateFollowing) {
@@ -59,6 +54,15 @@ class FriendsViewModel(
                     updateFollowingState(updateFollowing.following.followedId, false)
             }
         }
+    }
+
+    private fun errorUpdatingFollowing(followeeId: String) {
+        val currentState = savedStateHandle[SCREEN_STATE_KEY] ?: FriendsScreenState()
+        val newState = currentState.copy(
+            error = R.string.errorFollowingFriend,
+            currentlyUpdatingFriends = currentState.currentlyUpdatingFriends - listOf(followeeId)
+        )
+        savedStateHandle[SCREEN_STATE_KEY] = newState
     }
 
     private fun updateListOfFriendships(followeeId: String) {

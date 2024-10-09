@@ -9,5 +9,6 @@ import kotlinx.parcelize.Parcelize
 data class FriendsScreenState(
     val isLoading: Boolean = false,
     val friends: List<Friend> = emptyList(),
+    val currentlyUpdatingFriends: List<String> = emptyList(),
     @StringRes val error: Int = 0,
 ) : Parcelable

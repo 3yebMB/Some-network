@@ -31,13 +31,13 @@ class FriendsRobot(
             .performClick()
     }
 
-    fun tapOnFollowFriendFor(friend: Friend) {
+    fun tapOnFollowFor(friend: Friend) {
         val followFriend = rule.activity.getString(R.string.followFriend, friend.user.id)
         rule.onNodeWithContentDescription(followFriend)
             .performClick()
     }
 
-    fun tapOnUnfollowFriendFor(friend: Friend) {
+    fun tapOnUnfollowFor(friend: Friend) {
         val unfollowFriend = rule.activity.getString(R.string.unfollowFriend, friend.user.id)
         rule.onNodeWithContentDescription(unfollowFriend)
             .performClick()
@@ -107,6 +107,12 @@ class FriendsVerification(
         val follow = rule.activity.getString(R.string.follow)
         val followFriend = rule.activity.getString(R.string.followFriend, friend.user.id)
         rule.onNode(hasText(follow).and(hasContentDescription(followFriend)))
+            .assertIsDisplayed()
+    }
+
+    fun loadingIndicatorIsShownWhileTogglingFriendshipFor(friend: Friend) {
+        val updatingFriendship = rule.activity.getString(R.string.updatingFriendship, friend.user.id)
+        rule.onNodeWithContentDescription(updatingFriendship)
             .assertIsDisplayed()
     }
 }

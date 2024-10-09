@@ -9,6 +9,9 @@ class ControllableUserCatalog(
     },
     private val followedByLoad: suspend () -> List<String> = { emptyList() },
     private val friendsLoad: suspend () -> List<Friend> = { emptyList() },
+    private val followToggle: suspend (String, String) -> ToggleFollowing = { userId, followingId ->
+        ToggleFollowing(Following(userId, followingId), true)
+    },
 ) : UserCatalog {
 
     override suspend fun createUser(email: String, password: String, about: String): User {
@@ -23,7 +26,7 @@ class ControllableUserCatalog(
         return friendsLoad()
     }
 
-    override fun toggleFollowing(userId: String, followeeId: String): ToggleFollowing {
-        TODO("Not yet implemented")
+    override suspend fun toggleFollowing(userId: String, followeeId: String): ToggleFollowing {
+        return followToggle(userId, followeeId)
     }
 }

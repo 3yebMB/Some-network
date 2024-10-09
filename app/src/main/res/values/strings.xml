@@ -26,4 +26,6 @@
     <string name="followFriend">Follow to %1$s</string>
     <string name="unfollow">Unfollow</string>
     <string name="unfollowFriend">Unfollow %1$s</string>
+    <string name="followingFriend">Following %1$s</string>
+    <string name="updatingFriendship">Updating friendship for %1$s</string>
 </resources>

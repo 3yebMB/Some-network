@@ -23,4 +23,7 @@
     <string name="emptyFriendsMessage">There are no friends available yet</string>
     <string name="follow">Follow</string>
     <string name="fetchingFriendsError">Failed fetching friends</string>
+    <string name="followFriend">Follow to %1$s</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="unfollowFriend">Unfollow %1$s</string>
 </resources>

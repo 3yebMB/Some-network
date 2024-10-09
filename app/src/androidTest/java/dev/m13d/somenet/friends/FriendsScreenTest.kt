@@ -98,6 +98,17 @@ class FriendsScreenTest {
         }
     }
 
+    @Test
+    fun followAFriend() {
+        replaceUserCatalogWith(InMemoryUserCatalog(users))
+
+        launchFriends(rule) {
+            tapOnFollowFriendFor(friendTom)
+        } verify {
+            followingIsAddedFor(friendTom)
+        }
+    }
+
     @After
     fun tearDown() {
         replaceUserCatalogWith(InMemoryUserCatalog())

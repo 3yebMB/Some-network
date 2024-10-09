@@ -11,17 +11,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,7 +30,6 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import dev.m13d.somenet.R
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.friends.states.FriendsScreenState
-import dev.m13d.somenet.friends.states.FriendsState
 import dev.m13d.somenet.ui.component.InfoMessage
 import dev.m13d.somenet.ui.component.ScreenTitle
 import org.koin.androidx.compose.koinViewModel
@@ -49,9 +43,23 @@ fun FriendsScreen(userId: String) {
     }
     val screenState = friendsViewModel.screenState.observeAsState().value ?: FriendsScreenState()
 
+    FriendsScreenContent(
+        screenState = screenState,
+        onRefresh = { friendsViewModel.loadFriends(userId) },
+        toggleFollowingFor = { friendsViewModel.toggleFollowing(userId, it) }
+    )
+}
+
+@Composable
+private fun FriendsScreenContent(
+    modifier: Modifier = Modifier,
+    screenState: FriendsScreenState,
+    onRefresh: () -> Unit,
+    toggleFollowingFor: (String) -> Unit,
+) {
     Box {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
@@ -60,7 +68,8 @@ fun FriendsScreen(userId: String) {
             FriendsList(
                 isRefreshing = screenState.isLoading,
                 friends = screenState.friends,
-                onRefresh = { friendsViewModel.loadFriends(userId) }
+                onRefresh = { onRefresh() },
+                toggleFollowingFor = { toggleFollowingFor(it) }
             )
         }
         InfoMessage(stringResource = screenState.error)
@@ -73,6 +82,7 @@ private fun FriendsList(
     friends: List<Friend>,
     modifier: Modifier = Modifier,
     onRefresh: () -> Unit,
+    toggleFollowingFor: (String) -> Unit,
 ) {
     val description = stringResource(R.string.loading)
     SwipeRefresh(
@@ -87,10 +97,12 @@ private fun FriendsList(
                 textAlign = TextAlign.Center,
             )
         } else {
-            val scrollState = rememberScrollState()
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(friends) { friend ->
-                    FriendItem(friend)
+                    FriendItem(
+                        friend = friend,
+                        toggleFollowingFor = { toggleFollowingFor(it) }
+                    )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }
@@ -100,8 +112,9 @@ private fun FriendsList(
 
 @Composable
 private fun FriendItem(
-    friend: Friend,
     modifier: Modifier = Modifier,
+    friend: Friend,
+    toggleFollowingFor: (String) -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -124,8 +137,17 @@ private fun FriendItem(
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = friend.user.about)
             }
-            OutlinedButton(onClick = {}) {
-                Text(text = stringResource(R.string.follow))
+            val followContentDescription = stringResource(R.string.followFriend, friend.user.id)
+            val unfollowContentDescription = stringResource(R.string.unfollowFriend, friend.user.id)
+            OutlinedButton(
+                modifier = Modifier.semantics {
+                    contentDescription =
+                        if (friend.isFollowee) unfollowContentDescription else followContentDescription
+                },
+                onClick = { toggleFollowingFor(friend.user.id) }
+            ) {
+                val resource = if (friend.isFollowee) R.string.unfollow else R.string.follow
+                Text(text = stringResource(resource))
             }
         }
     }

@@ -1,6 +1,8 @@
 package dev.m13d.somenet.friends
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -27,6 +29,11 @@ class FriendsRobot(
         val friends = rule.activity.getString(R.string.friends)
         rule.onNodeWithText(friends)
             .performClick()
+    }
+
+    fun tapOnFollowFriendFor(friend: Friend) {
+        val followFriend = rule.activity.getString(R.string.followFriend, friend.user.id)
+        rule.onNodeWithContentDescription(followFriend)
     }
 
     infix fun verify(
@@ -79,6 +86,13 @@ class FriendsVerification(
     fun offlineErrorIsDisplayed() {
         val errorMessage = rule.activity.getString(R.string.offlineError)
         rule.onNodeWithText(errorMessage)
+            .assertIsDisplayed()
+    }
+
+    fun followingIsAddedFor(friend: Friend) {
+        val unfollow = rule.activity.getString(R.string.unfollow)
+        val unfollowFriend = rule.activity.getString(R.string.unfollowFriend, friend.user.id)
+        rule.onNode(hasText(unfollow).and(hasContentDescription(unfollowFriend)))
             .assertIsDisplayed()
     }
 }

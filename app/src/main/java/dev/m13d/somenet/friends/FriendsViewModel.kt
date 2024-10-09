@@ -49,15 +49,15 @@ class FriendsViewModel(
                     updateFollowingState(updateFollowing.following.followedId, false)
 
                 is FollowState.BackendError ->
-                    errorUpdatingFollowing(followeeId)
+                    errorUpdatingFollowing(followeeId, R.string.errorFollowingFriend)
             }
         }
     }
 
-    private fun errorUpdatingFollowing(followeeId: String) {
+    private fun errorUpdatingFollowing(followeeId: String, errorResource: Int) {
         val currentState = savedStateHandle[SCREEN_STATE_KEY] ?: FriendsScreenState()
         val newState = currentState.copy(
-            error = R.string.errorFollowingFriend,
+            error = errorResource,
             currentlyUpdatingFriends = currentState.currentlyUpdatingFriends - listOf(followeeId)
         )
         savedStateHandle[SCREEN_STATE_KEY] = newState

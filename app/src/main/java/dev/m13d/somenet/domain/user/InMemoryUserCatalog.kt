@@ -38,7 +38,7 @@ class InMemoryUserCatalog(
             .map { user -> Friend(user, user.id in friendsFollowedByUser) }
     }
 
-    override fun toggleFollowing(userId: String, followeeId: String): ToggleFollowing {
+    override suspend fun toggleFollowing(userId: String, followeeId: String): ToggleFollowing {
         val following = Following(userId, followeeId)
         return if (followings.contains(following)) {
             followings.remove(following)

@@ -14,5 +14,5 @@ interface UserCatalog {
 
     suspend fun loadFriendsFor(userId: String): List<Friend>
 
-    fun toggleFollowing(userId: String, followeeId: String): ToggleFollowing
+    suspend fun toggleFollowing(userId: String, followeeId: String): ToggleFollowing
 }

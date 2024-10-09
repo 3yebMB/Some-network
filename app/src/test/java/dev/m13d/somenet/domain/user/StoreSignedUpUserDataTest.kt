@@ -33,7 +33,7 @@ class StoreSignedUpUserDataTest {
             TODO("Not yet implemented")
         }
 
-        override fun toggleFollowing(userId: String, followeeId: String): ToggleFollowing {
+        override suspend fun toggleFollowing(userId: String, followeeId: String): ToggleFollowing {
             TODO("Not yet implemented")
         }
     }

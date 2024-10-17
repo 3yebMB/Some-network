@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,8 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
 import dev.m13d.somenet.domain.post.Post
-import dev.m13d.somenet.timeline.states.TimelineScreenStateOld
-import dev.m13d.somenet.timeline.states.TimelineState
+import dev.m13d.somenet.timeline.states.TimelineScreenState
 import dev.m13d.somenet.ui.component.InfoMessage
 import dev.m13d.somenet.ui.component.LoadingBlock
 import dev.m13d.somenet.ui.component.ScreenTitle
@@ -46,24 +46,25 @@ fun TimelineScreen(
     onCreateNewPost: () -> Unit,
 ) {
     val timelineViewModel = koinViewModel<TimelineViewModel>()
-    val screenState by remember { mutableStateOf(TimelineScreenStateOld()) }
-    val timelineState by timelineViewModel.timelineState.observeAsState()
-    if (screenState.shouldLoadPostsFor(userId)) {
-        timelineViewModel.timelineFor(userId)
+    var loadedUserId by remember { mutableStateOf("") }
+    val screenState =
+        timelineViewModel.timelineScreenState.observeAsState().value ?: TimelineScreenState()
+
+    if (loadedUserId != userId) {
+        loadedUserId = userId
+        timelineViewModel.timelineFor(loadedUserId)
     }
+    TimelineScreenContent(
+        screenState = screenState,
+        onCreateNewPost = { onCreateNewPost() }
+    )
+}
 
-    when (timelineState) {
-        is TimelineState.Loading -> screenState.showLoading()
-        is TimelineState.Posts -> {
-            val posts = (timelineState as TimelineState.Posts).posts
-            screenState.updatePosts(posts)
-        }
-
-        is TimelineState.BackendError -> screenState.showInfoMessage(R.string.fetchingTimelineError)
-        is TimelineState.OfflineError -> screenState.showInfoMessage(R.string.offlineError)
-        else -> {}
-    }
-
+@Composable
+private fun TimelineScreenContent(
+    screenState: TimelineScreenState,
+    onCreateNewPost: () -> Unit,
+) {
     Box {
         Column(
             modifier = Modifier
@@ -91,9 +92,7 @@ fun TimelineScreen(
                 }
             }
         }
-        InfoMessage(
-            stringResource = screenState.infoMessage,
-        )
+        InfoMessage(stringResource = screenState.error)
         LoadingBlock(screenState.isLoading)
     }
 }

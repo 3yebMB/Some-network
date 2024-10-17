@@ -1,6 +1,5 @@
 package dev.m13d.somenet.postcomposer
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -27,38 +25,19 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
+import dev.m13d.somenet.postcomposer.states.CreateNewPostScreenStateOld
 import dev.m13d.somenet.postcomposer.states.CreatePostState
 import dev.m13d.somenet.ui.component.InfoMessage
 import dev.m13d.somenet.ui.component.LoadingBlock
 import dev.m13d.somenet.ui.component.ScreenTitle
 import org.koin.androidx.compose.koinViewModel
 
-class CreateNewPostScreenState {
-    var isPostSubmitted by mutableStateOf(false)
-    var currentMessage by mutableIntStateOf(0)
-    var isLoading by mutableStateOf(false)
-
-    fun setPostSubmitted() {
-        isPostSubmitted = true
-    }
-
-    fun showMessage(@StringRes message: Int) {
-        isLoading = false
-        if (currentMessage != message)
-            currentMessage = message
-    }
-
-    fun showLoading() {
-        isLoading = true
-    }
-}
-
 @Composable
 fun CreateNewPostScreen(
     onPostCreated: () -> Unit,
 ) {
     val createPostViewModel = koinViewModel<CreatePostViewModel>()
-    val screenState by remember { mutableStateOf(CreateNewPostScreenState()) }
+    val screenState by remember { mutableStateOf(CreateNewPostScreenStateOld()) }
     var postText by remember { mutableStateOf("") }
 
     val createPostState by createPostViewModel.postState.observeAsState()

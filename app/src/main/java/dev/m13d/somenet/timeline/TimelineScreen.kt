@@ -24,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,7 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
 import dev.m13d.somenet.domain.post.Post
-import dev.m13d.somenet.timeline.states.TimelineScreenState
+import dev.m13d.somenet.timeline.states.TimelineScreenStateOld
 import dev.m13d.somenet.timeline.states.TimelineState
 import dev.m13d.somenet.ui.component.InfoMessage
 import dev.m13d.somenet.ui.component.LoadingBlock
@@ -47,8 +46,7 @@ fun TimelineScreen(
     onCreateNewPost: () -> Unit,
 ) {
     val timelineViewModel = koinViewModel<TimelineViewModel>()
-    val coroutineScope = rememberCoroutineScope()
-    val screenState by remember { mutableStateOf(TimelineScreenState(coroutineScope)) }
+    val screenState by remember { mutableStateOf(TimelineScreenStateOld()) }
     val timelineState by timelineViewModel.timelineState.observeAsState()
     if (screenState.shouldLoadPostsFor(userId)) {
         timelineViewModel.timelineFor(userId)

@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package dev.m13d.somenet.friends
 
 import androidx.compose.foundation.border
@@ -16,12 +14,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,8 +44,10 @@ import org.koin.androidx.compose.koinViewModel
 fun FriendsScreen(userId: String) {
 
     val friendsViewModel = koinViewModel<FriendsViewModel>()
-    if (friendsViewModel.screenState.value == null) {
-        friendsViewModel.loadFriends(userId)
+    var loadedUserId by remember { mutableStateOf("") }
+    if (loadedUserId != userId) {
+        loadedUserId = userId
+        friendsViewModel.loadFriends(loadedUserId)
     }
     val screenState = friendsViewModel.screenState.observeAsState().value ?: FriendsScreenState()
 

@@ -1,11 +1,13 @@
 package dev.m13d.somenet.timeline
 
 import android.annotation.SuppressLint
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.m13d.somenet.R
 import dev.m13d.somenet.app.CoroutineDispatchers
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.timeline.TimelineRepository
@@ -42,9 +44,17 @@ class TimelineViewModel(
     }
 
     private fun updateScreenStateFor(timelineState: TimelineState) {
-        if (timelineState is TimelineState.Posts) {
-            setPosts(timelineState.posts)
+        when (timelineState) {
+            is TimelineState.Posts -> setPosts(timelineState.posts)
+            is TimelineState.BackendError -> setError(R.string.fetchingTimelineError)
+            is TimelineState.OfflineError -> setError(R.string.offlineError)
+            else -> {}
         }
+    }
+
+    private fun setError(@StringRes errorResource: Int) {
+        val screenState = currentScreenState()
+        updateScreenState(screenState.copy(error = errorResource))
     }
 
     private fun setPosts(posts: List<Post>) {

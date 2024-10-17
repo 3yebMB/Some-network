@@ -6,11 +6,13 @@ import dev.m13d.somenet.domain.post.OfflinePostCatalog
 import dev.m13d.somenet.domain.post.UnavailablePostCatalog
 import dev.m13d.somenet.domain.timeline.TimelineRepository
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
+import dev.m13d.somenet.timeline.states.TimelineScreenState
 import dev.m13d.somenet.timeline.states.TimelineState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.assertEquals
+import dev.m13d.somenet.R
 
 @ExperimentalCoroutinesApi
 @ExtendWith(InstantTaskExecutorExtension::class)
@@ -24,8 +26,13 @@ class FailTimelineLoadingTest {
             TimelineRepository(userCatalog, postCatalog),
             TestDispatchers(),
         )
+
         viewModel.timelineFor(":irrelevant:")
-        assertEquals(TimelineState.BackendError, viewModel.timelineState.value)
+
+        assertEquals(
+            TimelineScreenState(error = R.string.fetchingTimelineError),
+            viewModel.timelineScreenState.value
+        )
     }
 
     @Test
@@ -36,7 +43,12 @@ class FailTimelineLoadingTest {
             TimelineRepository(userCatalog, postCatalog),
             TestDispatchers(),
         )
+
         viewModel.timelineFor(":irrelevant:")
-        assertEquals(TimelineState.OfflineError, viewModel.timelineState.value)
+
+        assertEquals(
+            TimelineScreenState(error = R.string.offlineError),
+            viewModel.timelineScreenState.value
+        )
     }
 }

@@ -1,5 +1,6 @@
 package dev.m13d.somenet.signup
 
+import androidx.lifecycle.SavedStateHandle
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
@@ -7,6 +8,7 @@ import dev.m13d.somenet.domain.user.InMemoryUserDataStore
 import dev.m13d.somenet.domain.user.UserRepository
 import dev.m13d.somenet.domain.validation.CredentialsValidationResult
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
+import dev.m13d.somenet.signup.states.SignUpScreenState
 import dev.m13d.somenet.signup.states.SignUpState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -33,10 +35,12 @@ class CredentialsValidationTest {
         val viewModel = SignUpViewModel(
             RegexCredentialValidator(),
             UserRepository(InMemoryUserCatalog(), InMemoryUserDataStore()),
+            SavedStateHandle(),
             TestDispatchers(),
         )
         viewModel.createAccount(email, ":password:", "about")
-        assertEquals(SignUpState.BadEmail, viewModel.signUpState.value)
+
+        assertEquals(SignUpScreenState(isBadEmail = true), viewModel.screenState.value)
     }
 
     @ParameterizedTest
@@ -55,16 +59,19 @@ class CredentialsValidationTest {
         val viewModel = SignUpViewModel(
             RegexCredentialValidator(),
             UserRepository(InMemoryUserCatalog(), InMemoryUserDataStore()),
+            SavedStateHandle(),
             TestDispatchers(),
         )
         viewModel.createAccount("michael@somenet.dev", password, ":about:")
-        assertEquals(SignUpState.BadPassword, viewModel.signUpState.value)
+
+        assertEquals(SignUpScreenState(isBadPassword = true), viewModel.screenState.value)
     }
 
     @Test
     fun validCredentials() {
         val validator = RegexCredentialValidator()
         val result = validator.validate("johnsmith@somenet.dev", "Q&ZKRmw1")
+
         assertEquals(CredentialsValidationResult.Valid, result)
     }
 }

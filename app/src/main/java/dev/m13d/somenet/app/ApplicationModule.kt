@@ -34,6 +34,7 @@ val applicationModule = module {
         SignUpViewModel(
             credentialValidator = get(),
             userRepository = get(),
+            savedStateHandle = get(),
             dispatchers = get(),
         )
     }

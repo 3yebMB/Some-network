@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,9 +21,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -38,20 +44,31 @@ fun SignUpScreen(
     onSignedUp: (String) -> Unit,
 ) {
     val signUpViewModel = koinViewModel<SignUpViewModel>()
-    val screenState by remember { mutableStateOf(SignUpScreenState()) }
-    val signUpState by signUpViewModel.signUpState.observeAsState()
+    var signedUpUser by remember { mutableStateOf("") }
+    val signUpScreenState = signUpViewModel.screenState.observeAsState().value ?: SignUpScreenState()
 
-    when (signUpState) {
-        is SignUpState.Loading -> screenState.toggleLoading()
-        is SignUpState.SignedUp -> onSignedUp((signUpState as SignUpState.SignedUp).user.id)
-        is SignUpState.BadEmail -> screenState.showBadEmail()
-        is SignUpState.BadPassword -> screenState.showBadPassword()
-        is SignUpState.DuplicateAccount -> screenState.toggleInfoMessage(R.string.duplicateAccountError)
-        is SignUpState.BackendError -> screenState.toggleInfoMessage(R.string.createAccountError)
-        is SignUpState.Offline -> screenState.toggleInfoMessage(R.string.offlineError)
-        else -> {}
+    if (signUpScreenState.signedUpUserId != signedUpUser) {
+        signedUpUser = signUpScreenState.signedUpUserId
+        onSignedUp(signedUpUser)
+    } else {
+        SignUpScreenContent(
+            screenState = signUpScreenState,
+            onEmailChange = signUpViewModel::updateEmail,
+            onPasswordChange = signUpViewModel::updatePassword,
+            onAboutChange = signUpViewModel::updateAbout,
+            onSignUp = signUpViewModel::createAccount
+        )
     }
+}
 
+@Composable
+private fun SignUpScreenContent(
+    screenState: SignUpScreenState,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onAboutChange: (String) -> Unit,
+    onSignUp: (email: String, password: String, about: String) -> Unit
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -59,52 +76,52 @@ fun SignUpScreen(
                 .padding(16.dp)
         ) {
             ScreenTitle(R.string.createAnAccount)
-            Spacer(Modifier.height(8.dp))
-            LoginField(
+            Spacer(modifier = Modifier.height(16.dp))
+            val passwordFocusRequester = FocusRequester()
+            val aboutFocusRequester = FocusRequester()
+            EmailField(
                 value = screenState.email,
-                isError = screenState.showBadEmail,
-                onValueChange = { screenState.email = it },
+                isError = screenState.isBadEmail,
+                onValueChange = { onEmailChange(it) },
+                onNextClicked = { passwordFocusRequester.requestFocus() }
             )
             PasswordField(
+                modifier = Modifier.focusRequester(passwordFocusRequester),
                 value = screenState.password,
-                isError = screenState.showBadPassword,
-                onValueChange = { screenState.password = it },
+                isError = screenState.isBadPassword,
+                onValueChange = { onPasswordChange(it) },
+                onNextClicked = { aboutFocusRequester.requestFocus() }
             )
-            Spacer(Modifier.height(8.dp))
             AboutField(
+                modifier = Modifier.focusRequester(aboutFocusRequester),
                 value = screenState.about,
-                onValueChange = { screenState.about = it },
+                onValueChange = { onAboutChange(it) },
+                onDoneClicked = { with(screenState) { onSignUp(email, password, about) } }
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    screenState.resetUiState()
-                    with(screenState) {
-                        signUpViewModel.createAccount(email, password, about)
-                    }
-                }
+                onClick = { with(screenState) { onSignUp(email, password, about) } }
             ) {
                 Text(text = stringResource(id = R.string.signUp))
             }
         }
-        InfoMessage(
-            stringResource = screenState.infoMessage,
-        )
+        InfoMessage(stringResource = screenState.error)
         LoadingBlock(screenState.isLoading)
     }
 }
 
 @Composable
-private fun LoginField(
+private fun EmailField(
     value: String,
     isError: Boolean,
     onValueChange: (String) -> Unit,
+    onNextClicked: () -> Unit
 ) {
     OutlinedTextField(
         modifier = Modifier
-            .testTag(stringResource(R.string.email))
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .testTag(stringResource(id = R.string.email)),
         value = value,
         isError = isError,
         label = {
@@ -112,48 +129,62 @@ private fun LoginField(
             Text(text = stringResource(id = resource))
         },
         onValueChange = onValueChange,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email,
+            imeAction = ImeAction.Next
+        ),
+        keyboardActions = KeyboardActions(onNext = { onNextClicked() })
     )
 }
 
 @Composable
 private fun PasswordField(
+    modifier: Modifier = Modifier,
     value: String,
     isError: Boolean,
     onValueChange: (String) -> Unit,
+    onNextClicked: () -> Unit
 ) {
-    var isPassVisible by remember { mutableStateOf(false) }
-    val visualTransformation = if (isPassVisible) {
+    var isVisible by remember { mutableStateOf(false) }
+    val visualTransformation = if (isVisible) {
         VisualTransformation.None
     } else {
         PasswordVisualTransformation()
     }
     OutlinedTextField(
-        modifier = Modifier
-            .testTag(stringResource(id = R.string.password))
-            .fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .testTag(stringResource(id = R.string.password)),
         value = value,
         isError = isError,
         trailingIcon = {
-            VisibilityToggle(isPassVisible) {
-                isPassVisible = !isPassVisible
+            VisibilityToggle(isVisible) {
+                isVisible = !isVisible
             }
         },
         visualTransformation = visualTransformation,
         label = {
             val resource = if (isError) R.string.badPassword else R.string.password
-            Text(text = stringResource(resource))
+            Text(text = stringResource(id = resource))
         },
         onValueChange = onValueChange,
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Next,
+            keyboardType = KeyboardType.Password
+        ),
+        keyboardActions = KeyboardActions(onNext = { onNextClicked() })
     )
 }
 
 @Composable
 private fun VisibilityToggle(
-    isPassVisible: Boolean,
-    onToggle: () -> Unit,
+    isVisible: Boolean,
+    onToggle: () -> Unit
 ) {
-    IconButton(onClick = { onToggle() }) {
-        val resource = if (isPassVisible) R.drawable.pass_visible else R.drawable.pass_invisible
+    IconButton(onClick = {
+        onToggle()
+    }) {
+        val resource = if (isVisible) R.drawable.pass_visible else R.drawable.pass_invisible
         Icon(
             painter = painterResource(id = resource),
             contentDescription = stringResource(id = R.string.passwordVisibilityToggle)
@@ -162,14 +193,22 @@ private fun VisibilityToggle(
 }
 
 @Composable
-private fun AboutField(
+fun AboutField(
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
+    onDoneClicked: () -> Unit
 ) {
     OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         value = value,
-        label = { Text(text = stringResource(id = R.string.about)) },
+        label = {
+            Text(text = stringResource(id = R.string.about))
+        },
         onValueChange = onValueChange,
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(onDone = { onDoneClicked() })
     )
 }

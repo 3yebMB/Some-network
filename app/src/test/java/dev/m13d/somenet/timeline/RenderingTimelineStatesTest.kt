@@ -5,6 +5,7 @@ import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.timeline.TimelineRepository
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
+import dev.m13d.somenet.timeline.states.TimelineScreenState
 import dev.m13d.somenet.timeline.states.TimelineState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Test
@@ -26,15 +27,15 @@ class RenderingTimelineStatesTest {
 
     @Test
     fun timelineStatesExposedToObserver() {
-        val renderedStates = mutableListOf<TimelineState>()
+        val renderedStates = mutableListOf<TimelineScreenState>()
 
-        viewModel.timelineState.observeForever { renderedStates.add(it) }
+        viewModel.timelineScreenState.observeForever { renderedStates.add(it) }
         viewModel.timelineFor(":irrelevant:")
 
         assertEquals(
             listOf(
-                TimelineState.Loading,
-                TimelineState.Posts(emptyList())
+                TimelineScreenState(isLoading = true),
+                TimelineScreenState(posts = emptyList())
             ),
             renderedStates
         )

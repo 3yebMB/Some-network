@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.m13d.somenet.app.CoroutineDispatchers
+import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.timeline.TimelineRepository
 import dev.m13d.somenet.timeline.states.TimelineScreenState
 import dev.m13d.somenet.timeline.states.TimelineState
@@ -32,9 +33,30 @@ class TimelineViewModel(
     fun timelineFor(userId: String) {
         viewModelScope.launch {
             _timelineState.value = TimelineState.Loading
-            _timelineState.value = withContext(dispatchers.background) {
+            val result = withContext(dispatchers.background) {
                 timelineRepository.getTimelineFor(userId)
             }
+            _timelineState.value = result
+            updateScreenStateFor(result)
         }
+    }
+
+    private fun updateScreenStateFor(timelineState: TimelineState) {
+        if (timelineState is TimelineState.Posts) {
+            setPosts(timelineState.posts)
+        }
+    }
+
+    private fun setPosts(posts: List<Post>) {
+        val screenState = currentScreenState()
+        updateScreenState(screenState.copy(posts = posts))
+    }
+
+    private fun currentScreenState(): TimelineScreenState {
+        return savedStateHandle[SCREEN_STATE_KEY] ?: TimelineScreenState()
+    }
+
+    private fun updateScreenState(newState: TimelineScreenState) {
+        savedStateHandle[SCREEN_STATE_KEY] = newState
     }
 }

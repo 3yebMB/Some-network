@@ -25,21 +25,16 @@ class TimelineViewModel(
         private const val SCREEN_STATE_KEY = "timelineScreenState"
     }
 
-    private var _timelineState = MutableLiveData<TimelineState>()
-    val timelineState: LiveData<TimelineState> = _timelineState
-
     private val savedStateHandle = SavedStateHandle()
     val timelineScreenState: LiveData<TimelineScreenState> = savedStateHandle.getLiveData(SCREEN_STATE_KEY)
 
     @SuppressLint("NullSafeMutableLiveData")
     fun timelineFor(userId: String) {
         viewModelScope.launch {
-            _timelineState.value = TimelineState.Loading
             setLoading()
             val result = withContext(dispatchers.background) {
                 timelineRepository.getTimelineFor(userId)
             }
-            _timelineState.value = result
             updateScreenStateFor(result)
         }
     }

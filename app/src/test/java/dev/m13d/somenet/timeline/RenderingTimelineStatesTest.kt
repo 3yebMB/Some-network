@@ -7,7 +7,6 @@ import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
 import dev.m13d.somenet.domain.timeline.TimelineRepository
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.timeline.states.TimelineScreenState
-import dev.m13d.somenet.timeline.states.TimelineState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -31,7 +30,7 @@ class RenderingTimelineStatesTest {
     fun timelineStatesExposedToObserver() {
         val renderedStates = mutableListOf<TimelineScreenState>()
 
-        viewModel.timelineScreenState.observeForever { renderedStates.add(it) }
+        viewModel.screenState.observeForever { renderedStates.add(it) }
         viewModel.timelineFor(":irrelevant:")
 
         assertEquals(

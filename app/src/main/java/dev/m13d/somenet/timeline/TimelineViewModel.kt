@@ -3,7 +3,6 @@ package dev.m13d.somenet.timeline
 import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,7 +25,7 @@ class TimelineViewModel(
         private const val SCREEN_STATE_KEY = "timelineScreenState"
     }
 
-    val timelineScreenState: LiveData<TimelineScreenState> = savedStateHandle.getLiveData(SCREEN_STATE_KEY)
+    val screenState: LiveData<TimelineScreenState> = savedStateHandle.getLiveData(SCREEN_STATE_KEY)
 
     @SuppressLint("NullSafeMutableLiveData")
     fun timelineFor(userId: String) {

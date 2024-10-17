@@ -10,7 +10,6 @@ import dev.m13d.somenet.domain.user.Following
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.infrastructure.builder.UserBuilder.Companion.aUser
 import dev.m13d.somenet.timeline.states.TimelineScreenState
-import dev.m13d.somenet.timeline.states.TimelineState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -51,7 +50,7 @@ class LoadTimelineTest {
             TestDispatchers(),
         )
         viewModel.timelineFor("annaId")
-        assertEquals(TimelineScreenState(posts = emptyList()), viewModel.timelineScreenState.value)
+        assertEquals(TimelineScreenState(posts = emptyList()), viewModel.screenState.value)
     }
 
     @Test
@@ -64,7 +63,7 @@ class LoadTimelineTest {
             TestDispatchers(),
         )
         viewModel.timelineFor(tim.id)
-        assertEquals(TimelineScreenState(posts = timPosts), viewModel.timelineScreenState.value)
+        assertEquals(TimelineScreenState(posts = timPosts), viewModel.screenState.value)
     }
 
     @Test
@@ -79,7 +78,7 @@ class LoadTimelineTest {
             TestDispatchers(),
         )
         viewModel.timelineFor(anabel.id)
-        assertEquals(TimelineScreenState(posts = lucyPosts), viewModel.timelineScreenState.value)
+        assertEquals(TimelineScreenState(posts = lucyPosts), viewModel.screenState.value)
     }
 
     @Test
@@ -94,6 +93,6 @@ class LoadTimelineTest {
             TestDispatchers(),
         )
         viewModel.timelineFor(sarah.id)
-        assertEquals(TimelineScreenState(posts = lucyPosts + sarahPosts), viewModel.timelineScreenState.value)
+        assertEquals(TimelineScreenState(posts = lucyPosts + sarahPosts), viewModel.screenState.value)
     }
 }

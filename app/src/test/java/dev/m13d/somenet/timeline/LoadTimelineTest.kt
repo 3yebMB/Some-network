@@ -1,5 +1,6 @@
 package dev.m13d.somenet.timeline
 
+import androidx.lifecycle.SavedStateHandle
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
@@ -46,6 +47,7 @@ class LoadTimelineTest {
         val postCatalog = InMemoryPostsCatalog(availablePosts)
         val viewModel = TimelineViewModel(
             TimelineRepository(userCatalog, postCatalog),
+            SavedStateHandle(),
             TestDispatchers(),
         )
         viewModel.timelineFor("annaId")
@@ -58,6 +60,7 @@ class LoadTimelineTest {
         val postCatalog = InMemoryPostsCatalog(availablePosts)
         val viewModel = TimelineViewModel(
             TimelineRepository(userCatalog, postCatalog),
+            SavedStateHandle(),
             TestDispatchers(),
         )
         viewModel.timelineFor(tim.id)
@@ -72,6 +75,7 @@ class LoadTimelineTest {
         val postCatalog = InMemoryPostsCatalog(availablePosts)
         val viewModel = TimelineViewModel(
             TimelineRepository(userCatalog, postCatalog),
+            SavedStateHandle(),
             TestDispatchers(),
         )
         viewModel.timelineFor(anabel.id)
@@ -86,6 +90,7 @@ class LoadTimelineTest {
         val postCatalog = InMemoryPostsCatalog(availablePosts)
         val viewModel = TimelineViewModel(
             TimelineRepository(userCatalog, postCatalog),
+            SavedStateHandle(),
             TestDispatchers(),
         )
         viewModel.timelineFor(sarah.id)

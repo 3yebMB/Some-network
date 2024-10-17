@@ -18,6 +18,7 @@ import kotlinx.coroutines.withContext
 
 class TimelineViewModel(
     private val timelineRepository: TimelineRepository,
+    private val savedStateHandle: SavedStateHandle,
     private val dispatchers: CoroutineDispatchers,
 ) : ViewModel() {
 
@@ -25,7 +26,6 @@ class TimelineViewModel(
         private const val SCREEN_STATE_KEY = "timelineScreenState"
     }
 
-    private val savedStateHandle = SavedStateHandle()
     val timelineScreenState: LiveData<TimelineScreenState> = savedStateHandle.getLiveData(SCREEN_STATE_KEY)
 
     @SuppressLint("NullSafeMutableLiveData")

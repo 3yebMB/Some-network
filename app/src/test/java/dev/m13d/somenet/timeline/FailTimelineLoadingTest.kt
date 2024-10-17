@@ -1,5 +1,6 @@
 package dev.m13d.somenet.timeline
 
+import androidx.lifecycle.SavedStateHandle
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.post.OfflinePostCatalog
@@ -24,6 +25,7 @@ class FailTimelineLoadingTest {
         val postCatalog = UnavailablePostCatalog()
         val viewModel = TimelineViewModel(
             TimelineRepository(userCatalog, postCatalog),
+            SavedStateHandle(),
             TestDispatchers(),
         )
 
@@ -41,6 +43,7 @@ class FailTimelineLoadingTest {
         val postCatalog = OfflinePostCatalog()
         val viewModel = TimelineViewModel(
             TimelineRepository(userCatalog, postCatalog),
+            SavedStateHandle(),
             TestDispatchers(),
         )
 

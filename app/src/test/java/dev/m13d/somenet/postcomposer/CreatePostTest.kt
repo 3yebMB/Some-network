@@ -8,7 +8,7 @@ import dev.m13d.somenet.domain.post.PostRepository
 import dev.m13d.somenet.domain.user.InMemoryUserDataStore
 import dev.m13d.somenet.infrastructure.ControllableClock
 import dev.m13d.somenet.infrastructure.ControllableIdGenerator
-import dev.m13d.somenet.postcomposer.states.CreatePostState
+import dev.m13d.somenet.postcomposer.states.CreateNewPostScreenState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -38,7 +38,7 @@ class CreatePostTest {
 
         viewModel.createPost(postText)
 
-        assertEquals(CreatePostState.Created(post), viewModel.postState.value)
+        assertEquals(CreateNewPostScreenState(createdPostId = post.id), viewModel.screenState.value)
     }
 
     @Test
@@ -61,6 +61,6 @@ class CreatePostTest {
 
         viewModel.createPost(postText)
 
-        assertEquals(CreatePostState.Created(anotherPost), viewModel.postState.value)
+        assertEquals(CreateNewPostScreenState(createdPostId = anotherPost.id), viewModel.screenState.value)
     }
 }

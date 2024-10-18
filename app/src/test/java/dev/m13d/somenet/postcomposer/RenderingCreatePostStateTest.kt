@@ -8,6 +8,7 @@ import dev.m13d.somenet.domain.post.PostRepository
 import dev.m13d.somenet.domain.user.InMemoryUserDataStore
 import dev.m13d.somenet.infrastructure.ControllableClock
 import dev.m13d.somenet.infrastructure.ControllableIdGenerator
+import dev.m13d.somenet.postcomposer.states.CreateNewPostScreenState
 import dev.m13d.somenet.postcomposer.states.CreatePostState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Test
@@ -23,6 +24,7 @@ class RenderingCreatePostStateTest {
     private val postId = "postId"
     private val timestamp = 3L
     private val postText = "Text post"
+    private val post = Post(postId, loggedInUserId, postText, timestamp)
 
     private val idGenerator = ControllableIdGenerator(postId)
     private val clock = ControllableClock(timestamp)
@@ -34,14 +36,13 @@ class RenderingCreatePostStateTest {
 
     @Test
     fun uiStatesAreDeliveredInParticularOrder() {
-        val deliveredStates = mutableListOf<CreatePostState>()
-        viewModel.postState.observeForever { deliveredStates.add(it) }
-        val post = Post(postId, loggedInUserId, postText, timestamp)
+        val deliveredStates = mutableListOf<CreateNewPostScreenState>()
+        viewModel.screenState.observeForever { deliveredStates.add(it) }
 
         viewModel.createPost(postText)
 
         assertEquals(
-            listOf(CreatePostState.Loading, CreatePostState.Created(post)),
+            listOf(CreateNewPostScreenState(isLoading = true), CreateNewPostScreenState(createdPostId = post.id)),
             deliveredStates
         )
     }

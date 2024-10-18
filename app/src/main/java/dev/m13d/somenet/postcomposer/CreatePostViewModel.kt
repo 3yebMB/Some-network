@@ -33,12 +33,18 @@ class CreatePostViewModel(
     fun createPost(postText: String) {
         viewModelScope.launch {
             _postState.value = CreatePostState.Loading
+            setLoading()
             val result = withContext(dispatchers.background) {
                 postRepository.createNewPost(postText)
             }
             _postState.value = result
             updateScreenStateFor(result)
         }
+    }
+
+    private fun setLoading() {
+        val currentState = currentScreenState()
+        updateScreenState(currentState.copy(isLoading = true))
     }
 
     private fun updateScreenStateFor(createPostState: CreatePostState) {
@@ -52,12 +58,12 @@ class CreatePostViewModel(
 
     private fun setError(@StringRes errorResource: Int) {
         val currentState = currentScreenState()
-        updateScreenState(currentState.copy(error = errorResource))
+        updateScreenState(currentState.copy(isLoading = false, error = errorResource))
     }
 
     private fun setPostCreated(post: Post) {
         val currentState = currentScreenState()
-        updateScreenState(currentState.copy(createdPostId = post.id))
+        updateScreenState(currentState.copy(isLoading = false, createdPostId = post.id))
     }
 
     private fun currentScreenState(): CreateNewPostScreenState {

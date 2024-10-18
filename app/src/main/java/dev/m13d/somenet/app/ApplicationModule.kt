@@ -51,6 +51,7 @@ val applicationModule = module {
     viewModel {
         CreatePostViewModel(
             postRepository = get(),
+            savedStateHandle = get(),
             dispatchers = get(),
         )
     }

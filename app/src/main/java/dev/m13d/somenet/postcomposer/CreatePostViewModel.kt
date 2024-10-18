@@ -17,6 +17,7 @@ import kotlinx.coroutines.withContext
 
 class CreatePostViewModel(
     private val postRepository: PostRepository,
+    private val savedStateHandle: SavedStateHandle,
     private val dispatchers: CoroutineDispatchers,
 ) : ViewModel() {
 
@@ -24,7 +25,6 @@ class CreatePostViewModel(
         private const val SCREEN_STATE_KEY = "createPostScreenState"
     }
 
-    private val savedStateHandle = SavedStateHandle()
     val screenState: LiveData<CreateNewPostScreenState> = savedStateHandle.getLiveData(SCREEN_STATE_KEY)
 
     fun createPost(postText: String) {

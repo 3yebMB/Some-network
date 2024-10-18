@@ -1,5 +1,6 @@
 package dev.m13d.somenet.postcomposer
 
+import androidx.lifecycle.SavedStateHandle
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
@@ -33,6 +34,7 @@ class CreatePostTest {
                     clock = clock,
                 )
             ),
+            SavedStateHandle(),
             TestDispatchers(),
         )
 
@@ -56,6 +58,7 @@ class CreatePostTest {
                     clock = clock,
                 )
             ),
+            SavedStateHandle(),
             TestDispatchers(),
         )
 

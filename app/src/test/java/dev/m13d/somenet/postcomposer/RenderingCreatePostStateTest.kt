@@ -1,5 +1,6 @@
 package dev.m13d.somenet.postcomposer
 
+import androidx.lifecycle.SavedStateHandle
 import dev.m13d.somenet.InstantTaskExecutorExtension
 import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.post.InMemoryPostsCatalog
@@ -31,8 +32,9 @@ class RenderingCreatePostStateTest {
     private val postCatalog = InMemoryPostsCatalog(idGenerator = idGenerator, clock = clock)
     private val userData = InMemoryUserDataStore(loggedInUserId)
     private val postRepository = PostRepository(userData, postCatalog)
+    private val savedStateHandle = SavedStateHandle()
     private val dispatchers = TestDispatchers()
-    private val viewModel = CreatePostViewModel(postRepository, dispatchers)
+    private val viewModel = CreatePostViewModel(postRepository, savedStateHandle, dispatchers)
 
     @Test
     fun uiStatesAreDeliveredInParticularOrder() {

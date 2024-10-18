@@ -29,7 +29,7 @@ class CreatePostViewModel(
 
     fun createPost(postText: String) {
         viewModelScope.launch {
-            setLoading()
+            updateScreenStateFor(CreatePostState.Loading)
             val result = withContext(dispatchers.background) {
                 postRepository.createNewPost(postText)
             }
@@ -49,10 +49,10 @@ class CreatePostViewModel(
 
     private fun updateScreenStateFor(createPostState: CreatePostState) {
         when (createPostState) {
+            is CreatePostState.Loading -> setLoading()
             is CreatePostState.Created -> setPostCreated(createPostState.post)
             is CreatePostState.BackendError -> setError(R.string.creatingPostError)
             is CreatePostState.OfflineError -> setError(R.string.offlineError)
-            else -> {}
         }
     }
 

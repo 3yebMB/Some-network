@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.FloatingActionButton
@@ -23,8 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
+import dev.m13d.somenet.postcomposer.states.CreateNewPostScreenState
 import dev.m13d.somenet.postcomposer.states.CreateNewPostScreenStateOld
 import dev.m13d.somenet.postcomposer.states.CreatePostState
 import dev.m13d.somenet.ui.component.InfoMessage
@@ -37,29 +41,26 @@ fun CreateNewPostScreen(
     onPostCreated: () -> Unit,
 ) {
     val createPostViewModel = koinViewModel<CreatePostViewModel>()
-    val screenState by remember { mutableStateOf(CreateNewPostScreenStateOld()) }
-    var postText by remember { mutableStateOf("") }
+    val createPostState =
+        createPostViewModel.screenState.observeAsState().value ?: CreateNewPostScreenState()
 
-    val createPostState by createPostViewModel.postState.observeAsState()
-    when (createPostState) {
-        is CreatePostState.Loading ->
-            screenState.showLoading()
-
-        is CreatePostState.Created -> {
-            if (screenState.isPostSubmitted) {
-                onPostCreated()
-            }
-        }
-
-        is CreatePostState.BackendError ->
-            screenState.showMessage(R.string.creatingPostError)
-
-        is CreatePostState.OfflineError ->
-            screenState.showMessage(R.string.offlineError)
-
-        else -> {}
+    if (createPostState.createdPostId.isBlank()) {
+        onPostCreated()
     }
 
+    CreateNewPostScreenContent(
+        screenState = createPostState,
+        onPostTextUpdated = createPostViewModel::updatePostText,
+        onSubmitPost = { createPostViewModel.createPost(it) },
+    )
+}
+
+@Composable
+private fun CreateNewPostScreenContent(
+    screenState: CreateNewPostScreenState,
+    onPostTextUpdated: (String) -> Unit,
+    onSubmitPost: (String) -> Unit,
+) {
     Box {
         Column(
             modifier = Modifier
@@ -69,12 +70,13 @@ fun CreateNewPostScreen(
             ScreenTitle(titleResource = R.string.createNewPost)
             Spacer(modifier = Modifier.height(16.dp))
             Box(modifier = Modifier.fillMaxSize()) {
-                PostComposer(postText) { postText = it }
+                PostComposer(
+                    postText = screenState.postText,
+                    onValueChange = { onPostTextUpdated(it) },
+                    onDone = { onSubmitPost(screenState.postText) },
+                )
                 FloatingActionButton(
-                    onClick = {
-                        screenState.setPostSubmitted()
-                        createPostViewModel.createPost(postText)
-                    },
+                    onClick = { onSubmitPost(screenState.postText) },
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .testTag(stringResource(R.string.submitPost))
@@ -86,7 +88,7 @@ fun CreateNewPostScreen(
                 }
             }
         }
-        InfoMessage(stringResource = screenState.currentMessage)
+        InfoMessage(stringResource = screenState.error)
         LoadingBlock(isShowing = screenState.isLoading)
     }
 }
@@ -95,11 +97,14 @@ fun CreateNewPostScreen(
 private fun PostComposer(
     postText: String,
     onValueChange: (String) -> Unit,
+    onDone: () -> Unit,
 ) {
     OutlinedTextField(
         value = postText,
         onValueChange = onValueChange,
         modifier = Modifier.fillMaxWidth(),
-        label = { Text(text = stringResource(id = R.string.newPostHint)) }
+        label = { Text(text = stringResource(id = R.string.newPostHint)) },
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = { onDone() }),
     )
 }

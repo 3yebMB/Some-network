@@ -42,6 +42,11 @@ class CreatePostViewModel(
         }
     }
 
+    fun updatePostText(postText: String) {
+        val currentState = currentScreenState()
+        updateScreenState(currentState.copy(postText = postText))
+    }
+
     private fun setLoading() {
         val currentState = currentScreenState()
         updateScreenState(currentState.copy(isLoading = true))

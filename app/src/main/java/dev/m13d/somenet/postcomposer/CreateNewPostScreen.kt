@@ -16,11 +16,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -29,7 +25,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
 import dev.m13d.somenet.postcomposer.states.CreateNewPostScreenState
-import dev.m13d.somenet.postcomposer.states.CreatePostState
 import dev.m13d.somenet.ui.component.InfoMessage
 import dev.m13d.somenet.ui.component.LoadingBlock
 import dev.m13d.somenet.ui.component.ScreenTitle
@@ -39,9 +34,8 @@ import org.koin.androidx.compose.koinViewModel
 fun CreateNewPostScreen(
     onPostCreated: () -> Unit,
 ) {
-    val createPostViewModel = koinViewModel<CreatePostViewModel>()
-    val createPostState =
-        createPostViewModel.screenState.observeAsState().value ?: CreateNewPostScreenState()
+    val viewModel = koinViewModel<CreatePostViewModel>()
+    val createPostState = viewModel.screenState.observeAsState().value ?: CreateNewPostScreenState()
 
     if (createPostState.createdPostId.isBlank()) {
         onPostCreated()
@@ -49,8 +43,8 @@ fun CreateNewPostScreen(
 
     CreateNewPostScreenContent(
         screenState = createPostState,
-        onPostTextUpdated = createPostViewModel::updatePostText,
-        onSubmitPost = { createPostViewModel.createPost(it) },
+        onPostTextUpdated = viewModel::updatePostText,
+        onSubmitPost = { viewModel.createPost(it) },
     )
 }
 

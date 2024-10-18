@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -44,13 +45,9 @@ import org.koin.androidx.compose.koinViewModel
 fun FriendsScreen(userId: String) {
 
     val friendsViewModel = koinViewModel<FriendsViewModel>()
-    var loadedUserId by remember { mutableStateOf("") }
-    if (loadedUserId != userId) {
-        loadedUserId = userId
-        friendsViewModel.loadFriends(loadedUserId)
-    }
     val screenState = friendsViewModel.screenState.observeAsState().value ?: FriendsScreenState()
 
+    LaunchedEffect(key1 = userId, block = { friendsViewModel.loadFriends(userId)})
     FriendsScreenContent(
         screenState = screenState,
         onRefresh = { friendsViewModel.loadFriends(userId) },

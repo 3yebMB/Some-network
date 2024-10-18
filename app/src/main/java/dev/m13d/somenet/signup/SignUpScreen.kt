@@ -15,6 +15,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -33,7 +34,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
 import dev.m13d.somenet.signup.states.SignUpScreenState
-import dev.m13d.somenet.signup.states.SignUpState
 import dev.m13d.somenet.ui.component.InfoMessage
 import dev.m13d.somenet.ui.component.LoadingBlock
 import dev.m13d.somenet.ui.component.ScreenTitle
@@ -44,13 +44,13 @@ fun SignUpScreen(
     onSignedUp: (String) -> Unit,
 ) {
     val signUpViewModel = koinViewModel<SignUpViewModel>()
-    var signedUpUser by remember { mutableStateOf("") }
     val signUpScreenState = signUpViewModel.screenState.observeAsState().value ?: SignUpScreenState()
 
-    if (signUpScreenState.signedUpUserId != signedUpUser) {
-        signedUpUser = signUpScreenState.signedUpUserId
-        onSignedUp(signedUpUser)
-    } else {
+    if (signUpScreenState.signedUpUserId.isBlank()) {
+        LaunchedEffect(
+            key1 = signUpScreenState.signedUpUserId,
+            block = { onSignedUp(signUpScreenState.signedUpUserId) }
+        )
         SignUpScreenContent(
             screenState = signUpScreenState,
             onEmailChange = signUpViewModel::updateEmail,
@@ -67,7 +67,7 @@ private fun SignUpScreenContent(
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onAboutChange: (String) -> Unit,
-    onSignUp: (email: String, password: String, about: String) -> Unit
+    onSignUp: (email: String, password: String, about: String) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -116,7 +116,7 @@ private fun EmailField(
     value: String,
     isError: Boolean,
     onValueChange: (String) -> Unit,
-    onNextClicked: () -> Unit
+    onNextClicked: () -> Unit,
 ) {
     OutlinedTextField(
         modifier = Modifier
@@ -143,7 +143,7 @@ private fun PasswordField(
     value: String,
     isError: Boolean,
     onValueChange: (String) -> Unit,
-    onNextClicked: () -> Unit
+    onNextClicked: () -> Unit,
 ) {
     var isVisible by remember { mutableStateOf(false) }
     val visualTransformation = if (isVisible) {
@@ -179,7 +179,7 @@ private fun PasswordField(
 @Composable
 private fun VisibilityToggle(
     isVisible: Boolean,
-    onToggle: () -> Unit
+    onToggle: () -> Unit,
 ) {
     IconButton(onClick = {
         onToggle()
@@ -197,7 +197,7 @@ fun AboutField(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
-    onDoneClicked: () -> Unit
+    onDoneClicked: () -> Unit,
 ) {
     OutlinedTextField(
         modifier = modifier.fillMaxWidth(),

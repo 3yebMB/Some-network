@@ -98,7 +98,9 @@ private fun FriendsList(
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
         onRefresh = { onRefresh() },
-        modifier = modifier.semantics { contentDescription = description },
+        modifier = modifier
+            .fillMaxSize()
+            .semantics { contentDescription = description },
     ) {
         if (friends.isEmpty()) {
             Text(

@@ -1,10 +1,12 @@
 package dev.m13d.somenet.postcomposer
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.m13d.somenet.R
 import dev.m13d.somenet.app.CoroutineDispatchers
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.domain.post.PostRepository
@@ -42,8 +44,15 @@ class CreatePostViewModel(
     private fun updateScreenStateFor(createPostState: CreatePostState) {
         when (createPostState) {
             is CreatePostState.Created -> setPostCreated(createPostState.post)
+            is CreatePostState.BackendError -> setError(R.string.creatingPostError)
+            is CreatePostState.OfflineError -> setError(R.string.offlineError)
             else -> {}
         }
+    }
+
+    private fun setError(@StringRes errorResource: Int) {
+        val currentState = currentScreenState()
+        updateScreenState(currentState.copy(error = errorResource))
     }
 
     private fun setPostCreated(post: Post) {

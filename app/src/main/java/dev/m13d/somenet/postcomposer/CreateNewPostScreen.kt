@@ -29,7 +29,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import dev.m13d.somenet.R
 import dev.m13d.somenet.postcomposer.states.CreateNewPostScreenState
-import dev.m13d.somenet.postcomposer.states.CreateNewPostScreenStateOld
 import dev.m13d.somenet.postcomposer.states.CreatePostState
 import dev.m13d.somenet.ui.component.InfoMessage
 import dev.m13d.somenet.ui.component.LoadingBlock

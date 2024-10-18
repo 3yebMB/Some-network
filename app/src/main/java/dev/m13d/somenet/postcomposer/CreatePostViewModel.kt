@@ -24,20 +24,15 @@ class CreatePostViewModel(
         private const val SCREEN_STATE_KEY = "createPostScreenState"
     }
 
-    private var _postState = MutableLiveData<CreatePostState>()
-    val postState: LiveData<CreatePostState> = _postState
-
     private val savedStateHandle = SavedStateHandle()
     val screenState: LiveData<CreateNewPostScreenState> = savedStateHandle.getLiveData(SCREEN_STATE_KEY)
 
     fun createPost(postText: String) {
         viewModelScope.launch {
-            _postState.value = CreatePostState.Loading
             setLoading()
             val result = withContext(dispatchers.background) {
                 postRepository.createNewPost(postText)
             }
-            _postState.value = result
             updateScreenStateFor(result)
         }
     }

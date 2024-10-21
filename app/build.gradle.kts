@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "dev.m13d.somenet"
-    compileSdk = 34
+    compileSdk = libs.versions.androidSdk.compile.get().toInt()
 
     defaultConfig {
         applicationId = "dev.m13d.somenet"

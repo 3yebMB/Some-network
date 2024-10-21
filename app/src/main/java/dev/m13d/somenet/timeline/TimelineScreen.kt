@@ -41,7 +41,6 @@ import dev.m13d.somenet.R
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.timeline.states.TimelineScreenState
 import dev.m13d.somenet.ui.component.InfoMessage
-import dev.m13d.somenet.ui.component.LoadingBlock
 import dev.m13d.somenet.ui.component.ScreenTitle
 import dev.m13d.somenet.ui.extentions.toDateTime
 import org.koin.androidx.compose.koinViewModel

@@ -16,7 +16,6 @@ import dev.m13d.somenet.postcomposer.CreatePostViewModel
 import dev.m13d.somenet.signup.SignUpViewModel
 import dev.m13d.somenet.timeline.TimelineViewModel
 import org.koin.core.module.dsl.viewModel
-import org.koin.core.scope.get
 import org.koin.dsl.module
 
 val applicationModule = module {

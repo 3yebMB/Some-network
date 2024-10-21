@@ -17,6 +17,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
+          cache: 'gradle'
 
       - name: Grand execute permissions to gradlew
         run: chmod +x gradlew
@@ -37,6 +38,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
+          cache: 'gradle'
 
       - name: Grand execute permissions to gradlew
         run: chmod +x gradlew
@@ -78,15 +80,17 @@ jobs:
         with:
           name: app-debug-androidTest
 
-      - name: 'Google Cloud Auth'
-        uses: google-github-actions/auth@v2
+      - id: Auth
+        uses: google-github-actions/auth@v2.1.6
         with:
-          credentials_json: '${{ secrets.GOOGLE_SERVICES_JSON }}'
+          project_id: ${{ secrets.SOME_PROJECT_ID }}
+          credentials_json: ${{ secrets.GOOGLE_SERVICES_JSON }}
 
       - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          project_id: ${{ secrets.SOME_PROJECT_ID }}  
+        uses: google-github-actions/setup-gcloud@v2.1.1
+
+      - name: Use gcloud CLI
+        run: gcloud info
 
       - name: Run instrumental tests in Firebase Test Lab
         run: gcloud firebase test android run --type instrumentation --app app-debug/app-debug.apk --test app-debug-androidTest/app-debug-androidTest.apk --device model=blueline,version=28
@@ -117,7 +121,7 @@ jobs:
         run: ./gradlew bundleRelease
 
       - name: Sign Release
-        uses: r0adkll/sign-android-release@v1.0.4
+        uses: r0adkll/sign-android-release@v1
         with:
           releaseDirectory: app/build/outputs/bundle/release
           signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE }}
@@ -129,10 +133,11 @@ jobs:
 #        run: echo '${{ secrets.GOOGLE_SERVICES_API }}' > service_account.json
 #
 #      - name: Deploy to Internal
-#        uses: r0adkll/upload-google-play@v1
+#        uses: r0adkll/upload-google-play@v1.1.13
 #        with:
 #          serviceAccountJson: service_account.json
 #          packageName: dev.m13d.somenet
 #          releaseFiles: app/build/outputs/bundle/release/app-release.aab
-#          track: internal
+#          track: alpha
+#          status: 'completed'
 #          whatsNewDirectory: whatsNewDirectory/

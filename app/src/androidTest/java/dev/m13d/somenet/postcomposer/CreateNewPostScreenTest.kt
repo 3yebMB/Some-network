@@ -20,7 +20,7 @@ import java.util.Calendar
 class CreateNewPostScreenTest {
 
     @get:Rule
-    val createNewPostRule = createAndroidComposeRule<MainActivity>()
+    val testRule = createAndroidComposeRule<MainActivity>()
 
     private val timestamp = Calendar.getInstance()
         .also { it.set(2024, 8, 21, 17, 30) }
@@ -30,7 +30,7 @@ class CreateNewPostScreenTest {
     fun createNewPost() {
         replacePostCatalogWith(InMemoryPostsCatalog(clock = ControllableClock(timestamp)))
 
-        launchPostComposerFor("max@somenet.dev", createNewPostRule) {
+        launchPostComposerFor("max@somenet.dev", testRule) {
             typePost("My New Post")
             submit()
         } verify {
@@ -42,7 +42,7 @@ class CreateNewPostScreenTest {
     fun createMultiplePost() {
         replacePostCatalogWith(InMemoryPostsCatalog(clock = ControllableClock(timestamp)))
 
-        launchPostComposerFor("mihaly@somenet.dev", createNewPostRule) {
+        launchPostComposerFor("mihaly@somenet.dev", testRule) {
             typePost("My First Post")
             submit()
             tapOnCreateNewPost()
@@ -58,7 +58,7 @@ class CreateNewPostScreenTest {
     fun showLoadingBlock() {
         replacePostCatalogWith(DelayingPostCatalog())
 
-        launchPostComposerFor("robert@somenet.dev", createNewPostRule) {
+        launchPostComposerFor("robert@somenet.dev", testRule) {
             typePost("Waiting")
             submit()
         } verify {
@@ -70,7 +70,7 @@ class CreateNewPostScreenTest {
     fun showBackendError() {
         replacePostCatalogWith(UnavailablePostCatalog())
 
-        launchPostComposerFor("dan@somenet.dev", createNewPostRule) {
+        launchPostComposerFor("dan@somenet.dev", testRule) {
             typePost("Some Post")
             submit()
         } verify {
@@ -82,7 +82,7 @@ class CreateNewPostScreenTest {
     fun showOfflineError() {
         replacePostCatalogWith(OfflinePostCatalog())
 
-        launchPostComposerFor("mia@somenet.dev", createNewPostRule) {
+        launchPostComposerFor("mia@somenet.dev", testRule) {
             typePost("My New Post")
             submit()
         } verify {

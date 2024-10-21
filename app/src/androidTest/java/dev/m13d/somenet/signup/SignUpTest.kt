@@ -20,7 +20,7 @@ import org.koin.dsl.module
 class SignUpTest {
 
     @get:Rule
-    val signUpTestRule = createAndroidComposeRule<MainActivity>()
+    val testRule = createAndroidComposeRule<MainActivity>()
 
     private val signUpModule = module {
         factory<UserCatalog> { InMemoryUserCatalog() }
@@ -33,7 +33,7 @@ class SignUpTest {
 
     @Test
     fun performSignUp() {
-        launchSignUpScreen(signUpTestRule) {
+        launchSignUpScreen(testRule) {
             typeEmail("somemail@somenet.dev")
             typePassword("p@sSw0rd")
             submit()
@@ -44,7 +44,7 @@ class SignUpTest {
 
     @Test
     fun displayBadEmailError() {
-        launchSignUpScreen(signUpTestRule) {
+        launchSignUpScreen(testRule) {
             typeEmail("email")
             submit()
         } verify {
@@ -54,7 +54,7 @@ class SignUpTest {
 
     @Test
     fun resetBadEmailError() {
-        launchSignUpScreen(signUpTestRule) {
+        launchSignUpScreen(testRule) {
             typeEmail("email")
             submit()
             typeEmail("email@")
@@ -65,7 +65,7 @@ class SignUpTest {
 
     @Test
     fun displayBadPasswordError() {
-        launchSignUpScreen(signUpTestRule) {
+        launchSignUpScreen(testRule) {
             typeEmail("jov@somenet.dev")
             typePassword("abc")
             submit()
@@ -76,7 +76,7 @@ class SignUpTest {
 
     @Test
     fun resetBadPasswordError() {
-        launchSignUpScreen(signUpTestRule) {
+        launchSignUpScreen(testRule) {
             typeEmail("valid@somenet.dev")
             typePassword("pass")
             submit()
@@ -95,7 +95,7 @@ class SignUpTest {
             createUser(signedUpUserEmail, signedUpUserPassword, "")
         })
 
-        launchSignUpScreen(signUpTestRule) {
+        launchSignUpScreen(testRule) {
             typeEmail(signedUpUserEmail)
             typePassword(signedUpUserPassword)
             submit()
@@ -108,7 +108,7 @@ class SignUpTest {
     fun displayBackendError() {
         replaceUserCatalogWith(UnavailableUserCatalog())
 
-        launchSignUpScreen(signUpTestRule) {
+        launchSignUpScreen(testRule) {
             typeEmail("robert@somenet.dev")
             typePassword("J0hn#333")
             submit()
@@ -121,7 +121,7 @@ class SignUpTest {
     fun displayOfflineError() {
         replaceUserCatalogWith(OfflineUserCatalog())
 
-        launchSignUpScreen(signUpTestRule) {
+        launchSignUpScreen(testRule) {
             typeEmail("philip@somenet.dev")
             typePassword("J0hn#333")
             submit()
@@ -132,13 +132,13 @@ class SignUpTest {
 
     @Test
     fun displayLoadingBlock() {
-        val createUser: suspend (String, String, String) -> User = {id, email, about ->
+        val createUser: suspend (String, String, String) -> User = { id, email, about ->
             delay(1500L)
             User(id, email, about)
         }
         replaceUserCatalogWith(ControllableUserCatalog(userCreate = createUser))
 
-        launchSignUpScreen(signUpTestRule) {
+        launchSignUpScreen(testRule) {
             typeEmail("alex@somenet.dev")
             typePassword("@1eX1092")
             submit()

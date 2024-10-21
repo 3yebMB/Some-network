@@ -17,13 +17,13 @@ import org.koin.dsl.module
 class TimelineScreenTest {
 
     @get:Rule
-    val timelineTestRule = createAndroidComposeRule<MainActivity>()
+    val testRule = createAndroidComposeRule<MainActivity>()
 
     @Test
     fun showEmptyTimelineMessage() {
         val email = "elizabeth@somenet.dev"
         val password = "p@Ssw0rd="
-        launchTimelineFor(email, password, timelineTestRule) {
+        launchTimelineFor(email, password, testRule) {
             // No operations
         } verify {
             emptyTimelineMessageIsShown()
@@ -38,7 +38,7 @@ class TimelineScreenTest {
         val post2 = Post("post2", "samanthaId", "This is Samantha's second post", 2L)
         replacePostCatalogWith(InMemoryPostsCatalog(mutableListOf(post1, post2)))
 
-        launchTimelineFor(email, password, timelineTestRule) {
+        launchTimelineFor(email, password, testRule) {
             //no operations
         } verify {
             postsAreDisplayed(post1, post2)
@@ -47,7 +47,7 @@ class TimelineScreenTest {
 
     @Test
     fun openPostComposer() {
-        launchTimelineFor("test@somenet.dev", "S0meP@sS1134", timelineTestRule) {
+        launchTimelineFor("test@somenet.dev", "S0meP@sS1134", testRule) {
             tapOnCreateNewPost()
         } verify {
             newPostComposerIsDisplayed()
@@ -56,7 +56,7 @@ class TimelineScreenTest {
 
     @Test
     fun opensFriends() {
-        launchTimelineFor("sam@mail.com", "P@sSw0rd", timelineTestRule) {
+        launchTimelineFor("sam@mail.com", "P@sSw0rd", testRule) {
             tapOnFriendsTab()
         } verify {
             friendsScreenIsDisplayed()
@@ -66,7 +66,7 @@ class TimelineScreenTest {
     @Test
     fun showLoadingIndicator() {
         replacePostCatalogWith(DelayingPostCatalog())
-        launchTimelineFor("test-indicator@somenet.dev", "S0meP@sS1134", timelineTestRule) {
+        launchTimelineFor("test-indicator@somenet.dev", "S0meP@sS1134", testRule) {
             //no operations
         } verify {
             loadingIndicatorIsDisplayed()
@@ -76,7 +76,7 @@ class TimelineScreenTest {
     @Test
     fun showBackendError() {
         replacePostCatalogWith(UnavailablePostCatalog())
-        launchTimelineFor("backend-error@somenet.dev", "S0meP@sS1134", timelineTestRule) {
+        launchTimelineFor("backend-error@somenet.dev", "S0meP@sS1134", testRule) {
             //no operations
         } verify {
             backendErrorIsDisplayed()
@@ -86,7 +86,7 @@ class TimelineScreenTest {
     @Test
     fun showOfflineError() {
         replacePostCatalogWith(OfflinePostCatalog())
-        launchTimelineFor("offline-error@somenet.dev", "S0meP@sS1134", timelineTestRule) {
+        launchTimelineFor("offline-error@somenet.dev", "S0meP@sS1134", testRule) {
             //no operations
         } verify {
             offlineErrorIsDisplayed()

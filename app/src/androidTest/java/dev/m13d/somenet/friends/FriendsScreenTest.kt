@@ -21,7 +21,7 @@ import org.koin.dsl.module
 class FriendsScreenTest {
 
     @get:Rule
-    val rule = createAndroidComposeRule<MainActivity>()
+    val testRule = createAndroidComposeRule<MainActivity>()
 
     private val tom = User("tomId", "tom@somenet.dev", "Something about Tom")
     private val jerry = User("jerryId", "jerry@somenet.dev", "")
@@ -31,7 +31,7 @@ class FriendsScreenTest {
 
     @Test
     fun showEmptyFriendsMessage() {
-        launchFriends(rule) {
+        launchFriends(testRule) {
             //no operations
         } verify {
             emptyFriendsMessageIsDisplayed()
@@ -46,7 +46,7 @@ class FriendsScreenTest {
         }
         replaceUserCatalogWith(ControllableUserCatalog(friendsLoad = friendsLoad))
 
-        launchFriends(rule) {
+        launchFriends(testRule) {
             //no operations
         } verify {
             loadingIndicatorIsShown()
@@ -57,7 +57,7 @@ class FriendsScreenTest {
     fun showAvailableFriends() {
         replaceUserCatalogWith(InMemoryUserCatalog(users))
 
-        launchFriends(rule) {
+        launchFriends(testRule) {
             //no operations
         } verify {
             friendsAreDisplayed(friendTom, friendJerry)
@@ -69,7 +69,7 @@ class FriendsScreenTest {
         val users = mutableMapOf("" to mutableListOf(tom))
         replaceUserCatalogWith(InMemoryUserCatalog(users))
 
-        launchFriends(rule) {
+        launchFriends(testRule) {
             //no operations
         } verify {
             friendInformationIsDisplayedFor(friendTom)
@@ -81,7 +81,7 @@ class FriendsScreenTest {
         val friendsLoad: suspend () -> List<Friend> = { throw BackendException() }
         replaceUserCatalogWith(ControllableUserCatalog(friendsLoad = friendsLoad))
 
-        launchFriends(rule) {
+        launchFriends(testRule) {
             //no operations
         } verify {
             backendErrorIsDisplayed()
@@ -93,7 +93,7 @@ class FriendsScreenTest {
         val friendsLoad: suspend () -> List<Friend> = { throw ConnectionUnavailableException() }
         replaceUserCatalogWith(ControllableUserCatalog(friendsLoad = friendsLoad))
 
-        launchFriends(rule) {
+        launchFriends(testRule) {
             //no operations
         } verify {
             offlineErrorIsDisplayed()
@@ -104,7 +104,7 @@ class FriendsScreenTest {
     fun followAFriend() {
         replaceUserCatalogWith(InMemoryUserCatalog(users))
 
-        launchFriends(rule) {
+        launchFriends(testRule) {
             tapOnFollowFor(friendTom)
         } verify {
             followingIsAddedFor(friendTom)
@@ -115,7 +115,7 @@ class FriendsScreenTest {
     fun unfollowAFriend() {
         replaceUserCatalogWith(InMemoryUserCatalog(users))
 
-        launchFriends(rule) {
+        launchFriends(testRule) {
             tapOnFollowFor(friendJerry)
             tapOnUnfollowFor(friendJerry)
         } verify {
@@ -132,7 +132,7 @@ class FriendsScreenTest {
         }
         replaceUserCatalogWith(ControllableUserCatalog(friendsLoad = friendsLoad, followToggle = toggleFollow))
 
-        launchFriends(rule) {
+        launchFriends(testRule) {
             tapOnFollowFor(friendJerry)
         } verify {
             loadingIndicatorIsShownWhileTogglingFriendshipFor(friendJerry)
@@ -147,7 +147,7 @@ class FriendsScreenTest {
         }
         replaceUserCatalogWith(ControllableUserCatalog(friendsLoad = friendsLoad, followToggle = toggleFollow))
 
-        launchFriends(rule) {
+        launchFriends(testRule) {
             tapOnFollowFor(friendJerry)
         } verify {
             backendErrorFollowingFriendIsDisplayed()

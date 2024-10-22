@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 class FriendsViewModel(
     private val friendsRepository: FriendsRepository,
     private val dispatchers: CoroutineDispatchers,
-    val savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private companion object {

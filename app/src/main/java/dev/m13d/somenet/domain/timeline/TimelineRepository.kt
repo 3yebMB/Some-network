@@ -15,9 +15,9 @@ class TimelineRepository(
             val userIds = listOf(userId) + userCatalog.followedBy(userId)
             val postsForUser = postCatalog.postsFor(userIds)
             TimelineState.Posts(postsForUser)
-        } catch (e: BackendException) {
+        } catch (backendException: BackendException) {
             TimelineState.BackendError
-        } catch (e: ConnectionUnavailableException) {
+        } catch (offlineException: ConnectionUnavailableException) {
             TimelineState.OfflineError
         }
     }

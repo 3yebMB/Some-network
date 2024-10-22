@@ -15,17 +15,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,12 +32,11 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import dev.m13d.somenet.R
 import dev.m13d.somenet.domain.post.Post
 import dev.m13d.somenet.timeline.states.TimelineScreenState
 import dev.m13d.somenet.ui.component.InfoMessage
+import dev.m13d.somenet.ui.component.PullToRefreshBox
 import dev.m13d.somenet.ui.component.ScreenTitle
 import dev.m13d.somenet.ui.extentions.toDateTime
 import org.koin.androidx.compose.koinViewModel
@@ -86,7 +82,6 @@ private fun TimelineScreenContent(
                     onClick = { onCreateNewPost() },
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(16.dp)
                         .testTag(stringResource(id = R.string.createNewPost))
                 ) {
                     Icon(
@@ -100,6 +95,7 @@ private fun TimelineScreenContent(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PostsList(
     modifier: Modifier = Modifier,
@@ -108,11 +104,12 @@ private fun PostsList(
     onRefresh: () -> Unit,
 ) {
     val loadingContentDescription = stringResource(id = R.string.loading)
-    SwipeRefresh(
+
+    PullToRefreshBox(
         modifier = modifier
             .fillMaxSize()
             .semantics { contentDescription = loadingContentDescription },
-        state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+        isRefreshing = isRefreshing,
         onRefresh = { onRefresh() },
     ) {
         if (posts.isEmpty()) {

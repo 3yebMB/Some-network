@@ -9,7 +9,6 @@ import dev.m13d.somenet.domain.user.UserRepository
 import dev.m13d.somenet.domain.validation.CredentialsValidationResult
 import dev.m13d.somenet.domain.validation.RegexCredentialValidator
 import dev.m13d.somenet.signup.states.SignUpScreenState
-import dev.m13d.somenet.signup.states.SignUpState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

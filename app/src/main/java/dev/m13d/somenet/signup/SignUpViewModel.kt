@@ -23,6 +23,10 @@ class SignUpViewModel(
     private val dispatchers: CoroutineDispatchers,
 ) : ViewModel() {
 
+    private companion object {
+        private const val SCREEN_STATE_KEY = "signUpScreenState"
+    }
+
     val screenState: LiveData<SignUpScreenState> = savedStateHandle.getLiveData(SCREEN_STATE_KEY)
 
     fun createAccount(
@@ -105,9 +109,5 @@ class SignUpViewModel(
 
     private fun updateScreenState(newState: SignUpScreenState) {
         savedStateHandle[SCREEN_STATE_KEY] = newState
-    }
-
-    private companion object {
-        private const val SCREEN_STATE_KEY = "signUpScreenState"
     }
 }

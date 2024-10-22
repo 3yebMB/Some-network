@@ -2,18 +2,17 @@ package dev.m13d.somenet.postcomposer
 
 import androidx.lifecycle.SavedStateHandle
 import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.R
 import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.post.OfflinePostCatalog
 import dev.m13d.somenet.domain.post.PostRepository
 import dev.m13d.somenet.domain.post.UnavailablePostCatalog
 import dev.m13d.somenet.domain.user.InMemoryUserDataStore
 import dev.m13d.somenet.postcomposer.states.CreateNewPostScreenState
-import dev.m13d.somenet.postcomposer.states.CreatePostState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.test.assertEquals
-import dev.m13d.somenet.R
 
 @ExperimentalCoroutinesApi
 @ExtendWith(InstantTaskExecutorExtension::class)

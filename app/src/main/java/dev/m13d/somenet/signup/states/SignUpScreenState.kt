@@ -13,5 +13,5 @@ data class SignUpScreenState(
     val isBadPassword: Boolean = false,
     val about: String = "",
     val signedUpUserId: String = "",
-    @StringRes val error: Int = 0
+    @StringRes val error: Int = 0,
 ) : Parcelable

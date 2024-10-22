@@ -2,6 +2,7 @@ package dev.m13d.somenet.signup
 
 import androidx.lifecycle.SavedStateHandle
 import dev.m13d.somenet.InstantTaskExecutorExtension
+import dev.m13d.somenet.R
 import dev.m13d.somenet.app.TestDispatchers
 import dev.m13d.somenet.domain.user.InMemoryUserCatalog
 import dev.m13d.somenet.domain.user.InMemoryUserDataStore
@@ -13,7 +14,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import dev.m13d.somenet.R
 
 @ExperimentalCoroutinesApi
 @ExtendWith(InstantTaskExecutorExtension::class)

@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,21 +24,26 @@ class MainActivity : ComponentActivity() {
         setContent {
             SoMeNetTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = Screen.SignUp.route) {
-                        composable(Screen.SignUp.route) {
-                            SignUpScreen { signedUpUserId ->
-                                navController.navigate(Screen.Home.createRoute(signedUpUserId)) {
-                                    popUpTo(Screen.SignUp.route) { inclusive = true }
-                                }
-                            }
-                        }
-                        composable(route = Screen.Home.route) { backStackEntry ->
-                            HomeScreen(userId = backStackEntry.arguments?.getString(Screen.Home.userId) ?: "")
-                        }
-                    }
+                    MainContent()
 //                        modifier = Modifier.padding(innerPadding)
                 }
+            }
+        }
+    }
+
+    @Composable
+    private fun MainContent() {
+        val navController = rememberNavController()
+        NavHost(navController = navController, startDestination = Screen.SignUp.route) {
+            composable(Screen.SignUp.route) {
+                SignUpScreen { signedUpUserId ->
+                    navController.navigate(Screen.Home.createRoute(signedUpUserId)) {
+                        popUpTo(Screen.SignUp.route) { inclusive = true }
+                    }
+                }
+            }
+            composable(route = Screen.Home.route) { backStackEntry ->
+                HomeScreen(userId = backStackEntry.arguments?.getString(Screen.Home.userId) ?: "")
             }
         }
     }

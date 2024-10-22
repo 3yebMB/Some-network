@@ -10,7 +10,6 @@ import dev.m13d.somenet.domain.user.InMemoryUserDataStore
 import dev.m13d.somenet.infrastructure.ControllableClock
 import dev.m13d.somenet.infrastructure.ControllableIdGenerator
 import dev.m13d.somenet.postcomposer.states.CreateNewPostScreenState
-import dev.m13d.somenet.postcomposer.states.CreatePostState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

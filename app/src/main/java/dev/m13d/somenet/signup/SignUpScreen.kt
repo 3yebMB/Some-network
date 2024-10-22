@@ -51,14 +51,14 @@ fun SignUpScreen(
             key1 = signUpScreenState.signedUpUserId,
             block = { onSignedUp(signUpScreenState.signedUpUserId) }
         )
-        SignUpScreenContent(
-            screenState = signUpScreenState,
-            onEmailChange = signUpViewModel::updateEmail,
-            onPasswordChange = signUpViewModel::updatePassword,
-            onAboutChange = signUpViewModel::updateAbout,
-            onSignUp = signUpViewModel::createAccount
-        )
     }
+    SignUpScreenContent(
+        screenState = signUpScreenState,
+        onEmailChange = signUpViewModel::updateEmail,
+        onPasswordChange = signUpViewModel::updatePassword,
+        onAboutChange = signUpViewModel::updateAbout,
+        onSignUp = signUpViewModel::createAccount
+    )
 }
 
 @Composable

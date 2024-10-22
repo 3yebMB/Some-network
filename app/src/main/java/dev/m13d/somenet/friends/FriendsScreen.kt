@@ -2,7 +2,6 @@ package dev.m13d.somenet.friends
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,10 +18,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
-import androidx.compose.material3.pulltorefresh.PullToRefreshState
-import androidx.compose.material3.pulltorefresh.pullToRefresh
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
@@ -38,6 +33,7 @@ import dev.m13d.somenet.R
 import dev.m13d.somenet.domain.user.Friend
 import dev.m13d.somenet.friends.states.FriendsScreenState
 import dev.m13d.somenet.ui.component.InfoMessage
+import dev.m13d.somenet.ui.component.PullToRefreshBox
 import dev.m13d.somenet.ui.component.ScreenTitle
 import org.koin.androidx.compose.koinViewModel
 
@@ -62,9 +58,9 @@ private fun FriendsScreenContent(
     onRefresh: () -> Unit,
     toggleFollowingFor: (String) -> Unit,
 ) {
-    Box {
+    Box(modifier = modifier) {
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
@@ -93,12 +89,13 @@ private fun FriendsList(
     toggleFollowingFor: (String) -> Unit,
 ) {
     val description = stringResource(R.string.loading)
+
     PullToRefreshBox(
-        isRefreshing = isRefreshing,
-        onRefresh = { onRefresh() },
         modifier = modifier
             .fillMaxSize()
             .semantics { contentDescription = description },
+        isRefreshing = isRefreshing,
+        onRefresh = { onRefresh() },
     ) {
         if (friends.isEmpty()) {
             Text(
@@ -118,32 +115,6 @@ private fun FriendsList(
                 }
             }
         }
-    }
-}
-
-@Composable
-@ExperimentalMaterial3Api
-fun PullToRefreshBox(
-    isRefreshing: Boolean,
-    onRefresh: () -> Unit,
-    modifier: Modifier = Modifier,
-    state: PullToRefreshState = rememberPullToRefreshState(),
-    contentAlignment: Alignment = Alignment.TopStart,
-    indicator: @Composable BoxScope.() -> Unit = {
-        Indicator(
-            modifier = Modifier.align(Alignment.TopCenter),
-            isRefreshing = isRefreshing,
-            state = state,
-        )
-    },
-    content: @Composable BoxScope.() -> Unit,
-) {
-    Box(
-        modifier.pullToRefresh(state = state, isRefreshing = isRefreshing, onRefresh = onRefresh),
-        contentAlignment = contentAlignment,
-    ) {
-        content()
-        indicator()
     }
 }
 
@@ -180,8 +151,7 @@ private fun FriendItem(
             val updatingDescription = stringResource(R.string.updatingFriendship, friend.user.id)
             OutlinedButton(
                 modifier = Modifier.semantics {
-                    contentDescription =
-                        if (friend.isFollowee) unfollowContentDescription else followContentDescription
+                    contentDescription = if (friend.isFollowee) unfollowContentDescription else followContentDescription
                 },
                 enabled = !isTogglingFriendship,
                 onClick = { toggleFollowingFor(friend.user.id) }

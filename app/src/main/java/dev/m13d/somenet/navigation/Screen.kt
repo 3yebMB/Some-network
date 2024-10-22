@@ -6,7 +6,7 @@ import dev.m13d.somenet.R
 
 sealed class Screen(val route: String) {
 
-    object SignUp : Screen("SignUpScreen")
+    object SignUp : Screen("SignUp")
 
     object Home : Screen("home/{userId}") {
         const val userId = "userId"

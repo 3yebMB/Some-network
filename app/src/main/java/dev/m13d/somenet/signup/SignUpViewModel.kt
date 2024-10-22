@@ -55,7 +55,7 @@ class SignUpViewModel(
     @SuppressLint("NullSafeMutableLiveData")
     private fun proceedWithSignUp(email: String, password: String, about: String) {
         viewModelScope.launch {
-            setLoading()
+            updateScreenStateFor(SignUpState.Loading)
             val result = withContext(dispatchers.background) {
                 userRepository.signUp(email, password, about)
             }
@@ -65,6 +65,7 @@ class SignUpViewModel(
 
     private fun updateScreenStateFor(signUpState: SignUpState) {
         when (signUpState) {
+            is SignUpState.Loading -> setLoading()
             is SignUpState.SignedUp -> setSignedUp(signUpState.user.id)
             is SignUpState.BackendError -> setError(R.string.createAccountError)
             is SignUpState.Offline -> setError(R.string.offlineError)

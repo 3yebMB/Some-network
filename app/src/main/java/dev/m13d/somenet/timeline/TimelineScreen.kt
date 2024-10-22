@@ -51,13 +51,8 @@ fun TimelineScreen(
     onCreateNewPost: () -> Unit,
 ) {
     val timelineViewModel = koinViewModel<TimelineViewModel>()
-    var loadedUserId by remember { mutableStateOf("") }
     val screenState = timelineViewModel.screenState.observeAsState().value ?: TimelineScreenState()
 
-    if (loadedUserId != userId) {
-        loadedUserId = userId
-        timelineViewModel.timelineFor(loadedUserId)
-    }
     LaunchedEffect(key1 = userId, block = { timelineViewModel.timelineFor(userId) })
     TimelineScreenContent(
         screenState = screenState,

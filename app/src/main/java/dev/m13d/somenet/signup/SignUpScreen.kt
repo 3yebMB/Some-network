@@ -46,7 +46,7 @@ fun SignUpScreen(
     val signUpViewModel = koinViewModel<SignUpViewModel>()
     val signUpScreenState = signUpViewModel.screenState.observeAsState().value ?: SignUpScreenState()
 
-    if (signUpScreenState.signedUpUserId.isBlank()) {
+    if (signUpScreenState.signedUpUserId.isNotBlank()) {
         LaunchedEffect(
             key1 = signUpScreenState.signedUpUserId,
             block = { onSignedUp(signUpScreenState.signedUpUserId) }

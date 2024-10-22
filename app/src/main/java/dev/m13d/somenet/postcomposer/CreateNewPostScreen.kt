@@ -41,10 +41,9 @@ fun CreateNewPostScreen(
     onPostCreated: () -> Unit,
 ) {
     val createPostViewModel = koinViewModel<CreatePostViewModel>()
-    val createPostState =
-        createPostViewModel.screenState.observeAsState().value ?: CreateNewPostScreenState()
+    val createPostState = createPostViewModel.screenState.observeAsState().value ?: CreateNewPostScreenState()
 
-    if (createPostState.createdPostId.isBlank()) {
+    if (createPostState.createdPostId.isNotBlank()) {
         onPostCreated()
     }
 

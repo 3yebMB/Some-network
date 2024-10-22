@@ -133,7 +133,7 @@ class SignUpTest {
     @Test
     fun displayLoadingBlock() {
         val createUser: suspend (String, String, String) -> User = { id, email, about ->
-            delay(1500L)
+            delay(3500L)
             User(id, email, about)
         }
         replaceUserCatalogWith(ControllableUserCatalog(userCreate = createUser))

@@ -5,12 +5,12 @@ import kotlinx.coroutines.delay
 class DelayingPostCatalog : PostsCatalog {
 
     override suspend fun postsFor(userIds: List<String>): List<Post> {
-        delay(2000L)
+        delay(3500L)
         return emptyList()
     }
 
     override suspend fun addPost(userId: String, postText: String): Post {
-        delay(2000L)
+        delay(3500L)
         return Post("postId", userId, postText, 0)
     }
 }

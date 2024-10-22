@@ -32,7 +32,7 @@ fun InfoMessage(
     var shouldShow by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = "displayMessage") {
         shouldShow = true
-        delay(1500L)
+        delay(3500L)
         shouldShow = false
     }
     AnimatedVisibility(

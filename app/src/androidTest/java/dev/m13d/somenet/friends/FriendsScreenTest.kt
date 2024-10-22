@@ -41,7 +41,7 @@ class FriendsScreenTest {
     @Test
     fun showLoadingIndicator() {
         val friendsLoad: suspend () -> List<Friend> = {
-            delay(1500L)
+            delay(3500L)
             listOf(friendTom, friendJerry)
         }
         replaceUserCatalogWith(ControllableUserCatalog(friendsLoad = friendsLoad))
@@ -127,7 +127,7 @@ class FriendsScreenTest {
     fun showLoadingIndicatorWhileTogglingFriendship() {
         val friendsLoad: suspend () -> List<Friend> = { listOf(friendTom, friendJerry) }
         val toggleFollow: suspend (String, String) -> ToggleFollowing = { userId, followingId ->
-            delay(1500L)
+            delay(3500L)
             ToggleFollowing(Following(userId, followingId), true)
         }
         replaceUserCatalogWith(ControllableUserCatalog(friendsLoad = friendsLoad, followToggle = toggleFollow))

@@ -97,7 +97,6 @@ dependencies {
     implementation(platform(libs.koin.bom))
     implementation(libs.bundles.koin)
     implementation(libs.kotlinx.datetime)
-    implementation(libs.accompanist.swiperefresh)
 
     testRuntimeOnly(libs.junit.jupiter.engine)
 

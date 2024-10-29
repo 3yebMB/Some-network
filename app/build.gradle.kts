@@ -59,6 +59,7 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
     buildFeatures {
+        compose = true
         buildConfig = true
     }
     tasks.withType<Test> {
